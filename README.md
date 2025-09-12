@@ -1,109 +1,88 @@
-🏠 Household Labor & Handyman Management System
+# 🏠 Household Labor & Handyman Management System  
 
-A full-stack service management platform that connects customers, workers (handymen), and vendors, with admin oversight.
-The system streamlines job requests, worker availability, payments (prototype), loyalty tracking, and vendor product management — all under one unified platform.
+A **full-stack service management platform** that connects **customers, workers (handymen), and vendors** with **admin oversight**.  
+It simplifies household service requests, worker scheduling, vendor product sales, prototype payments, and loyalty tracking — all in one place.  
 
-🚀 Features
-🔧 Worker Management
+---
 
-Secure registration & JWT-based login (role = worker).
+## 🚀 Features  
 
-Manage profile (skills, rates, service radius, availability).
+### 🔧 Worker Management  
+- Secure registration & JWT-based login (role = worker)  
+- Profile management: skills, rates, service radius, profile photo  
+- Multi-skill support (e.g., electrician + plumber)  
+- Availability calendar with drag/drop scheduling  
+- Job inbox: accept/reject job requests  
+- Job history, ratings, and performance metrics  
+- Upload certificates (pending admin verification)  
+- Export reports: Excel (jobs), PDF (profile), PNG (worker card)  
 
-Multi-skill support (e.g., electrician + plumber).
+### 👤 Customer Management  
+- Secure signup/login (role = customer)  
+- Browse & filter workers by skills, rating, price, location  
+- Post/manage job requests with media (photo/video)  
+- Track job status (pending → in-progress → completed)  
+- Rate & review workers (with optional photo)  
+- View job/payment history with export (Excel/PDF)  
+- Submit complaints against workers/vendors  
 
-Availability calendar with drag/drop scheduling.
+### 🏪 Vendor / Third-Party Management  
+- Vendor registration & login (role = vendor)  
+- Manage product/service listings (CRUD)  
+- Accept/reject service/product orders  
+- Transaction history with export options  
+- Vendor ratings & reviews  
 
-Job inbox: accept/reject requests in real-time.
+### 💳 Payment & Scheduling (Prototype)  
+- Smart job scheduling with conflict detection  
+- Prototype payment gateway integration (e.g., PayHere)  
+- Notifications: job confirmations via email/SMS  
+- Automated reminders (24 hrs before job)  
+- Receipts & payment summaries (PDF/Excel)  
 
-Job history, ratings, and performance metrics.
+### 🎁 Additional Services  
+- Loyalty points for customers (earn & redeem)  
+- Loyalty history reports (Excel/PDF)  
+- Virtual store for household products & tools  
+- Advanced search & filtering (workers & vendors)  
 
-Document uploads (certificates, ID verification).
+### 🛠️ Admin Subsystem  
+- Approve/ban users (workers, customers, vendors)  
+- Monitor complaints, reports, and suspicious activity  
+- System-wide reporting: jobs, revenue, users (PDF/Excel)  
+- Send announcements/notifications to all users  
+- Governance & verification workflows  
 
-Export reports (Excel/PDF/PNG worker card).
+---
 
-👤 Customer Management
+## 📊 System Highlights  
+✔️ CRUD everywhere – profiles, jobs, products, reviews  
+✔️ Reporting everywhere – PDF & Excel exports  
+✔️ File uploads – images, certificates, receipts  
+✔️ Role-based access control – worker, customer, vendor, admin  
+✔️ Admin-first design – every subsystem includes oversight  
 
-Secure signup/login (role = customer).
+---
 
-Search & filter workers by skills, rating, price, or location.
+## 🏗️ Tech Stack (Suggested)  
+- **Frontend:** React (Vite) + Tailwind CSS  
+- **Backend:** Node.js + Express.js  
+- **Database:** MongoDB  
+- **Authentication:** JWT + bcrypt  
+- **File Storage:** Multer / Cloudinary / AWS S3  
+- **Reports:** jsPDF, ExcelJS  
+- **Notifications:** Nodemailer (email), Twilio (SMS prototype)  
 
-Post/manage job requests with media attachments.
+---
 
-Track job status (pending → in-progress → completed).
+## 📂 Project Structure (Example)  
+```bash
+/backend
+  /config        → DB & JWT configs
+  /models        → Mongoose schemas
+  /routes        → API endpoints
+  /controllers   → Business logic
+  /uploads       → Uploaded images/docs
+  server.js
 
-Rate & review workers (with optional photo).
-
-Job/payment history (exportable).
-
-Complaint submission to admin.
-
-🏪 Vendor / Third-Party Management
-
-Vendor login & profile management (role = vendor).
-
-Add/manage product or service listings.
-
-Accept/reject customer/vendor service requests.
-
-Order history with export options.
-
-Vendor ratings & reviews.
-
-💳 Payment & Scheduling (Prototype)
-
-Smart job scheduling (conflict detection with worker availability).
-
-Prototype payment gateway integration (e.g., PayHere).
-
-Notifications via email/SMS for job confirmations.
-
-Automated job reminders.
-
-Downloadable receipts & payment summaries.
-
-🎁 Additional Services
-
-Loyalty points for completed jobs (redeemable for discounts).
-
-Loyalty reports (Excel/PDF).
-
-Virtual store for household products & tools.
-
-Advanced search & filtering across workers/vendors.
-
-🛠️ Admin Subsystem
-
-Approve/ban users (workers, customers, vendors).
-
-Monitor complaints, reports, and suspicious activity.
-
-System-wide analytics (jobs, revenue, user stats).
-
-Announcements/notifications to all users.
-
-Cross-system governance & verification workflows.
-
-📊 System Highlights
-
-✔️ CRUD operations across all entities (profiles, jobs, products, reviews).
-✔️ Reporting everywhere: PDF/Excel exports for users, jobs, vendors, and admin dashboards.
-✔️ File uploads: profile images, job media, certificates, receipts.
-✔️ Role-based access control (customer, worker, vendor, admin).
-✔️ Admin-first design — every subsystem includes an admin oversight view.
-
-🏗️ Tech Stack (Suggested)
-
-Frontend: React (Vite) + Tailwind CSS
-
-Backend: Node.js + Express.js
-
-Database: MongoDB
-
-Authentication: JWT + bcrypt
-
-File Storage: Multer / Cloudinary / AWS S3
-
-Reports: jsPDF, ExcelJS
-
-Notifications: Nodemailer (email), Twilio (SMS prototype)
+/fron
