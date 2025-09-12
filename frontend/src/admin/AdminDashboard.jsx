@@ -1,0 +1,17 @@
+import React from 'react';
+
+import Sidebar from './Sidebar';
+import { Outlet } from 'react-router-dom';
+
+const AdminDashboard = () => {
+  return (
+    <div className="flex min-h-screen bg-gray-900 text-white">
+      <Sidebar />
+      <div className="flex-1">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
