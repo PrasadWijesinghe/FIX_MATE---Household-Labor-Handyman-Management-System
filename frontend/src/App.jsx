@@ -1,5 +1,5 @@
 import SupplierDashboard from './supplier/SupplierDashboard';
-
+import { ToastContainer, toast } from 'react-toastify';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminDashboard from './admin/AdminDashboard';
@@ -13,13 +13,22 @@ import Home from './pages/Home/Home'
 import SignUp from './pages/SignUp' 
 import Register from './pages/Register'
 import VendorDashboard from './vendor/VendorDashboard';
+import EmailVerify from './pages/EmailVerify';
+import ResetPassword from './pages/ResetPassword';
+import ResendOtp from './pages/ResendOtp';
 
 const App = () => {
   return (
+    <div>
+      <ToastContainer/>
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/register" element={<Register/>} />
+
+  <Route path="/signup" element={<SignUp />} />
+  <Route path="/register" element={<Register/>} />
+  <Route path="/email-verify" element={<EmailVerify />} />
+  <Route path="/reset-password" element={<ResetPassword />} />
+  <Route path="/resend-otp" element={<ResendOtp />} />
 
 
   <Route path="/vendor" element={<VendorDashboard />}>
@@ -52,6 +61,8 @@ const App = () => {
         <Route path="services" element={<Services />} />
       </Route>
     </Routes>
+
+    </div>
   );
 }
 
