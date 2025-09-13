@@ -9,12 +9,14 @@ import Products from './admin/Products';
 import Services from './admin/Services';
 import Home from './pages/Home/Home'
 import SignUp from './pages/SignUp' 
+import Register from './pages/Register'
 
 const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/register" element={<Register/>} />
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<DashboardMain />} />
         <Route path="users" element={<Users />} />
