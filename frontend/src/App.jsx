@@ -1,3 +1,5 @@
+import SupplierDashboard from './supplier/SupplierDashboard';
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminDashboard from './admin/AdminDashboard';
@@ -10,6 +12,7 @@ import Services from './admin/Services';
 import Home from './pages/Home/Home'
 import SignUp from './pages/SignUp' 
 import Register from './pages/Register'
+import VendorDashboard from './vendor/VendorDashboard';
 
 const App = () => {
   return (
@@ -17,7 +20,30 @@ const App = () => {
       <Route path='/' element={<Home />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/register" element={<Register/>} />
-      <Route path="/admin" element={<AdminDashboard />}>
+
+
+  <Route path="/vendor" element={<VendorDashboard />}>
+    <Route index element={<DashboardMain />} />
+    <Route path="orders" element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
+    <Route path="ongoing" element={<div className='p-8 text-white text-xl'>Ongoing Orders Page</div>} />
+    <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders Page</div>} />
+    <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
+    <Route path="profile" element={<div className='p-8 text-white text-xl'>Profile Page</div>} />
+  </Route>
+
+  
+  <Route path="/supplier" element={<SupplierDashboard />}>
+    <Route index element={<div className='p-8 text-white text-xl'>Supplier Dashboard Home</div>} />
+    <Route path="orders" element={<div className='p-8 text-white text-xl'> Orders </div>} />
+    <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders </div>} />
+    <Route path="availableProducts" element={<div className='p-8 text-white text-xl'>Products</div>} />
+    <Route path="addProducts" element={<div className='p-8 text-white text-xl'>Add New Products</div>} />
+    <Route path="revenue" element={<div className='p-8 text-white text-xl'> Revenue </div>} />
+    <Route path="profile" element={<div className='p-8 text-white text-xl'> Profile</div>} />
+  </Route>
+
+
+  <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<DashboardMain />} />
         <Route path="users" element={<Users />} />
         <Route path="vendors" element={<Vendors />} />
