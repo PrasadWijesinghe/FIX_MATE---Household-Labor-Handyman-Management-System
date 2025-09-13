@@ -17,15 +17,12 @@ const SignUp = () => {
             <input type="password" className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Enter your password" />
           </div>
           <div className="flex items-center justify-between text-sm mt-1 mb-2">
-            <div className="flex items-center">
-              <input type="checkbox" id="remember" className="mr-2" />
-              <label htmlFor="remember">Remember me</label>
-            </div>
+            
             <a href="#" className="text-blue-600 hover:underline">Forgot password?</a>
           </div>
           <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2">Sign In</button>
         </form>
-        <p className="text-center text-gray-600 mt-4 text-sm">Don't have an account? <a href="#" className="text-blue-600 hover:underline">Sign up here</a></p>
+        <p className="text-center text-gray-600 mt-4 text-sm">Don't have an account? <a href="/register" className="text-blue-600 hover:underline">Sign up here</a></p>
         
       </div>
     </div>
