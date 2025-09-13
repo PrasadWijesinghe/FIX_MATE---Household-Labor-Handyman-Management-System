@@ -1,19 +1,31 @@
 import React from 'react'
-import './Header.css'
 import { assets } from '../../assets/assets'
 
 const Header = () => {
   return (
-     <div className='header'>
-        <div className="header-contents">
-            <p>One platform, all the home services you need</p>
-            <h2>Your Trusted <br /> Tasker for Every <br /> Task</h2>
-            <button>Book A Service</button>
-            <img src={assets.hero_img} alt="hero" className='hero-img' />
-        </div>
-
-         
+    <div className='relative h-[34vw] md:h-[20vw] lg:h-[18vw] min-h-[200px] md:min-h-[350px] mx-auto bg-contain '>
+     
+      <div className="absolute left-4 md:left-[6vw] bottom-[15%] md:bottom-[10%] flex flex-col items-start gap-3 md:gap-[1.5vw] max-w-[90%] md:max-w-[50%] z-10">
+        <p className="text-sm md:text-[max(1.2vw,14px)] text-gray-600 font-medium mb-2 md:mb-5">
+          One platform, all the home services you need
+        </p>
+        <h2 className="text-2xl md:text-[max(5.3vw,22px)] lg:text-5xl font-semibold text-black leading-tight">
+          Your Trusted <br /> 
+          Tasker for Every <br className='hidden md:block' /> 
+          <span className='md:hidden'>Task</span>
+          <span className='hidden md:inline'>Task</span>
+        </h2>
+        <button className="border-none text-white font-medium py-2 px-4 md:py-[1vw] md:px-[2.3vw] bg-blue-600 text-xs md:text-[max(1vw,13px)] rounded-full mt-2 md:mt-[10px] hover:bg-black hover:text-white transition-all duration-300 ease-in-out cursor-pointer shadow-lg">
+          Book A Service
+        </button>
+      </div>
       
+      
+      <img 
+        src={assets.hero_img} 
+        alt="hero" 
+        className='absolute right-5 bottom-[-1%] h-48 w-52 md:h-[430px] md:w-[470px] lg:h-[430px] lg:w-[450px] -z-10 opacity-80 md:opacity-100' 
+      />
     </div>
   )
 }
