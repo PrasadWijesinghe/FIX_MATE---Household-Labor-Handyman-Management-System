@@ -79,7 +79,7 @@ const Navbar = () => {
       ) : (
         <div className="flex items-center gap-4">
           
-          <Link to="/login">
+          <Link to="/signup">
             <button className="bg-blue-600 text-white text-xs border border-blue-600 px-5 py-2 rounded-full cursor-pointer transition hover:bg-black hover:text-white">
               GET STARTED
             </button>
