@@ -1,22 +1,35 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AppContext } from '../Context/AppContext'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../Context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const ResetPassword = () => {
-  const { backendUrl } = useContext(AppContext)
-  const navigate = useNavigate()
 
-  axios.defaults.withCredentials = true
 
-  const inputRefs = React.useRef([])
+const ResetPassword = ({ type = 'user' }) => {
+  const { backendUrl } = useContext(AppContext);
+  const navigate = useNavigate();
 
-  const [email, setEmail] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [isEmailSent, setIsEmailSent] = useState(false)
-  const [otp, setOtp] = useState('')
-  const [isOtpSubmitted, setIsOtpSubmitted] = useState(false)
+  axios.defaults.withCredentials = true;
+
+  const inputRefs = React.useRef([]);
+
+  const [email, setEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [isOtpSubmitted, setIsOtpSubmitted] = useState(false);
+
+ 
+  let sendOtpEndpoint = backendUrl + '/api/auth/send-reset-otp';
+  let resetPasswordEndpoint = backendUrl + '/api/auth/reset-password';
+  if (type === 'supplier') {
+    sendOtpEndpoint = backendUrl + '/api/supplier/send-reset-otp';
+    resetPasswordEndpoint = backendUrl + '/api/supplier/reset-password';
+  } else if (type === 'vendor') {
+    sendOtpEndpoint = backendUrl + '/api/vendor/send-reset-otp';
+    resetPasswordEndpoint = backendUrl + '/api/vendor/reset-password';
+  }
 
   const handleInput = (e, index) => {
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
@@ -44,13 +57,13 @@ const ResetPassword = () => {
   const onSubmitEmail = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(backendUrl + '/api/auth/send-reset-otp', { email })
-      data.success ? toast.success(data.message) : toast.error(data.message)
-      if (data.success) setIsEmailSent(true)
+      const { data } = await axios.post(sendOtpEndpoint, { email });
+      data.success ? toast.success(data.message) : toast.error(data.message);
+      if (data.success) setIsEmailSent(true);
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   const onsubmitOTP = async (e) => {
     e.preventDefault();
@@ -62,13 +75,13 @@ const ResetPassword = () => {
   const onSubmitNewPassword = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(backendUrl + '/api/auth/reset-password', { email, otp, newPassword })
-      data.success ? toast.success(data.message) : toast.error(data.message)
-      if (data.success) navigate('/')
+      const { data } = await axios.post(resetPasswordEndpoint, { email, otp, newPassword });
+      data.success ? toast.success(data.message) : toast.error(data.message);
+      if (data.success) navigate(type === 'supplier' ? '/supplierlogin' : '/');
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white px-2">

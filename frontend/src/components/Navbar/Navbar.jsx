@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="flex items-center gap-4">
-            <Link to="/login">
+            <Link to="/signup">
               <button className="bg-blue-600 text-white text-xs border border-blue-600 px-5 py-2 rounded-full cursor-pointer transition hover:bg-black hover:text-white">
                 GET STARTED
               </button>
@@ -126,7 +126,7 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <Link to="/login">
+          <Link to="/signup">
             <button className="bg-blue-600 text-white text-xs border border-blue-600 px-3 py-1.5 rounded-full cursor-pointer transition hover:bg-black hover:text-white">
               LOGIN
             </button>
@@ -145,44 +145,8 @@ const Navbar = () => {
       </div>
 
       
-<<<<<<< HEAD
-      <ul className="flex list-none gap-5 text-black text-xs">
-        <li onClick={() => setMenu("home")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "home" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>HOME</li>
-        <li onClick={() => setMenu("about")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "about" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>ABOUT</li>
-        <li onClick={() => setMenu("services")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "services" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>SERVICES</li>
-        <li onClick={() => setMenu("store")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "store" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>STORE</li>
-        <li onClick={() => setMenu("contact")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "contact" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>CONTACT</li>
-      </ul>
 
-     
-      {isLoggedin && userData ? (
-        <div className='relative group'>
-          <div className='rounded-full bg-black text-white w-14 h-14 flex items-center justify-center font-bold text-2xl transition-all duration-200 cursor-pointer'>
-            {userData.name && userData.name[0] ? userData.name[0].toUpperCase() : "U"}
-          </div>
-          <div className='absolute hidden group-hover:block top-full right-0 mt-2 z-10 bg-white text-black rounded shadow-lg'>
-            <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
-              {!userData.isAccountVerified && (
-                <li onClick={sendVerificationOtp} className='px-2 py-1 hover:bg-gray-200 cursor-pointer'>Verify Email</li>
-              )}
-              <li onClick={logout} className='px-2 py-1 hover:bg-gray-200 cursor-pointer pr-10'>Log Out</li>
-            </ul>
-          </div>
-        </div>
-      ) : (
-        <div className="flex items-center gap-4">
-          
-          <Link to="/signup">
-            <button className="bg-blue-600 text-white text-xs border border-blue-600 px-5 py-2 rounded-full cursor-pointer transition hover:bg-black hover:text-white">
-              GET STARTED
-            </button>
-          </Link>
-=======
+      
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-200 z-50">
           <ul className="flex flex-col list-none text-black">
@@ -207,7 +171,6 @@ const Navbar = () => {
               CONTACT
             </li>
           </ul>
->>>>>>> 79f409618789639b7f30a96ab1adcad8b0f8b566
         </div>
       )}
     </nav>

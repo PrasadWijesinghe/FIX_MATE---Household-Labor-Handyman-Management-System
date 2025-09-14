@@ -7,7 +7,7 @@ import SignUp from './pages/SignUp';
 import Register from './pages/Register';
 import EmailVerify from './pages/EmailVerify';
 import ResetPassword from './pages/ResetPassword';
-import ResendOtp from './pages/ResendOtp';
+
 import AdminDashboard from './admin/AdminDashboard';
 import DashboardMain from './admin/DashboardMain';
 import Users from './admin/Users';
@@ -16,13 +16,15 @@ import Suppliers from './admin/Suppliers';
 import Products from './admin/Products';
 import Services from './admin/Services';
 import VendorDashboard from './vendor/VendorDashboard';
-<<<<<<< HEAD
-import EmailVerify from './pages/EmailVerify';
-import ResetPassword from './pages/ResetPassword';
-
-=======
 import SupplierDashboard from './supplier/SupplierDashboard';
->>>>>>> 79f409618789639b7f30a96ab1adcad8b0f8b566
+import { SupplierContextProvider } from './Context/SupplierContext';
+
+import VendorLogin from './vendor/VendorLogin';
+import VendorRegister from './vendor/VendorRegister';
+
+import SupplierLogin from './supplier/SupplierLogin';
+import SupplierRegister from './supplier/SupplierRegister';
+
 
 const App = () => {
   return (
@@ -34,15 +36,18 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/resend-otp" element={<ResendOtp />} />
+       
 
-<<<<<<< HEAD
-  <Route path="/signup" element={<SignUp />} />
-  <Route path="/register" element={<Register/>} />
-  <Route path="/email-verify" element={<EmailVerify />} />
-  <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/email-verify" element={<EmailVerify />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route path="/vendorlogin" element={<VendorLogin />} />
+        <Route path="/vendorregister" element={<VendorRegister />} />
   
-=======
+
         <Route path="/vendor" element={<VendorDashboard />}>
           <Route index element={<DashboardMain />} />
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
@@ -51,9 +56,16 @@ const App = () => {
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
           <Route path="profile" element={<div className='p-8 text-white text-xl'>Profile Page</div>} />
         </Route>
->>>>>>> 79f409618789639b7f30a96ab1adcad8b0f8b566
 
-        <Route path="/supplier" element={<SupplierDashboard />}>
+        <Route path="/supplierlogin" element={<SupplierLogin />} />
+        <Route path="/supplierregister" element={<SupplierRegister />} />
+
+
+        <Route path="/supplier" element={
+          <SupplierContextProvider>
+            <SupplierDashboard />
+          </SupplierContextProvider>
+        }>
           <Route index element={<div className='p-8 text-white text-xl'>Supplier Dashboard Home</div>} />
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders</div>} />
