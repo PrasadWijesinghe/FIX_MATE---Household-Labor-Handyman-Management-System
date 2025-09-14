@@ -1,11 +1,35 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
 
 const VendorLogin = () => {
   const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        backendUrl + '/api/vendor/login',
+        { email: form.email, password: form.password },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        toast.success('Login successful');
+        navigate('/vendor');
+      } else {
+        toast.error(data.message || 'Login failed');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Login failed');
+    }
   };
 
   return (
@@ -18,8 +42,7 @@ const VendorLogin = () => {
           Welcome back! Sign in to your account
         </p>
 
-        <form className="flex flex-col gap-4">
-          
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1">
             <label className="block text-gray-700">Email Address</label>
             <input
@@ -32,8 +55,6 @@ const VendorLogin = () => {
               required
             />
           </div>
-
-          
           <div className="flex flex-col gap-1">
             <label className="block text-gray-700">Password</label>
             <input
@@ -46,15 +67,11 @@ const VendorLogin = () => {
               required
             />
           </div>
-
-      
           <div className="flex items-center justify-between text-sm mt-1 mb-2">
             <span className="text-blue-600 hover:underline cursor-pointer">
               Forgot password?
             </span>
           </div>
-
- 
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2"
@@ -62,7 +79,6 @@ const VendorLogin = () => {
             Sign In
           </button>
         </form>
-
         <p className="text-center text-gray-600 mt-4 text-sm">
           Don't have an account?{' '}
           <Link to="/vendorregister">
@@ -76,4 +92,4 @@ const VendorLogin = () => {
   );
 }
 
-export default VendorLogin
+export default VendorLogin;

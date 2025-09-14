@@ -12,14 +12,15 @@ export const getSupplierData = async (req, res) => {
 		if (!supplier) {
 			return res.json({ success: false, message: 'Supplier Not Found' });
 		}
-		res.json({
-			success: true,
-			supplierData: {
-				name: supplier.name,
-				email: supplier.email,
-				isAccountVerified: supplier.isAccountVerified
-			}
-		});
+			res.json({
+				success: true,
+				supplierData: {
+					_id: supplier._id, 
+					name: supplier.name,
+					email: supplier.email,
+					isAccountVerified: supplier.isAccountVerified
+				}
+			});
 	} catch (error) {
 		return res.json({ success: false, message: error.message });
 	}
