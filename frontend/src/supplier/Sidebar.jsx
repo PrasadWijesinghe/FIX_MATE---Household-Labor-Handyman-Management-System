@@ -1,6 +1,8 @@
 
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { SupplierContext } from "../Context/SupplierContext";
 
 const navLinks = [
   { name: "Available Orders", path: "/supplier/orders" },
@@ -13,10 +15,25 @@ const navLinks = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { setIsSupplierLoggedin, setSupplierData, backendUrl } = useContext(SupplierContext);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(backendUrl + '/api/supplier/logout', {}, { withCredentials: true });
+      setIsSupplierLoggedin(false);
+      setSupplierData(null);
+      navigate('/supplierlogin');
+    } catch (error) {
+     
+      navigate('/supplierlogin');
+    }
+  };
+
   return (
     <aside className="w-56 bg-gray-800 flex flex-col items-center py-8 min-h-screen">
-      <div className="text-2xl font-bold mb-10 tracking-wider">FIX MATE</div>
-      <nav className="w-full">
+      <div className="text-2xl font-bold mb-10 tracking-wider">FIX MATE<br/><p className="text-sm">Supplier Dashbord</p></div>
+      <nav className="w-full flex-1">
         <ul className="flex flex-col gap-2 w-full">
           {navLinks.map(link => (
             <li key={link.name}>
@@ -30,6 +47,12 @@ const Sidebar = () => {
           ))}
         </ul>
       </nav>
+      <button
+        onClick={handleLogout}
+        className="mt-auto mb-2 w-5/6 bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+      >
+        Logout
+      </button>
     </aside>
   );
 };
