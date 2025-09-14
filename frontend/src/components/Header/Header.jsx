@@ -18,15 +18,22 @@ const Header = () => {
         <button className="border-none text-white font-medium py-2 px-4 md:py-[1vw] md:px-[2.3vw] bg-blue-600 text-xs md:text-[max(1vw,13px)] rounded-full mt-2 md:mt-[10px] hover:bg-black hover:text-white transition-all duration-300 ease-in-out cursor-pointer shadow-lg">
           Book A Service
         </button>
+         {/* <div className="icon flex gap-3 mt-3 md:-mt-2 text-gray-600 text-xl md:text-2xl">
+                    <a  href="https://www.linkedin.com/in/kavi-dissanayake/" ><i className='bx bxl-linkedin'></i></a>
+                    <a href="https://github.com/kavinda44"><i className='bx bxl-github'></i></a>
+                    <a href="#"><i className='bx bxl-instagram' ></i></a>
+                    <a href="https://x.com/kevin_coding_"><i className='bx bxl-twitter'></i></a>
+                </div> */}
       </div>
-      
-      
+
       <img 
         src={assets.hero_img} 
         alt="hero" 
         className='absolute right-5 bottom-[-1%] h-48 w-52 md:h-[430px] md:w-[470px] lg:h-[430px] lg:w-[450px] -z-10 opacity-80 md:opacity-100' 
       />
+      
     </div>
+
   )
 }
 
