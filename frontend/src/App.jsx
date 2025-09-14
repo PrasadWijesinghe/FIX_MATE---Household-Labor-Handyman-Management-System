@@ -16,6 +16,7 @@ import Suppliers from './admin/Suppliers';
 import Products from './admin/Products';
 import Services from './admin/Services';
 import VendorDashboard from './vendor/VendorDashboard';
+import { VendorContextProvider } from './Context/VendorContext';
 import SupplierDashboard from './supplier/SupplierDashboard';
 import { SupplierContextProvider } from './Context/SupplierContext';
 
@@ -24,7 +25,7 @@ import VendorRegister from './vendor/VendorRegister';
 
 import SupplierLogin from './supplier/SupplierLogin';
 import SupplierRegister from './supplier/SupplierRegister';
-
+import SupplierProfile from './supplier/SupplierProfile';
 
 const App = () => {
   return (
@@ -36,20 +37,16 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-       
-
-
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/register" element={<Register/>} />
-        <Route path="/email-verify" element={<EmailVerify />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/vendorlogin" element={<VendorLogin />} />
         <Route path="/vendorregister" element={<VendorRegister />} />
-  
 
-        <Route path="/vendor" element={<VendorDashboard />}>
-          <Route index element={<DashboardMain />} />
+        <Route path="/vendor" element={
+          <VendorContextProvider>
+            <VendorDashboard />
+          </VendorContextProvider>
+        }>
+          <Route index element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
           <Route path="ongoing" element={<div className='p-8 text-white text-xl'>Ongoing Orders Page</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders Page</div>} />
@@ -60,19 +57,18 @@ const App = () => {
         <Route path="/supplierlogin" element={<SupplierLogin />} />
         <Route path="/supplierregister" element={<SupplierRegister />} />
 
-
         <Route path="/supplier" element={
           <SupplierContextProvider>
             <SupplierDashboard />
           </SupplierContextProvider>
         }>
-          <Route index element={<div className='p-8 text-white text-xl'>Supplier Dashboard Home</div>} />
+          <Route index element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders</div>} />
           <Route path="availableProducts" element={<div className='p-8 text-white text-xl'>Products</div>} />
           <Route path="addProducts" element={<div className='p-8 text-white text-xl'>Add New Products</div>} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue</div>} />
-          <Route path="profile" element={<div className='p-8 text-white text-xl'>Profile</div>} />
+          <Route path="profile" element={<SupplierProfile />} />
         </Route>
 
         <Route path="/admin" element={<AdminDashboard />}>
