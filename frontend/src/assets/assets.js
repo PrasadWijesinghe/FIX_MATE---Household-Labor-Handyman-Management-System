@@ -11,6 +11,7 @@ import service7 from './service7.png'
 import service8 from './service8.png'
 import service9 from './service9.png'         
 import step_bg from './step_bg.png'
+import seller from './seller.png'
 
 
 
@@ -26,7 +27,8 @@ export const assets = {
     service6,
     service7,
     service8,
-    service9
+    service9,
+    seller
     
 }
 
