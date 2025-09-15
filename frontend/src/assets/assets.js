@@ -16,6 +16,9 @@ import sand from './sand.jpeg'
 import cement from './cement.jpg'
 import metal_stones from './metal_stones.jpg'
 import brick_rocks from './brick_rocks.jpg' 
+import Vector from './Vector.png'
+import mdi_city from './mdi_city.png'
+import clarity_tasks_solid from './clarity_tasks_solid.png'
 
 
 
@@ -37,7 +40,10 @@ export const assets = {
     sand,
     cement,
     metal_stones,
-    brick_rocks
+    brick_rocks,
+    Vector,
+    mdi_city,
+    clarity_tasks_solid
     
 }
 

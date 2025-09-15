@@ -60,7 +60,7 @@ const Store = () => {
      
       <div className="flex justify-center mt-5">
         <button className="text-sm px-6 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition">
-          View Store
+          View Our Store
         </button>
       </div>
     </>
