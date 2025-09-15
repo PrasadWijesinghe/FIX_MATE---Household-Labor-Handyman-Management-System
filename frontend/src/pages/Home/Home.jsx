@@ -5,6 +5,7 @@ import Products from '../../components/Products/Products'
 import Steps from '../../components/Steps/Steps'
 import Services from '../../components/Services/Services'
 import Seller from '../../components/Seller/Seller'
+import Store from '../../components/Store/Store'
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
       <Steps/>
       <Services/>
       <Seller/>
+      <Store/>
     </div>
   )
 }

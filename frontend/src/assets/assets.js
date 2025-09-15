@@ -12,6 +12,11 @@ import service8 from './service8.png'
 import service9 from './service9.png'         
 import step_bg from './step_bg.png'
 import seller from './seller.png'
+import sand from './sand.jpeg'
+import cement from './cement.jpg'
+import metal_stones from './metal_stones.jpg'
+import brick_rocks from './brick_rocks.jpg' 
+
 
 
 
@@ -28,7 +33,11 @@ export const assets = {
     service7,
     service8,
     service9,
-    seller
+    seller,
+    sand,
+    cement,
+    metal_stones,
+    brick_rocks
     
 }
 

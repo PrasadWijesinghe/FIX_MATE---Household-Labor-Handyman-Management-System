@@ -1,0 +1,70 @@
+import React from 'react'
+import { assets } from '../../assets/assets'
+
+const Store = () => {
+  return (
+    <>
+      
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2' text-center mt-10 mb-4">
+        Discover Our Store
+      </h1>
+      <p className="text-xs text-gray-600 mb-10 text-center max-w-2xl mx-auto px-4">
+        Explore a wide range of high-quality construction materials. From sand and cement to pipes and more,
+ Fixmate connects you with trusted suppliers for all your building needs
+      </p>
+
+    
+      <section className="flex flex-wrap items-center justify-center gap-6 px-4">
+       
+        <a href="#" className="group w-full sm:w-56">
+          <img
+            className="rounded-lg w-full group-hover:shadow-xl group-hover:-translate-y-1 duration-300 transition-all h-72 object-cover object-top"
+            src={assets.sand}
+            alt="Sand"
+          />
+          <p className="text-sm mt-2">Sand</p>
+          <p className="text-xl font-semibold">$29.00</p>
+        </a>
+
+        <a href="#" className="group w-full sm:w-56">
+          <img
+            className="rounded-lg w-full group-hover:shadow-xl group-hover:-translate-y-1 duration-300 transition-all h-72 object-cover object-right"
+            src={assets.cement}
+            alt="Cement"
+          />
+          <p className="text-sm mt-2">Cement</p>
+          <p className="text-xl font-semibold">$39.00</p>
+        </a>
+
+        <a href="#" className="group w-full sm:w-56">
+          <img
+            className="rounded-lg w-full group-hover:shadow-xl group-hover:-translate-y-1 duration-300 transition-all h-72 object-cover object-right"
+            src={assets.metal_stones}
+            alt="Metal Stones"
+          />
+          <p className="text-sm mt-2">Metal Stones</p>
+          <p className="text-xl font-semibold">$29.00</p>
+        </a>
+
+        <a href="#" className="group w-full sm:w-56">
+          <img
+            className="rounded-lg w-full group-hover:shadow-xl group-hover:-translate-y-1 duration-300 transition-all h-72 object-cover object-right"
+            src={assets.brick_rocks}
+            alt="White Brick Rocks"
+          />
+          <p className="text-sm mt-2">White Brick Rocks</p>
+          <p className="text-xl font-semibold">$49.00</p>
+        </a>
+      </section>
+
+     
+      <div className="flex justify-center mt-5">
+        <button className="text-sm px-6 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition">
+          View Store
+        </button>
+      </div>
+    </>
+  )
+}
+
+export default Store
