@@ -6,6 +6,9 @@ import Steps from '../../components/Steps/Steps'
 import Services from '../../components/Services/Services'
 import Seller from '../../components/Seller/Seller'
 import Store from '../../components/Store/Store'
+import Testimonial from '../../components/Testimonial/Testimonial'
+import About from '../../components/About/About'
+import Footer from '../../components/Footer/Footer'
 
 function Home() {
   return (
@@ -17,6 +20,9 @@ function Home() {
       <Services/>
       <Seller/>
       <Store/>
+      <About/>
+      <Testimonial/>
+      <Footer/>
     </div>
   )
 }
