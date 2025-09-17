@@ -27,6 +27,10 @@ import SupplierLogin from './supplier/SupplierLogin';
 import SupplierRegister from './supplier/SupplierRegister';
 import SupplierProfile from './supplier/SupplierProfile';
 
+import ServicesPage from './pages/Services/ServicesPage';
+import ServicesCard from './pages/Services/ServicesCard';
+import VendorCard from './pages/Services/VendorCard';
+
 const App = () => {
   return (
     <div className='app'>
@@ -37,6 +41,9 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path='/ServicesPage' element={<ServicesPage />} />
+        <Route path='/ServicesCard' element={<ServicesCard />} />
+        <Route path='/VendorCard' element={<VendorCard />} />
 
         <Route path="/vendorlogin" element={<VendorLogin />} />
         <Route path="/vendorregister" element={<VendorRegister />} />

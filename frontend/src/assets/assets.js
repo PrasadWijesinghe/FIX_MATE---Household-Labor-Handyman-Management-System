@@ -19,7 +19,12 @@ import brick_rocks from './brick_rocks.jpg'
 import Vector from './Vector.png'
 import mdi_city from './mdi_city.png'
 import clarity_tasks_solid from './clarity_tasks_solid.png'
-
+import banner1 from './banner1.png'
+import banner2 from './banner2.png'
+import banner3 from './banner3.png'
+import carwash1 from './carwash1.png'
+import carwash2 from './carwash2.png'
+import carwash3 from './carwash3.png'
 
 
 
@@ -43,7 +48,13 @@ export const assets = {
     brick_rocks,
     Vector,
     mdi_city,
-    clarity_tasks_solid
+    clarity_tasks_solid,
+    banner1,
+    banner2,
+    banner3,
+    carwash1,
+    carwash2,
+    carwash3
     
 }
 
