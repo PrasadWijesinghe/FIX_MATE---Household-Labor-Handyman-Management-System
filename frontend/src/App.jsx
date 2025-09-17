@@ -26,6 +26,7 @@ import VendorRegister from './vendor/VendorRegister';
 import SupplierLogin from './supplier/SupplierLogin';
 import SupplierRegister from './supplier/SupplierRegister';
 import SupplierProfile from './supplier/SupplierProfile';
+import AddProducts from './supplier/AddProducts';
 
 import ServicesPage from './pages/Services/ServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
@@ -73,7 +74,7 @@ const App = () => {
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders</div>} />
           <Route path="availableProducts" element={<div className='p-8 text-white text-xl'>Products</div>} />
-          <Route path="addProducts" element={<div className='p-8 text-white text-xl'>Add New Products</div>} />
+          <Route path="addProducts" element={<AddProducts />} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue</div>} />
           <Route path="profile" element={<SupplierProfile />} />
         </Route>
