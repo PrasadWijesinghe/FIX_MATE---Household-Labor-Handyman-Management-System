@@ -154,14 +154,34 @@ const AllServicesPage = () => {
       rating: 4,
       reviews: 92,
       category: "security"
+    },
+      {
+      id: 9,
+      name: "AC Services",
+      description: "Professional air conditioning services including installation, maintenance, and repair solutions.",
+      image: assets.service7,
+      price: 29,
+      rating: 4,
+      reviews: 22,
+      category: "home"
+    },
+     {
+      id: 10,
+      name: "Mattress and Curtain Cleaning Services",
+      description: "Professional mattress and curtain cleaning services using eco-friendly products.",
+      image: assets.service8,
+      price: 29,
+      rating: 4,
+      reviews: 92,
+      category: "home"
     }
+
   ];
 
   const handleServiceNavigate = (service) => {
-    // Handle navigation to specific service page
+   
     console.log('Navigate to service:', service.name);
-    // You can implement navigation logic here
-    // For example: navigate('/services/' + service.id);
+   
   };
 
   return (
@@ -169,7 +189,7 @@ const AllServicesPage = () => {
       <Navbar />
       <Banner title="All Services" bgImage={assets.banner1} />
       
-      {/* Header Section */}
+     
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
