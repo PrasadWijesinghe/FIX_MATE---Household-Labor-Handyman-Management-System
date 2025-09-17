@@ -28,7 +28,7 @@ import SupplierRegister from './supplier/SupplierRegister';
 import SupplierProfile from './supplier/SupplierProfile';
 import AddProducts from './supplier/AddProducts';
 
-import ServicesPage from './pages/Services/ServicesPage';
+import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
 import VendorCard from './pages/Services/VendorCard';
 
@@ -42,7 +42,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path='/ServicesPage' element={<ServicesPage />} />
+        <Route path='/AllServicesPage' element={<AllServicesPage />} />
         <Route path='/ServicesCard' element={<ServicesCard />} />
         <Route path='/VendorCard' element={<VendorCard />} />
 
