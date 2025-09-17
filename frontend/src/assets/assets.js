@@ -1,6 +1,9 @@
 
 import logo from './web_logo.png'
 import hero_img from './hero_img.png'
+<<<<<<< HEAD
+import Upload_img from './Upload.png'
+=======
 import service1 from './service1.png'
 import service2 from './service2.png'
 import service3 from './service3.png'
@@ -26,11 +29,16 @@ import carwash1 from './carwash1.png'
 import carwash2 from './carwash2.png'
 import carwash3 from './carwash3.png'
 
+>>>>>>> c8be6a142290dd1dc1e2d9258217dc05ebe3bb04
 
 
 export const assets = {
     logo,
     hero_img,
+<<<<<<< HEAD
+    Upload_img
+   
+=======
     service1,
     service2,
     service3,
@@ -56,5 +64,6 @@ export const assets = {
     carwash2,
     carwash3
     
+>>>>>>> c8be6a142290dd1dc1e2d9258217dc05ebe3bb04
 }
 
