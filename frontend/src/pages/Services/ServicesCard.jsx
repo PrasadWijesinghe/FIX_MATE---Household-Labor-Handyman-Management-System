@@ -219,17 +219,6 @@ const ServicesCard = ({ title = "Car Washing Services", bgImage = assets.carwash
             ))}
           </div>
         </div>
-
-        
-        <div className="bg-blue-600 text-white py-16">
-          <div className="max-w-4xl mx-auto text-center px-6">
-            <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
-            <p className="text-xl mb-8 text-blue-100">Contact us and we'll help you find the perfect service provider for your needs.</p>
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-black transition-colors cursor-pointer">
-              Request Custom Service
-            </button>
-          </div>
-        </div>
       </div>
       <Footer />
     </div>

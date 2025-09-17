@@ -102,7 +102,7 @@ const Products = () => {
         
       </div>
       <div className='flex justify-center'>
-        <button className='text-xs px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition'>
+        <button className='text-xs px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition'  onClick={() => navigate('/AllServicesPage')}>
           View All Services
         </button>
       </div>

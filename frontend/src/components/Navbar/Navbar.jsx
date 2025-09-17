@@ -68,7 +68,7 @@ const Navbar = () => {
           ABOUT
         </li>
         <li onClick={() => setMenu("services")}
-            className={`cursor-pointer pb-0.5 transition-all ${menu === "services" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
+            className={`cursor-pointer pb-0.5 transition-all ${menu === "services" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}` }>
           SERVICES
         </li>
         <li onClick={() => setMenu("store")}

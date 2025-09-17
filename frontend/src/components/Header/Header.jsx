@@ -1,7 +1,9 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <div className='relative h-[34vw] md:h-[20vw] lg:h-[18vw] min-h-[200px] md:min-h-[350px] mx-auto bg-contain '>
      
@@ -15,7 +17,7 @@ const Header = () => {
           <span className='md:hidden'>Task</span>
           <span className='hidden md:inline'>Task</span>
         </h2>
-        <button className="border-none text-white font-medium py-2 px-4 md:py-[1vw] md:px-[2.3vw] bg-blue-600 text-xs md:text-[max(1vw,13px)] rounded-full mt-2 md:mt-[10px] hover:bg-black hover:text-white transition-all duration-300 ease-in-out cursor-pointer shadow-lg">
+        <button className="border-none text-white font-medium py-2 px-4 md:py-[1vw] md:px-[2.3vw] bg-blue-600 text-xs md:text-[max(1vw,13px)] rounded-full mt-2 md:mt-[10px] hover:bg-black hover:text-white transition-all duration-300 ease-in-out cursor-pointer shadow-lg" onClick={() => navigate('/AllServicesPage')}>
           Book A Service
         </button>
          {/* <div className="icon flex gap-3 mt-3 md:-mt-2 text-gray-600 text-xl md:text-2xl">
