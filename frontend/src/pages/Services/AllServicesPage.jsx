@@ -63,7 +63,7 @@ const ServiceCard = ({ service }) => {
         
         <button 
           className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-black transition-colors transform hover:scale-105 duration-200 cursor-pointer"
-          onClick={() => navigate('/ServicesCard')}
+          onClick={() => navigate(`/services/category/${service.category}`)}
         >
           Book Now
         </button>
@@ -77,103 +77,103 @@ const AllServicesPage = () => {
   const services = [
     {
       id: 1,
-      name: "Car Washing Services",
-      description: "Professional car detailing and washing services with eco-friendly products and mobile options.",
-      image: assets.service1,
-      price: 25,
-      rating: 5,
-      reviews: 124,
-      category: "automotive"
-    },
-    {
-      id: 2,
-      name: "House Cleaning Services",
-      description: "Complete home cleaning services including deep cleaning, regular maintenance, and sanitization.",
-      image: assets.service2,
-      price: 39,
-      rating: 4,
-      reviews: 89,
-      category: "home"
-    },
-    {
-      id: 3,
-      name: "Painting & Renovation Services",
-      description: "Interior and exterior painting, wall repairs, and complete home renovation solutions.",
-      image: assets.service3,
-      price: 29,
-      rating: 5,
-      reviews: 156,
-      category: "renovation"
-    },
-    {
-      id: 4,
-      name: "Plumbing Repairs Services",
-      description: "Emergency plumbing repairs, pipe installation, leak fixing, and drain cleaning services.",
+      name: "Plumber",
+      description: "Expert plumbing services for repairs, installations, and maintenance of pipes, fixtures, and water systems.",
       image: assets.service4,
       price: 49,
       rating: 4,
       reviews: 203,
-      category: "maintenance"
+      category: "Plumber"
     },
     {
-      id: 5,
-      name: "Electrical Services",
-      description: "Licensed electricians for wiring, outlet installation, electrical troubleshooting and repairs.",
+      id: 2,
+      name: "Electrician",
+      description: "Licensed electricians for wiring, outlet installation, troubleshooting, and electrical repairs.",
       image: assets.service5,
       price: 29,
       rating: 5,
       reviews: 78,
-      category: "maintenance"
+      category: "Electrician"
+    },
+    {
+      id: 3,
+      name: "Carpenter",
+      description: "Professional carpentry services for furniture, doors, windows, and custom woodwork projects.",
+      image: assets.service1,
+      price: 35,
+      rating: 5,
+      reviews: 120,
+      category: "Carpenter"
+    },
+    {
+      id: 4,
+      name: "Painter",
+      description: "Interior and exterior painting, wall repairs, and complete home or office painting solutions.",
+      image: assets.service3,
+      price: 29,
+      rating: 5,
+      reviews: 156,
+      category: "Painter"
+    },
+    {
+      id: 5,
+      name: "Mechanic",
+      description: "Automotive mechanic services for car repairs, maintenance, and diagnostics.",
+      image: assets.service2,
+      price: 40,
+      rating: 4,
+      reviews: 110,
+      category: "Mechanic"
     },
     {
       id: 6,
-      name: "Mattress and Curtain Cleaning",
-      description: "Deep cleaning services for mattresses, curtains, upholstery with eco-friendly solutions.",
+      name: "Gardener",
+      description: "Gardening and landscaping services for lawn care, plant maintenance, and outdoor beautification.",
       image: assets.service6,
       price: 39,
       rating: 4,
       reviews: 167,
-      category: "home"
+      category: "Gardener"
     },
     {
       id: 7,
-      name: "Hair Styling Experts Services",
-      description: "Professional hair styling, cutting, coloring, and beauty services at your convenience.",
-      image: assets.service9,
+      name: "Cleaner",
+      description: "Complete home and office cleaning services including deep cleaning and regular maintenance.",
+      image: assets.service8,
       price: 29,
-      rating: 5,
-      reviews: 145,
-      category: "beauty"
+      rating: 4,
+      reviews: 92,
+      category: "Cleaner"
     },
     {
       id: 8,
-      name: "Security Services",
+      name: "Security",
       description: "Professional security services including installation, monitoring, and maintenance solutions.",
       image: assets.service10,
       price: 49,
       rating: 4,
       reviews: 92,
-      category: "security"
+      category: "Security"
     },
-      {
+    {
       id: 9,
-      name: "AC Services",
-      description: "Professional air conditioning services including installation, maintenance, and repair solutions.",
+      name: "Pest Control Specialist",
+      description: "Pest control and extermination services for homes and businesses, using safe and effective methods.",
       image: assets.service7,
-      price: 29,
+      price: 35,
       rating: 4,
-      reviews: 22,
-      category: "home"
+      reviews: 60,
+      category: "PestControl"
     },
-     {
+    {
       id: 10,
-      name: "Mattress and Curtain Cleaning Services",
-      description: "Professional mattress and curtain cleaning services using eco-friendly products.",
-      image: assets.service8,
-      price: 29,
-      rating: 4,
-      reviews: 92,
-      category: "home"
+      name: "Mason",
+      description: "Masonry services for brickwork, stonework, tiling, and construction projects.",
+      image: assets.service9,
+      price: 45,
+      rating: 5,
+      reviews: 80,
+      category: "Mason"
     }
 
   ];

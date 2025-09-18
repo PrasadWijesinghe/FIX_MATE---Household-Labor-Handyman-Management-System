@@ -35,6 +35,8 @@ import AvailableProducts from './supplier/AvailableProducts';
 import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
 import VendorCard from './pages/Services/VendorCard';
+import VendorsByCategory from './pages/Services/VendorsByCategory';
+import VendorCardDynamic from './pages/Services/VendorCardDynamic';
 
 
 const App = () => {
@@ -49,9 +51,12 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/About" element={<About />} />
-        <Route path='/AllServicesPage' element={<AllServicesPage />} />
-        <Route path='/ServicesCard' element={<ServicesCard />} />
-        <Route path='/VendorCard' element={<VendorCard />} />
+
+  <Route path='/AllServicesPage' element={<AllServicesPage />} />
+  <Route path='/ServicesCard' element={<ServicesCard />} />
+  <Route path='/VendorCard' element={<VendorCard />} />
+  <Route path='/services/category/:category' element={<VendorsByCategory />} />
+  <Route path='/services/category/vendor/:id' element={<VendorCardDynamic />} />
 
 
         <Route path="/vendorlogin" element={<VendorLogin />} />

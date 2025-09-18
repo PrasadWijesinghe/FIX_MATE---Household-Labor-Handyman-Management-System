@@ -86,7 +86,9 @@ const VendorRegister = () => {
               <option value="Mechanic">Mechanic</option>
               <option value="Gardener">Gardener</option>
               <option value="Cleaner">Cleaner</option>
-              <option value="Other">Other</option>
+              <option value="Security">Security</option>
+              <option value="PestControl">Pest Control Specialist</option>
+              <option value="Mason">Mason</option>
             </select>
           </div>
 
