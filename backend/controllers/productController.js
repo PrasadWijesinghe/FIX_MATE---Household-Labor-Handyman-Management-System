@@ -1,3 +1,32 @@
+// Admin: Get all products with supplier info
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await productModel.find({}).populate('supplier', 'name');
+    res.json({ success: true, products });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Admin: Delete any product by ID
+export const adminDeleteProduct = async (req, res) => {
+  try {
+    const product = await productModel.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    // Remove image from Cloudinary if present
+    if (product.imagePublicId) {
+      try {
+        await cloudinary.v2.uploader.destroy(product.imagePublicId);
+      } catch (err) {}
+    }
+    await product.deleteOne();
+    res.json({ success: true, message: 'Product deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 export const getSupplierProducts = async (req, res) => {
   try {
     const supplierId = req.user.id;

@@ -17,6 +17,7 @@ import Vendors from './admin/Vendors';
 import Suppliers from './admin/Suppliers';
 import Products from './admin/Products';
 import Services from './admin/Services';
+import Adminlogin from './admin/Adminlogin';
 import VendorDashboard from './vendor/VendorDashboard';
 import VendorProfile from './vendor/Profile';
 import AvailableOrders from './vendor/AvailableOrders';
@@ -47,6 +48,7 @@ const App = () => {
     <div className='app'>
       <ToastContainer />
       <Routes>
+        <Route path="/adminlogin" element={<Adminlogin />} />
         <Route path='/' element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/register" element={<Register />} />

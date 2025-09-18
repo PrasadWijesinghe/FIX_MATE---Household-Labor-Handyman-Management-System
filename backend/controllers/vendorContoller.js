@@ -1,3 +1,14 @@
+// Admin: Verify vendor account
+export const verifyVendor = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const vendor = await vendorModel.findByIdAndUpdate(id, { isAccountVerified: true }, { new: true });
+		if (!vendor) return res.status(404).json({ success: false, message: 'Vendor not found' });
+		res.json({ success: true, message: 'Vendor verified' });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};
 import vendorModel from '../models/vendorModel.js';
 
 

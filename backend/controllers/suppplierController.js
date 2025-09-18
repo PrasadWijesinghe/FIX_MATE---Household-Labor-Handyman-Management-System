@@ -1,3 +1,42 @@
+// Supplier: Update profile
+export const updateSupplierProfile = async (req, res) => {
+	try {
+		const supplierId = req.user.id;
+		const { name, businessName, phone } = req.body;
+		const supplier = await supplierModel.findById(supplierId);
+		if (!supplier) {
+			return res.status(404).json({ success: false, message: 'Supplier Not Found' });
+		}
+		if (name !== undefined) supplier.name = name;
+		if (businessName !== undefined) supplier.businessName = businessName;
+		if (phone !== undefined) supplier.phone = phone;
+		await supplier.save();
+		res.json({ success: true, message: 'Profile updated successfully', supplier });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};
+// Admin: Get all suppliers
+export const getAllSuppliers = async (req, res) => {
+	try {
+		const suppliers = await supplierModel.find({}, 'name email isAccountVerified');
+		res.json({ success: true, suppliers });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};
+
+// Admin: Delete supplier
+export const deleteSupplier = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const supplier = await supplierModel.findByIdAndDelete(id);
+		if (!supplier) return res.status(404).json({ success: false, message: 'Supplier not found' });
+		res.json({ success: true, message: 'Supplier deleted' });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import supplierModel from '../models/supplierModel.js';

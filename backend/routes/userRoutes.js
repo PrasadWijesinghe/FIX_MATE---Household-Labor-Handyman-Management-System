@@ -1,8 +1,12 @@
+
 import express from 'express'
 import userAuth from '../middleware/userAuth.js';
-import { getUserData, getAllUsers } from '../controllers/userController.js';
+import { getUserData, getAllUsers, verifyUser } from '../controllers/userController.js';
 
 const userRouter = express.Router();
+
+// Admin: Verify user
+userRouter.put('/verify/:id', verifyUser);
 
 userRouter.get('/data',userAuth, getUserData);
 

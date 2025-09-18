@@ -1,6 +1,7 @@
 import express from 'express';
 import vendorAuth from '../middleware/vendorAuth.js';
 import upload from '../middleware/vendorUpload.js';
+
 import {
 	registerVendor,
 	loginVendor,
@@ -10,10 +11,14 @@ import {
 	getVendorsByCategory,
 	getVendorById,
 	getAllVendors,
-	deleteVendor
+	deleteVendor,
+	verifyVendor
 } from '../controllers/vendorContoller.js';
 
 const vendorRouter = express.Router();
+
+// Admin: Verify vendor
+vendorRouter.put('/verify/:id', verifyVendor);
 
 vendorRouter.get('/all', getAllVendors);
 

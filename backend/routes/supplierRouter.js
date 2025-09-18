@@ -1,3 +1,4 @@
+
 import express from 'express';
 import supplierAuth from '../middleware/supplierAuth.js';
 import {
@@ -8,10 +9,21 @@ import {
   sendSupplierVerifyOtp,
   verifySupplierEmail,
   sendSupplierResetOtp,
-  resetSupplierPassword
+  resetSupplierPassword,
+  getAllSuppliers,
+  deleteSupplier,
+  updateSupplierProfile
 } from '../controllers/suppplierController.js';
 
 const supplierRouter = express.Router();
+
+// Supplier: Update profile
+supplierRouter.put('/update-profile', supplierAuth, updateSupplierProfile);
+
+// Admin: Get all suppliers
+supplierRouter.get('/all', getAllSuppliers);
+// Admin: Delete supplier
+supplierRouter.delete('/:id', deleteSupplier);
 
 supplierRouter.post('/register', registerSupplier);
 supplierRouter.post('/login', loginSupplier);
