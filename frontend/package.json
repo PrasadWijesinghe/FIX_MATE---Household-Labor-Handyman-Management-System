@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.1",
     "cloudinary": "^2.7.0",
+    "countdown": "^2.6.0",
     "multer": "^2.0.2",
     "react": "^19.1.1",
     "react-countup": "^6.5.3",

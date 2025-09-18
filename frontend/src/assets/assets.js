@@ -1,9 +1,9 @@
 
 import logo from './web_logo.png'
 import hero_img from './hero_img.png'
-<<<<<<< HEAD
+
 import Upload_img from './Upload.png'
-=======
+
 import service1 from './service1.png'
 import service2 from './service2.png'
 import service3 from './service3.png'
@@ -24,16 +24,15 @@ import mdi_city from './mdi_city.png'
 import clarity_tasks_solid from './clarity_tasks_solid.png'
 
 
->>>>>>> c8be6a142290dd1dc1e2d9258217dc05ebe3bb04
+
 
 
 export const assets = {
     logo,
     hero_img,
-<<<<<<< HEAD
-    Upload_img
+
+    Upload_img,
    
-=======
     service1,
     service2,
     service3,
@@ -53,6 +52,6 @@ export const assets = {
     mdi_city,
     clarity_tasks_solid
     
->>>>>>> c8be6a142290dd1dc1e2d9258217dc05ebe3bb04
+
 }
 
