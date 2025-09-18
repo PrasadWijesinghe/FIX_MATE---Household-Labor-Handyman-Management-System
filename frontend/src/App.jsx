@@ -19,6 +19,9 @@ import Products from './admin/Products';
 import Services from './admin/Services';
 import VendorDashboard from './vendor/VendorDashboard';
 import VendorProfile from './vendor/Profile';
+import AvailableOrders from './vendor/AvailableOrders';
+import OngoingOrders from './vendor/OngoingOrders';
+import PreviousOrders from './vendor/PreviousOrders';
 import { VendorContextProvider } from './Context/VendorContext';
 import SupplierDashboard from './supplier/SupplierDashboard';
 import { SupplierContextProvider } from './Context/SupplierContext';
@@ -67,10 +70,10 @@ const App = () => {
             <VendorDashboard />
           </VendorContextProvider>
         }>
-          <Route index element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
-          <Route path="orders" element={<div className='p-8 text-white text-xl'>Available Orders Page</div>} />
-          <Route path="ongoing" element={<div className='p-8 text-white text-xl'>Ongoing Orders Page</div>} />
-          <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders Page</div>} />
+          <Route index element={<AvailableOrders />} />
+          <Route path="orders" element={<AvailableOrders />} />
+          <Route path="ongoing" element={<OngoingOrders />} />
+          <Route path="previous" element={<PreviousOrders />} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
           <Route path="profile" element={<VendorProfile />} />
         </Route>

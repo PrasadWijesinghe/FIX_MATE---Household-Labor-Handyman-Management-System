@@ -1,4 +1,4 @@
-// Update order status (accept, reject, mark as done)
+
 export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -14,7 +14,7 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-// Delete order (for rejected orders)
+
 export const deleteOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -27,7 +27,7 @@ export const deleteOrder = async (req, res) => {
 };
 import orderModel from '../models/orderModel.js';
 
-// Create a new order
+
 export const createOrder = async (req, res) => {
   try {
     const { vendorId, vendorName, name, phone, email, address, date, notes } = req.body;
@@ -42,7 +42,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// Get all orders for a vendor
+
 export const getOrdersByVendor = async (req, res) => {
   try {
     const { vendorId } = req.params;
