@@ -86,13 +86,51 @@ const Vendors = () => {
                   <td className="px-4 py-2">{vendor.category}</td>
                   <td className="px-4 py-2">${vendor.hourlyRate}</td>
                   <td className="px-4 py-2">{vendor.isAccountVerified ? 'Yes' : 'No'}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 flex gap-2">
                     <button
                       className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs"
                       onClick={() => handleRemove(vendor._id)}
                     >
                       Remove
                     </button>
+                    {!vendor.isAccountVerified && (
+                      <button
+                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
+                        onClick={() => {
+                          toast.info(
+                            <div>
+                              <div className="mb-2">Are you sure you want to verify this vendor?</div>
+                              <div className="flex gap-2 justify-end">
+                                <button
+                                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
+                                  onClick={async () => {
+                                    toast.dismiss();
+                                    try {
+                                      await axios.put(`/api/vendor/verify/${vendor._id}`);
+                                      toast.success('Vendor verified.');
+                                      fetchVendors();
+                                    } catch {
+                                      toast.error('Failed to verify vendor.');
+                                    }
+                                  }}
+                                >
+                                  Yes
+                                </button>
+                                <button
+                                  className="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-xs"
+                                  onClick={() => toast.dismiss()}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>,
+                            { autoClose: false, closeOnClick: false, closeButton: false, position: 'top-center' }
+                          );
+                        }}
+                      >
+                        Verify
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

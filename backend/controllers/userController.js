@@ -1,3 +1,14 @@
+// Admin: Verify user account
+export const verifyUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userModel.findByIdAndUpdate(id, { isAccountVerified: true }, { new: true });
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        res.json({ success: true, message: 'User verified' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 export const getAllUsers = async (req, res) => {
     try {

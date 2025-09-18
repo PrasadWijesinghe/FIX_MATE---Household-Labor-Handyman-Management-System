@@ -32,7 +32,8 @@ app.get('/', (req, res)=>res.send("API WORKING"))
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supplier', supplierRouter);
-app.use('/api/supplier', productRouter); // supplier product routes
+app.use('/api/supplier', productRouter); 
+app.use('/api/product', productRouter); 
 app.use('/api/vendor', vendorRouter);
 app.use('/api/upload', imageUploadRouter); 
 
