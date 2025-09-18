@@ -63,11 +63,11 @@ const Navbar = () => {
             className={`cursor-pointer pb-0.5 transition-all ${menu === "home" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           HOME
         </li>
-        <li onClick={() => setMenu("about")}
+        <li onClick={() => navigate('/about')}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "about" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           ABOUT
         </li>
-        <li onClick={() => setMenu("services")}
+        <li onClick={() => navigate('/AllServicesPage')}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "services" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}` }>
           SERVICES
         </li>
@@ -75,7 +75,7 @@ const Navbar = () => {
             className={`cursor-pointer pb-0.5 transition-all ${menu === "store" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           STORE
         </li>
-        <li onClick={() => setMenu("contact")}
+        <li onClick={() => navigate('/contact')}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "contact" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           CONTACT
         </li>
