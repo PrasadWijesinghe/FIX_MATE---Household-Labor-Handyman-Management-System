@@ -5,7 +5,7 @@ import { getUserData, getAllUsers, verifyUser } from '../controllers/userControl
 
 const userRouter = express.Router();
 
-// Admin: Verify user
+
 userRouter.put('/verify/:id', verifyUser);
 
 userRouter.get('/data',userAuth, getUserData);
