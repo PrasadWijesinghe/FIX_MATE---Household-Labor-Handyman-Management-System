@@ -1,3 +1,12 @@
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({}, 'name email role');
+        res.json({ success: true, users });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
 import userModel from "../models/userModel.js";
 
 

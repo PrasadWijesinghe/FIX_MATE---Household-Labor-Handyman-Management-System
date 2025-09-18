@@ -3,27 +3,23 @@ import axios from "axios";
 import { VendorContext } from "../Context/VendorContext";
 import { toast } from "react-toastify";
 
-const AvailableOrders = () => {
+const OngoingOrders = () => {
   const { vendorData, backendUrl } = useContext(VendorContext) || {};
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const fetchOrders = async () => {
-    if (!vendorData?._id) {
-      console.log('No vendorData._id, skipping fetch. vendorData:', vendorData);
-      return;
-    }
+    if (!vendorData?._id) return;
     setLoading(true);
     try {
       const { data } = await axios.get(`${backendUrl}/api/orders/vendor/${vendorData._id}`);
       if (data.success) {
-        setOrders(data.orders.filter(order => order.status === 'pending'));
+        setOrders(data.orders.filter(order => order.status === 'ongoing'));
       } else {
         setOrders([]);
       }
     } catch (err) {
       setOrders([]);
-      console.log('Error fetching orders:', err);
     } finally {
       setLoading(false);
     }
@@ -34,53 +30,21 @@ const AvailableOrders = () => {
     // eslint-disable-next-line
   }, [vendorData, backendUrl]);
 
-  const handleAccept = (orderId) => {
+  const handleMarkDone = (orderId) => {
     toast.info(
       <div>
-        <div className="mb-2">Are you sure you want to accept this order?</div>
+        <div className="mb-2">Are you sure you want to mark this order as done?</div>
         <div className="flex gap-2 justify-end">
           <button
             className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
             onClick={async () => {
               toast.dismiss();
               try {
-                await axios.patch(`${backendUrl}/api/orders/${orderId}/status`, { status: 'ongoing' });
-                toast.success('Order accepted and moved to Ongoing Orders.');
+                await axios.patch(`${backendUrl}/api/orders/${orderId}/status`, { status: 'done' });
+                toast.success('Order marked as done.');
                 fetchOrders();
               } catch {
-                toast.error('Failed to accept order.');
-              }
-            }}
-          >
-            Yes
-          </button>
-          <button
-            className="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-xs"
-            onClick={() => toast.dismiss()}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>,
-      { autoClose: false, closeOnClick: false, closeButton: false, position: 'top-center' }
-    );
-  };
-
-  const handleReject = (orderId) => {
-    toast.info(
-      <div>
-        <div className="mb-2">Are you sure you want to reject this order?</div>
-        <div className="flex gap-2 justify-end">
-          <button
-            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs"
-            onClick={async () => {
-              toast.dismiss();
-              try {
-                await axios.delete(`${backendUrl}/api/orders/${orderId}`);
-                toast.success('Order rejected and removed.');
-                fetchOrders();
-              } catch {
-                toast.error('Failed to reject order.');
+                toast.error('Failed to mark as done.');
               }
             }}
           >
@@ -100,11 +64,11 @@ const AvailableOrders = () => {
 
   return (
     <div className="py-8">
-      <h2 className="text-xl font-semibold mb-4">Available Orders</h2>
+      <h2 className="text-xl font-semibold mb-4">Ongoing Orders</h2>
       {loading ? (
         <div className="text-gray-600">Loading...</div>
       ) : orders.length === 0 ? (
-        <div className="text-gray-500">No available orders.</div>
+        <div className="text-gray-500">No ongoing orders.</div>
       ) : (
         <div className="max-w-3xl mx-auto space-y-6">
           {orders.map(order => (
@@ -133,16 +97,10 @@ const AvailableOrders = () => {
               </div>
               <div className="flex gap-3 items-center">
                 <button
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
-                  onClick={() => handleAccept(order._id)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+                  onClick={() => handleMarkDone(order._id)}
                 >
-                  Accept
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition"
-                  onClick={() => handleReject(order._id)}
-                >
-                  Reject
+                  Mark as Done
                 </button>
               </div>
             </div>
@@ -153,4 +111,4 @@ const AvailableOrders = () => {
   );
 };
 
-export default AvailableOrders;
+export default OngoingOrders;

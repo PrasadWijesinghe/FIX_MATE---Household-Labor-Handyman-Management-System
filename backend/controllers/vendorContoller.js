@@ -1,4 +1,28 @@
-// Get a single vendor by ID (public)
+import vendorModel from '../models/vendorModel.js';
+
+
+export const getAllVendors = async (req, res) => {
+	try {
+		const vendors = await vendorModel.find({}, 'name email category hourlyRate isAccountVerified');
+		console.log('Fetched vendors:', vendors);
+		res.json({ success: true, vendors });
+	} catch (error) {
+		res.json({ success: false, message: error.message });
+	}
+};
+
+
+export const deleteVendor = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const vendor = await vendorModel.findByIdAndDelete(id);
+		if (!vendor) return res.status(404).json({ success: false, message: 'Vendor not found' });
+		res.json({ success: true, message: 'Vendor deleted' });
+	} catch (error) {
+		res.json({ success: false, message: error.message });
+	}
+};
+
 export const getVendorById = async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -26,19 +50,19 @@ export const getVendorById = async (req, res) => {
 		return res.status(500).json({ success: false, message: error.message });
 	}
 };
-// Get all vendors by category
+
 export const getVendorsByCategory = async (req, res) => {
 	try {
 		const { category } = req.params;
 		if (!category) {
 			return res.status(400).json({ success: false, message: 'Category is required' });
 		}
-		// Case-insensitive search for category
+	
 		const vendors = await vendorModel.find({ category: { $regex: `^${category}$`, $options: 'i' } });
 		if (!vendors.length) {
 			return res.json({ success: true, vendors: [] });
 		}
-		// Return only public info
+	
 		const vendorList = vendors.map(vendor => ({
 			_id: vendor._id,
 			name: vendor.name,
@@ -57,7 +81,7 @@ export const getVendorsByCategory = async (req, res) => {
 		return res.status(500).json({ success: false, message: error.message });
 	}
 };
-// Update vendor profile
+
 import cloudinary from 'cloudinary';
 import streamifier from 'streamifier';
 export const updateVendorProfile = async (req, res) => {
@@ -74,13 +98,13 @@ export const updateVendorProfile = async (req, res) => {
 		if (hourlyRate !== undefined) vendor.hourlyRate = hourlyRate;
 		if (description !== undefined) vendor.description = description;
 
-		// Handle profile image upload
+	
 		if (req.files && req.files['profileImage'] && req.files['profileImage'][0]) {
-			// Remove old image if exists
+		
 			if (vendor.profileImagePublicId) {
 				try { await cloudinary.v2.uploader.destroy(vendor.profileImagePublicId); } catch {}
 			}
-			// Upload new image
+			
 			const streamUpload = (fileBuffer) => {
 				return new Promise((resolve, reject) => {
 					const stream = cloudinary.v2.uploader.upload_stream(
@@ -98,7 +122,7 @@ export const updateVendorProfile = async (req, res) => {
 			vendor.profileImagePublicId = result.public_id;
 		}
 
-		// Handle gallery images (up to 4)
+
 		let galleryUrls = [];
 		let galleryPublicIds = [];
 		for (let i = 1; i <= 4; i++) {
@@ -132,7 +156,6 @@ export const updateVendorProfile = async (req, res) => {
 		return res.json({ success: false, message: error.message });
 	}
 };
-import vendorModel from '../models/vendorModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -220,7 +243,7 @@ export const loginVendor = async (req, res) => {
 	}
 };
 
-// Logout vendor
+
 export const logoutVendor = async (req, res) => {
 	try {
 		res.clearCookie('vendor_token', {
