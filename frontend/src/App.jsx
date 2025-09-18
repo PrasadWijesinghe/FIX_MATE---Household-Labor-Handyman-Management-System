@@ -7,6 +7,8 @@ import SignUp from './pages/SignUp';
 import Register from './pages/Register';
 import EmailVerify from './pages/EmailVerify';
 import ResetPassword from './pages/ResetPassword';
+import Contact from './pages/Contact/Contact';
+import About from './pages/About/About';
 
 import AdminDashboard from './admin/AdminDashboard';
 import DashboardMain from './admin/DashboardMain';
@@ -32,6 +34,7 @@ import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
 import VendorCard from './pages/Services/VendorCard';
 
+
 const App = () => {
   return (
     <div className='app'>
@@ -42,9 +45,12 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/Contact" element={<Contact />} />
+        <Route path="/About" element={<About />} />
         <Route path='/AllServicesPage' element={<AllServicesPage />} />
         <Route path='/ServicesCard' element={<ServicesCard />} />
         <Route path='/VendorCard' element={<VendorCard />} />
+
 
         <Route path="/vendorlogin" element={<VendorLogin />} />
         <Route path="/vendorregister" element={<VendorRegister />} />
