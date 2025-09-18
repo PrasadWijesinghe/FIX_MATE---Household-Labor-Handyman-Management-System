@@ -1,14 +1,9 @@
 
 import logo from './web_logo.png'
 import hero_img from './hero_img.png'
-<<<<<<< HEAD
-
 
 import Upload_img from './Upload.png'
 
-=======
-import Upload_img from './Upload.png'
->>>>>>> b14709fa144888508e749689b0c33f03f0123697
 import service1 from './service1.png'
 import service2 from './service2.png'
 import service3 from './service3.png'
@@ -28,10 +23,7 @@ import brick_rocks from './brick_rocks.jpg'
 import Vector from './Vector.png'
 import mdi_city from './mdi_city.png'
 import clarity_tasks_solid from './clarity_tasks_solid.png'
-<<<<<<< HEAD
 
-=======
->>>>>>> b14709fa144888508e749689b0c33f03f0123697
 import banner1 from './banner1.png'
 import banner2 from './banner2.png'
 import banner3 from './banner3.png'
@@ -39,12 +31,11 @@ import banner4 from './banner4.png'
 import carwash1 from './carwash1.png'
 import carwash2 from './carwash2.png'
 import carwash3 from './carwash3.png'
-<<<<<<< HEAD
-=======
+
 import contactus from './contactus.png'
 import aboutus from './aboutus.png'
 
->>>>>>> b14709fa144888508e749689b0c33f03f0123697
+
 
 
 export const assets = {
@@ -76,13 +67,11 @@ export const assets = {
     banner4,
     carwash1,
     carwash2,
-<<<<<<< HEAD
-    carwash3
-=======
+
     carwash3,
     contactus,
     aboutus
->>>>>>> b14709fa144888508e749689b0c33f03f0123697
+
 
 }
 
