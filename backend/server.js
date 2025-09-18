@@ -10,6 +10,7 @@ import supplierRouter from './routes/supplierRouter.js';
 import vendorRouter from './routes/vendorRoutes.js';
 import connectCloudinary from './config/cloudinary.js';
 import imageUploadRouter from './routes/imageUploadRouter.js';
+import productRouter from './routes/productRouter.js';
 
 const app = express();
 const port = process.env.PORT || 4000
@@ -29,6 +30,7 @@ app.get('/', (req, res)=>res.send("API WORKING"))
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supplier', supplierRouter);
+app.use('/api/supplier', productRouter); // supplier product routes
 app.use('/api/vendor', vendorRouter);
 app.use('/api/upload', imageUploadRouter); 
 

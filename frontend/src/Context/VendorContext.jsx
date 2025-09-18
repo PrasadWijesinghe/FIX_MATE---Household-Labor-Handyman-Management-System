@@ -16,7 +16,7 @@ export const VendorContextProvider = (props) => {
 			const { data } = await axios.get(backendUrl + '/api/vendor/data', { withCredentials: true });
 			if (data.success) {
 				setIsVendorLoggedin(true);
-				setVendorData(data.vendorData);
+				setVendorData(data.vendor);
 			} else {
 				setIsVendorLoggedin(false);
 				setVendorData(null);

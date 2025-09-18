@@ -16,6 +16,7 @@ import Suppliers from './admin/Suppliers';
 import Products from './admin/Products';
 import Services from './admin/Services';
 import VendorDashboard from './vendor/VendorDashboard';
+import VendorProfile from './vendor/Profile';
 import { VendorContextProvider } from './Context/VendorContext';
 import SupplierDashboard from './supplier/SupplierDashboard';
 import { SupplierContextProvider } from './Context/SupplierContext';
@@ -27,6 +28,7 @@ import SupplierLogin from './supplier/SupplierLogin';
 import SupplierRegister from './supplier/SupplierRegister';
 import SupplierProfile from './supplier/SupplierProfile';
 import AddProducts from './supplier/AddProducts';
+import AvailableProducts from './supplier/AvailableProducts';
 
 import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
@@ -59,7 +61,7 @@ const App = () => {
           <Route path="ongoing" element={<div className='p-8 text-white text-xl'>Ongoing Orders Page</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders Page</div>} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
-          <Route path="profile" element={<div className='p-8 text-white text-xl'>Profile Page</div>} />
+          <Route path="profile" element={<VendorProfile />} />
         </Route>
 
         <Route path="/supplierlogin" element={<SupplierLogin />} />
@@ -73,7 +75,7 @@ const App = () => {
           <Route index element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="orders" element={<div className='p-8 text-white text-xl'>Orders</div>} />
           <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders</div>} />
-          <Route path="availableProducts" element={<div className='p-8 text-white text-xl'>Products</div>} />
+          <Route path="availableProducts" element={<AvailableProducts />} />
           <Route path="addProducts" element={<AddProducts />} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue</div>} />
           <Route path="profile" element={<SupplierProfile />} />

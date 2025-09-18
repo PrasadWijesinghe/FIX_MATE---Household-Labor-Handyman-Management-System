@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
+import axios from "axios";
+import { SupplierContext } from "../Context/SupplierContext";
+import { toast } from "react-toastify";
 
 const AddProducts = () => {
+  const { backendUrl } = useContext(SupplierContext);
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -23,12 +27,55 @@ const AddProducts = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: send form data (including image) to backend
-    alert(`Product Added:\nName: ${form.name}\nPrice: ${form.price}\nDescription: ${form.description}\nImage: ${form.image ? form.image.name : 'No image'}`);
-    setForm({ name: "", price: "", description: "", image: null });
-    setImagePreview(null);
+    toast(
+      ({ closeToast }) => (
+        <div className="flex flex-col items-center">
+          <div className="font-semibold mb-2">Are you sure you want to add this product?</div>
+          <div className="flex gap-3">
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold"
+              onClick={async () => {
+                const formData = new FormData();
+                formData.append("name", form.name);
+                formData.append("price", form.price);
+                formData.append("description", form.description);
+                if (form.image) {
+                  formData.append("image", form.image);
+                }
+                try {
+                  const { data } = await axios.post(
+                    backendUrl + "/api/supplier/products",
+                    formData,
+                    { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } }
+                  );
+                  if (data.success) {
+                    toast.success("Product added successfully!");
+                    setForm({ name: "", price: "", description: "", image: null });
+                    setImagePreview(null);
+                  } else {
+                    toast.error(data.message || "Failed to add product");
+                  }
+                } catch (error) {
+                  toast.error(error.response?.data?.message || "Failed to add product");
+                }
+                closeToast();
+              }}
+            >
+              Yes, Add
+            </button>
+            <button
+              className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded text-xs font-semibold"
+              onClick={closeToast}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      { autoClose: false }
+    );
   };
 
   return (
