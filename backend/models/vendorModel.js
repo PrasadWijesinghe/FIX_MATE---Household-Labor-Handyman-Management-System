@@ -8,7 +8,12 @@ const vendorSchema = new mongoose.Schema({
 	password: { type: String, required: true },
 	isAccountVerified: { type: Boolean, default: false },
 	profileImageUrl: { type: String, default: '' },
-	profileImagePublicId: { type: String, default: '' }
+	profileImagePublicId: { type: String, default: '' },
+	phone: { type: String, default: '' },
+	address: { type: String, default: '' },
+	galleryImages: { type: [String], default: [] },
+	galleryImagePublicIds: { type: [String], default: [] },
+	description: { type: String, default: '' }
 });
 
 const vendorModel = mongoose.models.vendor || mongoose.model('vendors', vendorSchema);
