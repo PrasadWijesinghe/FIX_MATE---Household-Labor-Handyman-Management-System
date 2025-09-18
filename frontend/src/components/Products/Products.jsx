@@ -1,7 +1,10 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="px-4 md:px-8 lg:px-16 py-8">
      
@@ -21,13 +24,13 @@ const Products = () => {
         <div className='service-card overflow-hidden'>
           <div className='relative'>
             <img 
-              className='border-none rounded-4xl h-48 md:h-40 object-cover '
+              className='border-none rounded-4xl h-48 md:h-40 object-cover cursor-pointer hover:scale-101 transition-transform duration-300' onClick={() => navigate('/ServicesCard')}
               src={assets.service1}
               alt="Car Washing Service"
             />
           </div>
           <div className='p-4'>
-            <h2 className='text-xm md:text-base font-semibold text-gray-800 mb-2'>
+            <h2 className='text-xm md:text-base font-semibold text-gray-800 mb-2 cursor-pointer hover:text-blue-600 transition '  onClick={() => navigate('/ServicesCard')}>
               Car Washing
             </h2>
             <p className='text-xs text-gray-600 leading-relaxed mb-3'>
@@ -99,7 +102,7 @@ const Products = () => {
         
       </div>
       <div className='flex justify-center'>
-        <button className='text-xs px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition'>
+        <button className='text-xs px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition'  onClick={() => navigate('/AllServicesPage')}>
           View All Services
         </button>
       </div>
