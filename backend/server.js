@@ -12,6 +12,8 @@ import connectCloudinary from './config/cloudinary.js';
 import imageUploadRouter from './routes/imageUploadRouter.js';
 import productRouter from './routes/productRouter.js';
 
+import orderRouter from './routes/orderRoutes.js';
+
 const app = express();
 const port = process.env.PORT || 4000
 connectDB();
@@ -33,5 +35,7 @@ app.use('/api/supplier', supplierRouter);
 app.use('/api/supplier', productRouter); // supplier product routes
 app.use('/api/vendor', vendorRouter);
 app.use('/api/upload', imageUploadRouter); 
+
+app.use('/api/orders', orderRouter);
 
 app.listen(port, ()=> console.log(`Server started on PORT:${port}`));

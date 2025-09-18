@@ -1,3 +1,62 @@
+// Get a single vendor by ID (public)
+export const getVendorById = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const vendor = await vendorModel.findById(id);
+		if (!vendor) {
+			return res.status(404).json({ success: false, message: 'Vendor not found' });
+		}
+		return res.json({
+			success: true,
+			vendor: {
+				_id: vendor._id,
+				name: vendor.name,
+				category: vendor.category,
+				hourlyRate: vendor.hourlyRate,
+				email: vendor.email,
+				isAccountVerified: vendor.isAccountVerified,
+				phone: vendor.phone || '',
+				address: vendor.address || '',
+				profileImageUrl: vendor.profileImageUrl || '',
+				galleryImages: vendor.galleryImages || [],
+				description: vendor.description || ''
+			}
+		});
+	} catch (error) {
+		return res.status(500).json({ success: false, message: error.message });
+	}
+};
+// Get all vendors by category
+export const getVendorsByCategory = async (req, res) => {
+	try {
+		const { category } = req.params;
+		if (!category) {
+			return res.status(400).json({ success: false, message: 'Category is required' });
+		}
+		// Case-insensitive search for category
+		const vendors = await vendorModel.find({ category: { $regex: `^${category}$`, $options: 'i' } });
+		if (!vendors.length) {
+			return res.json({ success: true, vendors: [] });
+		}
+		// Return only public info
+		const vendorList = vendors.map(vendor => ({
+			_id: vendor._id,
+			name: vendor.name,
+			category: vendor.category,
+			hourlyRate: vendor.hourlyRate,
+			email: vendor.email,
+			isAccountVerified: vendor.isAccountVerified,
+			phone: vendor.phone || '',
+			address: vendor.address || '',
+			profileImageUrl: vendor.profileImageUrl || '',
+			galleryImages: vendor.galleryImages || [],
+			description: vendor.description || ''
+		}));
+		return res.json({ success: true, vendors: vendorList });
+	} catch (error) {
+		return res.status(500).json({ success: false, message: error.message });
+	}
+};
 // Update vendor profile
 import cloudinary from 'cloudinary';
 import streamifier from 'streamifier';

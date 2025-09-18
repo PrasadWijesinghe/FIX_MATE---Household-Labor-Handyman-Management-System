@@ -82,7 +82,7 @@ const VendorCard = ({ vendor }) => {
 };
 
 const ServicesCard = ({ title = "Car Washing Services", bgImage = assets.carwash3 }) => {
-  // Sample vendor data tika - replace krpn real data database eken
+
   const vendors = [
     {
       id: 1,
