@@ -8,7 +8,6 @@ const SupplierProfile = () => {
 
   const { supplierData, backendUrl, getSupplierAuthState } = useContext(SupplierContext);
 
-  // Local state for edit mode and form fields
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({
     name: supplierData?.name || "",
@@ -20,12 +19,11 @@ const SupplierProfile = () => {
   const verified = supplierData?.isAccountVerified ?? true;
   const displayName = supplierData?.name || "Name not set";
 
-  // Handle input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle save
+ 
   const handleSave = async (e) => {
     e.preventDefault();
     try {
