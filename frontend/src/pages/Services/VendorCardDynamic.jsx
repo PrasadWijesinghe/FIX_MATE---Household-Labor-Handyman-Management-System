@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { AppContext } from '../../Context/AppContext';
 
 const VendorCardDynamic = () => {
   const { id } = useParams();
   const [vendor, setVendor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { userData, isLoggedin } = useContext(AppContext);
 
   useEffect(() => {
     const fetchVendor = async () => {
@@ -31,19 +33,18 @@ const VendorCardDynamic = () => {
     fetchVendor();
   }, [id]);
 
+  const images = vendor && vendor.galleryImages && vendor.galleryImages.length > 0
+    ? vendor.galleryImages
+    : (vendor && vendor.profileImageUrl ? [vendor.profileImageUrl] : []);
+  const [thumbnail, setThumbnail] = React.useState(images[0] || null);
 
 
-  // Use galleryImages for images, fallback to profileImageUrl
-  const images = vendor && vendor.galleryImages && vendor.galleryImages.length > 0 ? vendor.galleryImages : (vendor ? [vendor.profileImageUrl] : []);
-  const [thumbnail, setThumbnail] = React.useState(images[0] || '');
-
-  // Booking modal state (must be before any early return)
   const [showBooking, setShowBooking] = useState(false);
   const [bookingForm, setBookingForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
+    name: userData?.name || '',
+    phone: userData?.phone || '',
+    email: userData?.email || '',
+    address: userData?.address || '',
     date: '',
     notes: ''
   });
@@ -57,9 +58,68 @@ const VendorCardDynamic = () => {
     setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
   };
 
+  
+
+  // Only set bookingForm fields from userData when opening the modal
+  const handleOpenBooking = () => {
+    if (isLoggedin && userData) {
+      setBookingForm({
+        name: userData.name || '',
+        phone: userData.phone || '',
+        email: userData.email || '',
+        address: userData.address || '',
+        date: '',
+        notes: ''
+      });
+    } else {
+      setBookingForm({
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        date: '',
+        notes: ''
+      });
+    }
+    setShowBooking(true);
+  };
+
 
   const handleBookingSubmit = async e => {
     e.preventDefault();
+    if (!isLoggedin || !userData) {
+      toast.error('You must be logged in to book.');
+      setShowBooking(false);
+      return;
+    }
+   
+    const name = bookingForm.name || userData.name;
+    const phone = bookingForm.phone || userData.phone;
+    const email = bookingForm.email || userData.email;
+    const address = bookingForm.address || userData.address;
+    const date = bookingForm.date;
+    // Debug log userData
+    console.log('Booking userData:', userData);
+    // Try all possible userId fields
+    const userId = userData._id || userData.id || userData.userId;
+    console.log('Booking debug:', {
+      vendorId: vendor._id,
+      vendorName: vendor.name,
+      userId,
+      name,
+      phone,
+      email,
+      address,
+      date
+    });
+    if (!vendor._id || !vendor.name || !userId || !name || !phone || !email || !address || !date) {
+      if (!userId) {
+        toast.error('User ID missing. Please log out and log in again.');
+      } else {
+        toast.error('Please fill all required fields.');
+      }
+      return;
+    }
     toast.info(
       <div>
         <div className="mb-2">Are you sure you want to proceed with this booking?</div>
@@ -72,13 +132,26 @@ const VendorCardDynamic = () => {
                 await axios.post('/api/orders', {
                   vendorId: vendor._id,
                   vendorName: vendor.name,
-                  ...bookingForm
+                  userId: userData._id || userData.id,
+                  name,
+                  phone,
+                  email,
+                  address,
+                  date,
+                  notes: bookingForm.notes
                 });
                 setBookingSuccess(true);
                 setTimeout(() => {
                   setShowBooking(false);
                   setBookingSuccess(false);
-                  setBookingForm({ name: '', phone: '', email: '', date: '', notes: '' });
+                  setBookingForm({
+                    name: userData.name || '',
+                    phone: userData.phone || '',
+                    email: userData.email || '',
+                    address: userData.address || '',
+                    date: '',
+                    notes: ''
+                  });
                 }, 1800);
                 toast.success('Your order has been placed.');
               } catch (err) {
@@ -140,7 +213,7 @@ const VendorCardDynamic = () => {
               <div className="flex flex-row gap-6 w-full lg:w-2/3">
              
                 <div className="flex flex-col gap-2 items-center">
-                  {images.map((image, index) => (
+                  {images.filter(Boolean).map((image, index) => (
                     <div
                       key={index}
                       onClick={() => setThumbnail(image)}
@@ -154,7 +227,9 @@ const VendorCardDynamic = () => {
                 </div>
                 
                 <div className="flex-1 border-2 border-gray-300 rounded-lg overflow-hidden flex items-center justify-center min-w-[250px] min-h-[250px]">
-                  <img src={thumbnail} alt="Selected" className="w-full h-80 object-cover" />
+                  {thumbnail ? (
+                    <img src={thumbnail} alt="Selected" className="w-full h-80 object-cover" />
+                  ) : null}
                 </div>
               </div>
               
@@ -174,7 +249,7 @@ const VendorCardDynamic = () => {
                 <div className="flex flex-col sm:flex-row gap-3 pt-3">
                   <button
                     className="w-full sm:flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-black cursor-pointer"
-                    onClick={() => setShowBooking(true)}
+                    onClick={handleOpenBooking}
                   >
                     Book Now
                   </button>
@@ -276,8 +351,9 @@ const VendorCardDynamic = () => {
                 <button
                   type="submit"
                   className="bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2"
+                  disabled={!isLoggedin}
                 >
-                  Submit Booking
+                  {isLoggedin ? 'Submit Booking' : 'Login to Book'}
                 </button>
               </form>
             )}

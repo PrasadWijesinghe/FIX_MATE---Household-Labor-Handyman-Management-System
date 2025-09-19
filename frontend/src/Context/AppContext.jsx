@@ -28,7 +28,17 @@ export const AppContextProvider = (props) => {
     const getUserData = async () => {
         try {
             const { data } = await axios.get(backendUrl + '/api/user/data', { withCredentials: true });
-            data.success ? setUserData(data.userData) : toast.error(data.message);
+            if (data.success) {
+                // Defensive: ensure _id is present
+                if (data.userData && data.userData._id) {
+                    setUserData(data.userData);
+                } else {
+                    toast.error('User ID missing in user data.');
+                    setUserData(null);
+                }
+            } else {
+                toast.error(data.message);
+            }
         } catch (error) {
             toast.error(error.message || 'Failed to fetch user data');
         }
