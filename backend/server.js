@@ -29,6 +29,10 @@ app.get('/', (req, res)=>res.send("API WORKING"))
 
 
 
+// Serve uploads directory for profile images
+import path from "path";
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supplier', supplierRouter);

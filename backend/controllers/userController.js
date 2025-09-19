@@ -33,9 +33,13 @@ export const getUserData = async (req, res)=>{
 
         res.json({
             success: true,
-            userData:{
+            userData: {
                 name: user.name,
-                email: user.email, 
+                email: user.email,
+                phone: user.phone || '',
+                address: user.address || '',
+                birthday: user.birthday || '',
+                profileImageUrl: user.profileImageUrl || '',
                 isAccountVerified: user.isAccountVerified
             }
         })

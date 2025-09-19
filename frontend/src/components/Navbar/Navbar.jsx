@@ -90,6 +90,7 @@ const Navbar = () => {
             </div>
             <div className='absolute hidden group-hover:block top-full right-0 mt-2 z-10 bg-white text-black rounded shadow-lg'>
               <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
+                <li onClick={() => navigate('/userprofile')} className='px-2 py-1 hover:bg-gray-200 cursor-pointer'>Profile</li>
                 {!userData.isAccountVerified && (
                   <li onClick={sendVerificationOtp} className='px-2 py-1 hover:bg-gray-200 cursor-pointer'>Verify Email</li>
                 )}
@@ -118,6 +119,7 @@ const Navbar = () => {
             </div>
             <div className='absolute hidden group-hover:block top-full right-0 mt-2 z-10 bg-white text-black rounded shadow-lg'>
               <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
+                <li onClick={() => navigate('/userprofile')} className='px-2 py-1 hover:bg-gray-200 cursor-pointer whitespace-nowrap'>Profile</li>
                 {!userData.isAccountVerified && (
                   <li onClick={sendVerificationOtp} className='px-2 py-1 hover:bg-gray-200 cursor-pointer whitespace-nowrap'>Verify Email</li>
                 )}
