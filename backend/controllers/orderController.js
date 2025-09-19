@@ -40,11 +40,11 @@ export const getOrdersByUser = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   try {
-    const { vendorId, vendorName, name, phone, email, address, date, notes } = req.body;
-    if (!vendorId || !name || !phone || !email || !address || !date) {
+    const { vendorId, vendorName, userId, name, phone, email, address, date, notes } = req.body;
+    if (!vendorId || !userId || !name || !phone || !email || !address || !date) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
-    const order = new orderModel({ vendorId, vendorName, name, phone, email, address, date, notes });
+    const order = new orderModel({ vendorId, vendorName, userId, name, phone, email, address, date, notes });
     await order.save();
     return res.json({ success: true, order });
   } catch (error) {
