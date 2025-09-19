@@ -19,7 +19,7 @@ const UserProfile = () => {
       setUserData(null);
       navigate('/');
     } catch {
-      // Optionally show error
+      //  error
     }
   };
 
