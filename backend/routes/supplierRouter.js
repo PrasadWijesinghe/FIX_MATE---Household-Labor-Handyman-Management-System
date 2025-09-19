@@ -17,12 +17,12 @@ import {
 
 const supplierRouter = express.Router();
 
-// Supplier: Update profile
+
 supplierRouter.put('/update-profile', supplierAuth, updateSupplierProfile);
 
-// Admin: Get all suppliers
+
 supplierRouter.get('/all', getAllSuppliers);
-// Admin: Delete supplier
+
 supplierRouter.delete('/:id', deleteSupplier);
 
 supplierRouter.post('/register', registerSupplier);
