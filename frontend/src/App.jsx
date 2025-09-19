@@ -1,3 +1,4 @@
+import UserProfile from './pages/UserProfile';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -47,7 +48,8 @@ const App = () => {
   return (
     <div className='app'>
       <ToastContainer />
-      <Routes>
+  <Routes>
+  <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/adminlogin" element={<Adminlogin />} />
         <Route path='/' element={<Home />} />
         <Route path="/signup" element={<SignUp />} />

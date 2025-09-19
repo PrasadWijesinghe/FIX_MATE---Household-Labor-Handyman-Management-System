@@ -27,6 +27,16 @@ export const deleteOrder = async (req, res) => {
 };
 import orderModel from '../models/orderModel.js';
 
+export const getOrdersByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await orderModel.find({ userId }).sort({ createdAt: -1 });
+    return res.json({ success: true, orders });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 export const createOrder = async (req, res) => {
   try {

@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const orderSchema = new mongoose.Schema({
   vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'vendors', required: true },
   vendorName: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
   name: { type: String, required: true },
   phone: { type: String, required: true },
   email: { type: String, required: true },
