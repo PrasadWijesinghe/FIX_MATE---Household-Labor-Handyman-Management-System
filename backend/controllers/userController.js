@@ -1,3 +1,14 @@
+// Admin: Delete user
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userModel.findByIdAndDelete(id);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        res.json({ success: true, message: 'User deleted' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 // Admin: Verify user account
 export const verifyUser = async (req, res) => {
     try {
@@ -27,9 +38,9 @@ export const getUserData = async (req, res)=>{
 
         const user = await userModel.findById(userId);
 
-        if(!user){
-             return res.json({success:false, message:'User Not Found'});
-        }
+       if(!user){
+           return res.status(401).json({success:false, message:'You are not logged in or your session has expired. Please log in again.'});
+       }
 
         res.json({
             success: true,

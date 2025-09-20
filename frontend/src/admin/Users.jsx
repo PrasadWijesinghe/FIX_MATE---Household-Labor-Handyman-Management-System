@@ -73,7 +73,7 @@ const Users = () => {
                 <th className="px-4 py-2 text-left">Name</th>
                 <th className="px-4 py-2 text-left">Email</th>
                 <th className="px-4 py-2 text-left">Role</th>
-                <th className="px-4 py-2 text-left">Verified</th>
+                {/* Removed Verified column */}
                 <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
@@ -83,7 +83,7 @@ const Users = () => {
                   <td className="px-4 py-2">{user.name}</td>
                   <td className="px-4 py-2">{user.email}</td>
                   <td className="px-4 py-2">{user.role || 'User'}</td>
-                  <td className="px-4 py-2">{user.isAccountVerified ? 'Yes' : 'No'}</td>
+                  
                   <td className="px-4 py-2 flex gap-2">
                     <button
                       className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs"
@@ -91,44 +91,7 @@ const Users = () => {
                     >
                       Remove
                     </button>
-                    {!user.isAccountVerified && (
-                      <button
-                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
-                        onClick={() => {
-                          toast.info(
-                            <div>
-                              <div className="mb-2">Are you sure you want to verify this user?</div>
-                              <div className="flex gap-2 justify-end">
-                                <button
-                                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
-                                  onClick={async () => {
-                                    toast.dismiss();
-                                    try {
-                                      await axios.put(`/api/user/verify/${user._id}`);
-                                      toast.success('User verified.');
-                                      fetchUsers();
-                                    } catch {
-                                      toast.error('Failed to verify user.');
-                                    }
-                                  }}
-                                >
-                                  Yes
-                                </button>
-                                <button
-                                  className="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-xs"
-                                  onClick={() => toast.dismiss()}
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>,
-                            { autoClose: false, closeOnClick: false, closeButton: false, position: 'top-center' }
-                          );
-                        }}
-                      >
-                        Verify
-                      </button>
-                    )}
+
                   </td>
                 </tr>
               ))}

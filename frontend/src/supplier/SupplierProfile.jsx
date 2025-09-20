@@ -13,6 +13,7 @@ const SupplierProfile = () => {
     name: supplierData?.name || "",
     businessName: supplierData?.businessName || "",
     phone: supplierData?.phone || "",
+    location: supplierData?.location || "",
   });
   const email = supplierData?.email || "Edit your email here";
   const rating = supplierData?.rating || 4.8;
@@ -33,6 +34,7 @@ const SupplierProfile = () => {
           name: form.name,
           businessName: form.businessName,
           phone: form.phone,
+          location: form.location,
         },
         { withCredentials: true }
       );
@@ -115,6 +117,16 @@ const SupplierProfile = () => {
             disabled={!editMode}
           />
         </div>
+        <div>
+          <label className="block text-gray-400 mb-1">Location</label>
+          <input
+            className="w-full p-2 rounded bg-gray-700 text-white"
+            name="location"
+            value={form.location}
+            onChange={handleChange}
+            disabled={!editMode}
+          />
+        </div>
         {editMode && (
           <div className="col-span-2 flex gap-4 mt-4">
             <button
@@ -132,6 +144,7 @@ const SupplierProfile = () => {
                   name: supplierData?.name || "",
                   businessName: supplierData?.businessName || "",
                   phone: supplierData?.phone || "",
+                  location: supplierData?.location || "",
                 });
               }}
             >

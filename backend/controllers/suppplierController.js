@@ -1,8 +1,19 @@
+// Admin: Verify supplier
+export const verifySupplier = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const supplier = await supplierModel.findByIdAndUpdate(id, { isAccountVerified: true }, { new: true });
+		if (!supplier) return res.status(404).json({ success: false, message: 'Supplier not found' });
+		res.json({ success: true, message: 'Supplier verified', supplier });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+};
 // Supplier: Update profile
 export const updateSupplierProfile = async (req, res) => {
 	try {
 		const supplierId = req.user.id;
-		const { name, businessName, phone } = req.body;
+		const { name, businessName, phone, location } = req.body;
 		const supplier = await supplierModel.findById(supplierId);
 		if (!supplier) {
 			return res.status(404).json({ success: false, message: 'Supplier Not Found' });
@@ -10,6 +21,7 @@ export const updateSupplierProfile = async (req, res) => {
 		if (name !== undefined) supplier.name = name;
 		if (businessName !== undefined) supplier.businessName = businessName;
 		if (phone !== undefined) supplier.phone = phone;
+		if (location !== undefined) supplier.location = location;
 		await supplier.save();
 		res.json({ success: true, message: 'Profile updated successfully', supplier });
 	} catch (error) {
@@ -51,15 +63,18 @@ export const getSupplierData = async (req, res) => {
 		if (!supplier) {
 			return res.json({ success: false, message: 'Supplier Not Found' });
 		}
-			res.json({
-				success: true,
-				supplierData: {
-					_id: supplier._id, 
-					name: supplier.name,
-					email: supplier.email,
-					isAccountVerified: supplier.isAccountVerified
-				}
-			});
+		res.json({
+			success: true,
+			supplierData: {
+				_id: supplier._id,
+				name: supplier.name,
+				email: supplier.email,
+				isAccountVerified: supplier.isAccountVerified,
+				businessName: supplier.businessName,
+				phone: supplier.phone,
+				location: supplier.location
+			}
+		});
 	} catch (error) {
 		return res.json({ success: false, message: error.message });
 	}

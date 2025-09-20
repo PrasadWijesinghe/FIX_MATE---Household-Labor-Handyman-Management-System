@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { AppContext } from '../Context/AppContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +11,9 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [supplyOrders, setSupplyOrders] = useState([]);
+  const [supplyOrdersLoading, setSupplyOrdersLoading] = useState(false);
+  const [editOrderModal, setEditOrderModal] = useState({ open: false, order: null, type: null });
   const navigate = useNavigate();
   // Logout handler
   const handleLogout = async () => {
@@ -28,12 +32,19 @@ const UserProfile = () => {
       try {
         const { data } = await axios.get(backendUrl + '/api/user/data', { withCredentials: true });
         if (data.success) setUser(data.userData);
-      } catch {
-        setUser(null);
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          toast.error(err.response.data.message || 'Session expired. Please log in again.');
+          setIsLoggedin(false);
+          setUserData(null);
+          navigate('/login');
+        } else {
+          setUser(null);
+        }
       }
     };
     fetchUser();
-  }, [backendUrl]);
+  }, [backendUrl, setIsLoggedin, setUserData, navigate]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -50,11 +61,107 @@ const UserProfile = () => {
         setOrdersLoading(false);
       }
     };
-    if (user) fetchOrders();
+    const fetchSupplyOrders = async () => {
+      if (!user?._id && !user?.id) return;
+      setSupplyOrdersLoading(true);
+      try {
+        const userId = user._id || user.id;
+        const { data } = await axios.get(`${backendUrl.replace(/\/api.*/, '')}/api/supply-orders/user/${userId}`, { withCredentials: true });
+        if (data.success) setSupplyOrders(data.orders);
+        else setSupplyOrders([]);
+      } catch {
+        setSupplyOrders([]);
+      } finally {
+        setSupplyOrdersLoading(false);
+      }
+    };
+    if (user) {
+      fetchOrders();
+      fetchSupplyOrders();
+    }
   }, [user, backendUrl]);
+
+  // Delete order handler
+  const handleDeleteOrder = async (orderId, type = 'service') => {
+    if (!window.confirm('Are you sure you want to delete this order?')) return;
+    try {
+      if (type === 'service') {
+        await axios.delete(`${backendUrl.replace(/\/api.*/, '')}/api/orders/${orderId}`, { withCredentials: true });
+        setOrders(prev => prev.filter(o => o._id !== orderId));
+        toast.success('Order deleted');
+      } else {
+        await axios.delete(`${backendUrl.replace(/\/api.*/, '')}/api/supply-orders/${orderId}`, { withCredentials: true });
+        setSupplyOrders(prev => prev.filter(o => o._id !== orderId));
+        toast.success('Supply order deleted');
+      }
+    } catch {
+      toast.error('Failed to delete order');
+    }
+  };
+
+  // Save edited order handler
+  const handleSaveEditOrder = async (updatedOrder) => {
+    try {
+      if (editOrderModal.type === 'service') {
+        // Use /api/orders/:id for update
+        await axios.put(`${backendUrl.replace(/\/api.*/, '')}/api/orders/${updatedOrder._id}`, updatedOrder, { withCredentials: true });
+        setOrders(prev => prev.map(o => o._id === updatedOrder._id ? { ...o, ...updatedOrder } : o));
+        toast.success('Order updated');
+      } else {
+        // Use /api/supply-orders/:id for update
+        await axios.put(`${backendUrl.replace(/\/api.*/, '')}/api/supply-orders/${updatedOrder._id}`, updatedOrder, { withCredentials: true });
+        setSupplyOrders(prev => prev.map(o => o._id === updatedOrder._id ? { ...o, ...updatedOrder } : o));
+        toast.success('Supply order updated');
+      }
+      setEditOrderModal({ open: false, order: null, type: null });
+    } catch {
+      toast.error('Failed to update order');
+    }
+  };
+
+  // Modal component for editing order
+  const EditOrderModal = ({ open, order, type, onClose, onSave }) => {
+    const [form, setForm] = useState(order || {});
+    useEffect(() => { setForm(order || {}); }, [order]);
+    if (!open || !order) return null;
+    // Fields: for service: address, notes, date; for supply: address, notes, amount, paymentMethod, date
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+          <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl" onClick={onClose}>&times;</button>
+          <h2 className="text-xl font-bold mb-4">Edit {type === 'service' ? 'Service' : 'Supply'} Order</h2>
+          <form onSubmit={e => { e.preventDefault(); onSave({ ...form }); }} className="space-y-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Address</label>
+              <input type="text" className="w-full p-2 border rounded bg-gray-100" value={form.address || ''} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} required />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Notes</label>
+              <textarea className="w-full p-2 border rounded bg-gray-100" value={form.notes || ''} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Date</label>
+              <input type="date" className="w-full p-2 border rounded bg-gray-100" value={form.date ? new Date(form.date).toISOString().slice(0,10) : ''} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} required />
+            </div>
+            {type === 'supply' && (
+              <div>
+                <label className="block text-gray-700 mb-1">Amount</label>
+                <input type="number" min="1" className="w-full p-2 border rounded bg-gray-100" value={form.amount || 1} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} required />
+              </div>
+            )}
+            <div className="flex gap-4 mt-4">
+              <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">Save</button>
+              <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg font-semibold" onClick={onClose}>Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
+      
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-lg p-6 flex flex-col gap-4 min-h-full">
         <div className="mb-8">
@@ -80,7 +187,13 @@ const UserProfile = () => {
           className={`text-left px-4 py-2 rounded ${activeTab === 'orders' ? 'bg-blue-100 text-blue-700 font-semibold' : 'hover:bg-gray-200'}`}
           onClick={() => setActiveTab('orders')}
         >
-          View Orders
+          View Service Orders
+        </button>
+        <button
+          className={`text-left px-4 py-2 rounded ${activeTab === 'supplyorders' ? 'bg-blue-100 text-blue-700 font-semibold' : 'hover:bg-gray-200'}`}
+          onClick={() => setActiveTab('supplyorders')}
+        >
+          View Supply Orders
         </button>
         <button
           className={`text-left px-4 py-2 rounded ${activeTab === 'previous' ? 'bg-blue-100 text-blue-700 font-semibold' : 'hover:bg-gray-200'}`}
@@ -108,7 +221,7 @@ const UserProfile = () => {
           <EditProfileForm user={user} setUser={setUser} setActiveTab={setActiveTab} backendUrl={backendUrl} />
         ) : activeTab === 'orders' ? (
           <div>
-            <h2 className="text-2xl font-bold mb-4">Current Orders</h2>
+            <h2 className="text-2xl font-bold mb-4">Current Service Orders</h2>
             {ordersLoading ? (
               <div className="text-gray-400">Loading orders...</div>
             ) : (
@@ -125,8 +238,48 @@ const UserProfile = () => {
                           <div className="text-gray-600 text-sm">Status: <span className="capitalize font-medium">{order.status}</span></div>
                           {order.notes && <div className="text-gray-500 text-xs mt-1">Notes: {order.notes}</div>}
                         </div>
-                        <div className="mt-2 md:mt-0 text-right">
+                        <div className="mt-2 md:mt-0 text-right flex flex-col gap-2 items-end">
                           <div className="text-gray-700 text-sm">Address: {order.address}</div>
+                          <div className="flex gap-2 mt-2">
+                            <button className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-xs" onClick={() => setEditOrderModal({ open: true, order, type: 'service' })}>Edit</button>
+                            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs" onClick={() => handleDeleteOrder(order._id, 'service')}>Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        ) : activeTab === 'supplyorders' ? (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Current Supply Orders</h2>
+            {supplyOrdersLoading ? (
+              <div className="text-gray-400">Loading supply orders...</div>
+            ) : (
+              <>
+                {supplyOrders.filter(o => o.status === 'Pending').length === 0 ? (
+                  <div className="text-gray-500">No supply orders to show.</div>
+                ) : (
+                  <div className="space-y-4">
+                    {supplyOrders.filter(o => o.status === 'Pending').map(order => (
+                      <div key={order._id} className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <div className="font-semibold">{order.productName}</div>
+                          <div className="text-gray-600 text-sm">Supplier: {order.supplierId?.name || ''}</div>
+                          <div className="text-gray-600 text-sm">Date: {order.date ? new Date(order.date).toLocaleDateString() : ''}</div>
+                          <div className="text-gray-600 text-sm">Status: <span className="capitalize font-medium">{order.status}</span></div>
+                          {order.notes && <div className="text-gray-500 text-xs mt-1">Notes: {order.notes}</div>}
+                        </div>
+                        <div className="mt-2 md:mt-0 text-right flex flex-col gap-2 items-end">
+                          <div className="text-gray-700 text-sm">Address: {order.address}</div>
+                          <div className="text-gray-700 text-sm">Amount: {order.amount || 1}</div>
+                          <div className="text-gray-700 text-sm">Payment: {order.paymentMethod}</div>
+                          <div className="flex gap-2 mt-2">
+                            <button className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-xs" onClick={() => setEditOrderModal({ open: true, order, type: 'supply' })}>Edit</button>
+                            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs" onClick={() => handleDeleteOrder(order._id, 'supply')}>Delete</button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -138,14 +291,16 @@ const UserProfile = () => {
         ) : activeTab === 'previous' ? (
           <div>
             <h2 className="text-2xl font-bold mb-4">Previous Orders</h2>
-            {ordersLoading ? (
+            {ordersLoading && supplyOrdersLoading ? (
               <div className="text-gray-400">Loading orders...</div>
             ) : (
               <>
-                {orders.filter(o => o.status === 'done' || o.status === 'rejected').length === 0 ? (
+                {orders.filter(o => o.status === 'done' || o.status === 'rejected').length === 0 &&
+                 supplyOrders.filter(o => o.status === 'Confirmed').length === 0 ? (
                   <div className="text-gray-500">No previous orders to show.</div>
                 ) : (
                   <div className="space-y-4">
+                    {/* Previous Service Orders */}
                     {orders.filter(o => o.status === 'done' || o.status === 'rejected').map(order => (
                       <div key={order._id} className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
@@ -159,6 +314,23 @@ const UserProfile = () => {
                         </div>
                       </div>
                     ))}
+                    {/* Previous Supply Orders (Confirmed) */}
+                    {supplyOrders.filter(o => o.status === 'Confirmed').map(order => (
+                      <div key={order._id} className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <div className="font-semibold">{order.productName}</div>
+                          <div className="text-gray-600 text-sm">Supplier: {order.supplierId?.name || ''}</div>
+                          <div className="text-gray-600 text-sm">Date: {order.date ? new Date(order.date).toLocaleDateString() : ''}</div>
+                          <div className="text-gray-600 text-sm">Status: <span className="capitalize font-medium">{order.status}</span></div>
+                          {order.notes && <div className="text-gray-500 text-xs mt-1">Notes: {order.notes}</div>}
+                        </div>
+                        <div className="mt-2 md:mt-0 text-right">
+                          <div className="text-gray-700 text-sm">Address: {order.address}</div>
+                          <div className="text-gray-700 text-sm">Amount: {order.amount || 1}</div>
+                          <div className="text-gray-700 text-sm">Payment: {order.paymentMethod}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </>
@@ -166,13 +338,20 @@ const UserProfile = () => {
           </div>
         ) : null}
       </div>
-    </div>
+    {/* Edit Order Modal */}
+    <EditOrderModal
+      open={editOrderModal.open}
+      order={editOrderModal.order}
+      type={editOrderModal.type}
+      onClose={() => setEditOrderModal({ open: false, order: null, type: null })}
+      onSave={handleSaveEditOrder}
+    />
+  </div>
   );
 };
 
 // Edit Profile Form Component
 function EditProfileForm({ user, setUser, setActiveTab, backendUrl }) {
-
   const [form, setForm] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -258,7 +437,7 @@ function EditProfileForm({ user, setUser, setActiveTab, backendUrl }) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
       <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
       <form className="max-w-2xl w-full bg-white rounded-lg shadow p-8" onSubmit={handleSubmit} encType="multipart/form-data">
         {/* Profile Image */}

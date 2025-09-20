@@ -1,7 +1,9 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
+import { useNavigate } from 'react-router-dom'
 
 const Store = () => {
+  const navigate = useNavigate();
   return (
     <>
       
@@ -59,7 +61,10 @@ const Store = () => {
 
      
       <div className="flex justify-center mt-5">
-        <button className="text-sm px-6 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition">
+        <button
+          className="text-sm px-6 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-black transition"
+          onClick={() => navigate('/supplystore')}
+        >
           View Our Store
         </button>
       </div>

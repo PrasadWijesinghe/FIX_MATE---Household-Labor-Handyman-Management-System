@@ -1,10 +1,14 @@
 
-import express from 'express'
+
+import express from 'express';
 import userAuth from '../middleware/userAuth.js';
-import { getUserData, getAllUsers, verifyUser } from '../controllers/userController.js';
+import { getUserData, getAllUsers, verifyUser, deleteUser } from '../controllers/userController.js';
 import { updateUserProfile, uploadUserProfileImage } from '../controllers/userProfileController.js';
 
 const userRouter = express.Router();
+
+// Admin: Delete user
+userRouter.delete('/:id', deleteUser);
 
 
 userRouter.put('/verify/:id', verifyUser);
