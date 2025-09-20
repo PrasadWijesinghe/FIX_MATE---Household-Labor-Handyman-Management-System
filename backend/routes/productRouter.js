@@ -1,5 +1,6 @@
 
 import express from "express";
+console.log('productRouter loaded');
 import supplierAuth from "../middleware/supplierAuth.js";
 import multer from "multer";
 import { addProduct, getSupplierProducts, deleteProduct, getAllProducts, adminDeleteProduct } from "../controllers/productController.js";
@@ -18,7 +19,24 @@ const upload = multer({ storage });
 router.post("/products", supplierAuth, upload.single("image"), addProduct);
 
 
-router.get("/products", supplierAuth, getSupplierProducts);
+
+
+// /products route must come BEFORE /:id
+router.get("/products", (req, res, next) => {
+  console.log('ROUTE /api/supplier/products HIT');
+  next();
+}, supplierAuth, getSupplierProducts);
+
+// Public: Get single product by ID with supplier info
+router.get("/:id", async (req, res) => {
+	try {
+		const product = await (await import("../models/productModel.js")).default.findById(req.params.id).populate('supplier', 'name businessName location profileImageUrl email');
+		if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
+		res.json({ success: true, product });
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+});
 
 
 router.delete("/products/:id", supplierAuth, deleteProduct);

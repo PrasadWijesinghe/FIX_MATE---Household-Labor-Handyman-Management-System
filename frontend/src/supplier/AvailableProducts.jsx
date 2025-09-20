@@ -12,7 +12,7 @@ const AvailableProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get(backendUrl + "/api/supplier/products", { withCredentials: true });
+  const { data } = await axios.get(backendUrl + "/api/supplier/products", { withCredentials: true });
         if (data.success) {
           setProducts(data.products);
         }

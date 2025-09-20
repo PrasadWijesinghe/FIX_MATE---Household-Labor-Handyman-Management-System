@@ -35,6 +35,17 @@ const VendorLogin = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-white px-2">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate('/')} 
+          className="mb-3 text-blue-600 hover:underline flex items-center gap-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Back
+        </button>
         <h1 className="text-3xl font-extrabold text-center text-blue-600 mb-2">
           FixMate
         </h1>

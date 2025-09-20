@@ -1,3 +1,5 @@
+import SupplyStore from './pages/SupplyStore';
+import ProductCardDynamic from './pages/ProductCardDynamic';
 import UserProfile from './pages/UserProfile';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -21,7 +23,9 @@ import Services from './admin/Services';
 import Adminlogin from './admin/Adminlogin';
 import VendorDashboard from './vendor/VendorDashboard';
 import VendorProfile from './vendor/Profile';
-import AvailableOrders from './vendor/AvailableOrders';
+import VendorAvailableOrders from './vendor/AvailableOrders';
+import SupplierAvailableOrders from './supplier/AvailableOrders';
+import SupplierPreviousOrders from './supplier/PreviousOrders';
 import OngoingOrders from './vendor/OngoingOrders';
 import PreviousOrders from './vendor/PreviousOrders';
 import { VendorContextProvider } from './Context/VendorContext';
@@ -49,7 +53,9 @@ const App = () => {
     <div className='app'>
       <ToastContainer />
   <Routes>
-  <Route path="/userprofile" element={<UserProfile />} />
+  <Route path="/supplystore" element={<SupplyStore />} />
+  <Route path="/product/:id" element={<ProductCardDynamic />} />
+    <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/adminlogin" element={<Adminlogin />} />
         <Route path='/' element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
@@ -74,8 +80,8 @@ const App = () => {
             <VendorDashboard />
           </VendorContextProvider>
         }>
-          <Route index element={<AvailableOrders />} />
-          <Route path="orders" element={<AvailableOrders />} />
+          <Route index element={<VendorAvailableOrders />} />
+          <Route path="orders" element={<VendorAvailableOrders />} />
           <Route path="ongoing" element={<OngoingOrders />} />
           <Route path="previous" element={<PreviousOrders />} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
@@ -91,8 +97,8 @@ const App = () => {
           </SupplierContextProvider>
         }>
           <Route index element={<div className='p-8 text-white text-xl'>Orders</div>} />
-          <Route path="orders" element={<div className='p-8 text-white text-xl'>Orders</div>} />
-          <Route path="previous" element={<div className='p-8 text-white text-xl'>Previous Orders</div>} />
+          <Route path="orders" element={<SupplierAvailableOrders />} />
+          <Route path="previous" element={<SupplierPreviousOrders />} />
           <Route path="availableProducts" element={<AvailableProducts />} />
           <Route path="addProducts" element={<AddProducts />} />
           <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue</div>} />

@@ -1,7 +1,8 @@
 // Admin: Get all products with supplier info
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await productModel.find({}).populate('supplier', 'name');
+    // Populate all fields needed for frontend display
+    const products = await productModel.find({}).populate('supplier', 'name businessName location profileImageUrl');
     res.json({ success: true, products });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -29,11 +30,30 @@ export const adminDeleteProduct = async (req, res) => {
 };
 export const getSupplierProducts = async (req, res) => {
   try {
+    console.log('getSupplierProducts called');
+    console.log('req.user:', req.user);
+    if (!req.user || !req.user.id) {
+      console.error('No supplier ID found in req.user');
+      return res.status(401).json({ success: false, message: 'Not authorized. Please log in as a supplier.' });
+    }
     const supplierId = req.user.id;
+    // Validate supplierId is a valid ObjectId
+    if (!supplierId.match(/^[0-9a-fA-F]{24}$/)) {
+      console.error('Invalid supplierId format:', supplierId);
+      return res.status(400).json({ success: false, message: 'Invalid supplier ID.' });
+    }
+    // Check if supplier exists
+    const supplier = await (await import('../models/supplierModel.js')).default.findById(supplierId);
+    if (!supplier) {
+      console.error('Supplier not found for id:', supplierId);
+      return res.status(404).json({ success: false, message: 'Supplier not found.' });
+    }
     const products = await productModel.find({ supplier: supplierId }).sort({ createdAt: -1 });
+    console.log('Products found:', products.length);
     return res.json({ success: true, products });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    console.error('Error in getSupplierProducts:', error);
+    return res.status(500).json({ success: false, message: error.message, stack: error.stack });
   }
 };
 

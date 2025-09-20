@@ -1,3 +1,19 @@
+// Update service order details
+export const updateOrderDetails = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const updateFields = {};
+    const allowedFields = ['address', 'notes', 'date'];
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) updateFields[field] = req.body[field];
+    });
+    const updatedOrder = await orderModel.findByIdAndUpdate(orderId, updateFields, { new: true });
+    if (!updatedOrder) return res.status(404).json({ success: false, message: 'Order not found' });
+    res.json({ success: true, order: updatedOrder });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update order', error: error.message });
+  }
+};
 
 export const updateOrderStatus = async (req, res) => {
   try {

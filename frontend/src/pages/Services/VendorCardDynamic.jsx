@@ -98,9 +98,9 @@ const VendorCardDynamic = () => {
     const email = bookingForm.email || userData.email;
     const address = bookingForm.address || userData.address;
     const date = bookingForm.date;
-    // Debug log userData
+    
     console.log('Booking userData:', userData);
-    // Try all possible userId fields
+    
     const userId = userData._id || userData.id || userData.userId;
     console.log('Booking debug:', {
       vendorId: vendor._id,

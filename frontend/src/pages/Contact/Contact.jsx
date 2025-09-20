@@ -25,20 +25,24 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      alert(
-        "Thank you for contacting FixMate! We'll get back to you within 24 hours."
-      );
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        message: "",
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
+      const data = await res.json();
+      if (data.success) {
+        alert("Thank you for contacting FixMate! We'll get back to you within 24 hours.");
+        setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+      } else {
+        alert(data.message || 'Failed to send message.');
+      }
+    } catch {
+      alert('Failed to send message.');
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const services = [
@@ -190,7 +194,7 @@ const Contact = () => {
                   disabled={isSubmitting}
                   className="w-full bg-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold hover:bg-black focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm sm:text-base"
                 >
-                  {isSubmitting ? "Sending..." : "Get Free Quote"}
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>

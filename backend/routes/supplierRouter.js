@@ -1,4 +1,5 @@
 
+
 import express from 'express';
 import supplierAuth from '../middleware/supplierAuth.js';
 import {
@@ -12,19 +13,18 @@ import {
   resetSupplierPassword,
   getAllSuppliers,
   deleteSupplier,
-  updateSupplierProfile
+  updateSupplierProfile,
+  verifySupplier
 } from '../controllers/suppplierController.js';
 
 const supplierRouter = express.Router();
 
+// Admin verify supplier endpoint
+supplierRouter.put('/verify/:id', verifySupplier);
 
 supplierRouter.put('/update-profile', supplierAuth, updateSupplierProfile);
-
-
 supplierRouter.get('/all', getAllSuppliers);
-
 supplierRouter.delete('/:id', deleteSupplier);
-
 supplierRouter.post('/register', registerSupplier);
 supplierRouter.post('/login', loginSupplier);
 supplierRouter.post('/logout', logoutSupplier);
