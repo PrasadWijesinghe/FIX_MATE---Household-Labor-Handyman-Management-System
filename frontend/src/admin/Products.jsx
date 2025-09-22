@@ -33,7 +33,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line
+    
   }, []);
 
   const handleRemove = (productId) => {
