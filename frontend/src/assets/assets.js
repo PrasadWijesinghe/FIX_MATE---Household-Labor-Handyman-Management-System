@@ -39,6 +39,7 @@ import carwash3 from './carwash3.png'
 
 import contactus from './contactus.png'
 import aboutus from './aboutus.png'
+import driver from './driver.png'
 
 
 
@@ -77,7 +78,7 @@ export const assets = {
     banner4,
     carwash1,
     carwash2,
-
+    driver,
     carwash3,
     contactus,
     aboutus
