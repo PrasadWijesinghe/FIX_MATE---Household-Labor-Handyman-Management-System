@@ -8,13 +8,18 @@ const UserProfile = () => {
   const { backendUrl, setIsLoggedin, setUserData } = useContext(AppContext);
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('orders');
-  const [editMode, setEditMode] = useState(false);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [supplyOrders, setSupplyOrders] = useState([]);
   const [supplyOrdersLoading, setSupplyOrdersLoading] = useState(false);
   const [editOrderModal, setEditOrderModal] = useState({ open: false, order: null, type: null });
   const navigate = useNavigate();
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Logout handler
   const handleLogout = async () => {
     try {
@@ -437,7 +442,7 @@ function EditProfileForm({ user, setUser, setActiveTab, backendUrl }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full">
       <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
       <form className="max-w-2xl w-full bg-white rounded-lg shadow p-8" onSubmit={handleSubmit} encType="multipart/form-data">
         {/* Profile Image */}

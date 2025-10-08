@@ -73,6 +73,11 @@ const ServiceCard = ({ service }) => {
 };
 
 const AllServicesPage = () => {
+  // Scroll to top when component mounts
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Services data
   const services = [
     {

@@ -30,10 +30,13 @@ export const createSupplyOrder = async (req, res) => {
       address,
       date,
       notes,
-      paymentMethod
+      amount,
+      paymentMethod,
+      paymentStatus,
+      paymentIntentId
     } = req.body;
 
-    if (!productId || !productName || !supplierId || !userId || !name || !phone || !email || !address || !date || !paymentMethod) {
+    if (!productId || !productName || !supplierId || !userId || !name || !phone || !email || !address || !date || !paymentMethod || !amount) {
       return res.status(400).json({ success: false, message: 'All required fields must be provided.' });
     }
 
@@ -48,11 +51,15 @@ export const createSupplyOrder = async (req, res) => {
       address,
       date,
       notes,
-      paymentMethod
+      amount,
+      paymentMethod,
+      paymentStatus: paymentStatus || (paymentMethod === 'Cash on Delivery' ? 'pending' : 'paid'),
+      paymentIntentId
     });
     await newOrder.save();
     res.status(201).json({ success: true, order: newOrder });
   } catch (error) {
+    console.log('Supply order creation error:', error);
     res.status(500).json({ success: false, message: 'Failed to create supply order', error: error.message });
   }
 };

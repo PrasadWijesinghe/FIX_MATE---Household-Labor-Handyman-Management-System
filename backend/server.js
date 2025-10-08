@@ -13,6 +13,9 @@ import connectCloudinary from './config/cloudinary.js';
 import imageUploadRouter from './routes/imageUploadRouter.js';
 import supplyOrderRoutes from './routes/supplyOrderRoutes.js';
 import productRouter from './routes/productRouter.js';
+import reviewRouter from './routes/reviewRouter.js';
+import vendorReviewRouter from './routes/vendorReviewRouter.js';
+import paymentRouter from './routes/paymentRouter.js';
 
 import orderRouter from './routes/orderRoutes.js';
 
@@ -31,7 +34,7 @@ app.get('/', (req, res)=>res.send("API WORKING"))
 
 
 
-// Serve uploads directory for profile images
+
 app.use('/api/supply-orders', supplyOrderRoutes);
 import path from "path";
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
@@ -43,6 +46,9 @@ app.use('/api/vendor', vendorRouter);
 
 app.use('/api/upload', imageUploadRouter); 
 app.use('/api/contact', contactRouter);
+app.use('/api/reviews', reviewRouter);
+app.use('/api/vendor-reviews', vendorReviewRouter);
+app.use('/api/payment', paymentRouter);
 // Removed duplicate productRouter mounts
 app.use('/api/supplier', productRouter); 
 

@@ -43,10 +43,23 @@ const supplyOrderSchema = new mongoose.Schema({
   notes: {
     type: String
   },
+  amount: {
+    type: Number,
+    required: true,
+    min: 1
+  },
   paymentMethod: {
     type: String,
-    enum: ['Cash on Delivery', 'Online Payment'],
+    enum: ['Cash on Delivery', 'Card Payment'],
     required: true
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending'
+  },
+  paymentIntentId: {
+    type: String
   },
   status: {
     type: String,

@@ -11,6 +11,7 @@ const VendorsByCategory = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const fetchVendors = async () => {
       setLoading(true);
@@ -31,10 +32,15 @@ const VendorsByCategory = () => {
     fetchVendors();
   }, [category]);
 
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
+
   return (
     <div>
       <Navbar />
-      <div className="max-w-5xl mx-auto px-4 py-8 min-h-[60vh]">
+      <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
         <h2 className="text-2xl font-bold mb-6 text-center capitalize">Available {category} Vendors</h2>
         {loading ? (
           <div className="text-center text-gray-500">Loading...</div>

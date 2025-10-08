@@ -3,6 +3,11 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
 const VendorCard = () => {
+  // Scroll to top when component mounts
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const vendor = {
     name: "Mike's Auto Detailing",
     category: "Car Washing & Detailing",

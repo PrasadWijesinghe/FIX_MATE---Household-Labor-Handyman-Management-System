@@ -34,7 +34,7 @@ const ProductDetail = () => {
         } else {
           setError(data.message || 'Product not found');
         }
-      } catch (err) {
+      } catch {
         setError('Failed to fetch product');
       } finally {
         setLoading(false);

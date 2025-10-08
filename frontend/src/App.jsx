@@ -1,6 +1,9 @@
 import SupplyStore from './pages/SupplyStore';
 import ProductCardDynamic from './pages/ProductCardDynamic';
 import UserProfile from './pages/UserProfile';
+import BookingPage from './pages/BookingPage';
+import PaymentPage from './pages/PaymentPage';
+import ServiceBookingPage from './pages/ServiceBookingPage';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -55,6 +58,9 @@ const App = () => {
   <Routes>
   <Route path="/supplystore" element={<SupplyStore />} />
   <Route path="/product/:id" element={<ProductCardDynamic />} />
+  <Route path="/booking" element={<BookingPage />} />
+  <Route path="/payment" element={<PaymentPage />} />
+  <Route path="/service-booking" element={<ServiceBookingPage />} />
     <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/adminlogin" element={<Adminlogin />} />
         <Route path='/' element={<Home />} />

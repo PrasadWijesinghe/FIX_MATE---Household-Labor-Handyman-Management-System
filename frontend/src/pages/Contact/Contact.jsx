@@ -112,6 +112,7 @@ const Contact = () => {
                     >
                       Email Address *
                     </label>
+                    
                     <input
                       type="email"
                       id="email"
