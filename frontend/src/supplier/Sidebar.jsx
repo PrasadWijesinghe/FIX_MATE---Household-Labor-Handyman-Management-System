@@ -6,6 +6,7 @@ import { SupplierContext } from "../Context/SupplierContext";
 
 const navLinks = [
   { name: "Available Orders", path: "/supplier/orders" },
+  { name: "Waiting Orders", path: "/supplier/waiting" },
   { name: "Previous Orders", path: "/supplier/previous" },
   { name: "Revenue", path: "/supplier/revenue" },
   { name: "Available Products", path: "/supplier/availableProducts" },
@@ -32,7 +33,7 @@ const Sidebar = () => {
 
   return (
     <aside className="w-56 bg-gray-800 flex flex-col items-center py-8 min-h-screen">
-      <div className="text-2xl font-bold mb-10 tracking-wider">FIX MATE<br/><p className="text-sm">Supplier Dashbord</p></div>
+      <div className="text-2xl font-bold mb-10 tracking-wider">FIX MATE<br/><p className="text-sm">Supplier Dashboard</p></div>
       <nav className="w-full flex-1">
         <ul className="flex flex-col gap-2 w-full">
           {navLinks.map(link => (

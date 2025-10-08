@@ -16,7 +16,7 @@ const PreviousOrders = () => {
       const { data } = await axios.get(`/api/supply-orders/supplier/${supplierData._id}`);
       if (data.success) {
         setOrders(
-          (data.orders || []).filter(order => order.status !== 'Pending')
+          (data.orders || []).filter(order => order.status === 'Delivered' || order.status === 'Cancelled')
         );
       } else {
         setOrders([]);
@@ -69,14 +69,38 @@ const PreviousOrders = () => {
                 <div className="mb-2">
                   <span className="font-semibold">Total Price:</span> <span className="ml-1">${(order.amount || 1) * (order.productId?.price || 0)}</span>
                 </div>
+                <div className="mb-2">
+                  <span className="font-semibold">Payment Method:</span> 
+                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    order.paymentMethod === 'Card Payment'
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Cash on Delivery'}
+                  </span>
+                </div>
                 {order.notes && (
                   <div className="mb-2">
                     <span className="font-semibold">Notes:</span> <span className="ml-1">{order.notes}</span>
                   </div>
                 )}
                 <div className="mb-2">
-                  <span className="font-semibold">Status:</span> <span className="ml-1">{order.status}</span>
+                  <span className="font-semibold">Status:</span> 
+                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    order.status === 'Delivered' 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {order.status}
+                  </span>
                 </div>
+                {order.status === 'Delivered' && order.supplierRevenue && (
+                  <div className="mb-2">
+                    <span className="font-semibold">Revenue Earned:</span> 
+                    <span className="ml-1 text-green-600 font-bold">${order.supplierRevenue.toFixed(2)}</span>
+                    <span className="text-xs text-gray-500 ml-1">(80% of total)</span>
+                  </div>
+                )}
               </div>
             </div>
           ))}

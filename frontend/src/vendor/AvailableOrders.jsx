@@ -4,16 +4,16 @@ import { VendorContext } from "../Context/VendorContext";
 import { toast } from "react-toastify";
 
 const AvailableOrders = () => {
-  const { vendorData, backendUrl } = useContext(VendorContext) || {};
+  const { vendorData, backendUrl, loading } = useContext(VendorContext) || {};
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
 
   const fetchOrders = async () => {
     if (!vendorData?._id) {
       console.log('No vendorData._id, skipping fetch. vendorData:', vendorData);
       return;
     }
-    setLoading(true);
+    setFetchLoading(true);
     try {
       const { data } = await axios.get(`${backendUrl}/api/orders/vendor/${vendorData._id}`);
       if (data.success) {
@@ -25,7 +25,7 @@ const AvailableOrders = () => {
       setOrders([]);
       console.log('Error fetching orders:', err);
     } finally {
-      setLoading(false);
+      setFetchLoading(false);
     }
   };
 
@@ -46,7 +46,7 @@ const AvailableOrders = () => {
               try {
                 await axios.patch(`${backendUrl}/api/orders/${orderId}/status`, { status: 'ongoing' });
                 toast.success('Order accepted and moved to Ongoing Orders.');
-                fetchOrders();
+                fetchOrders(); // Refresh the available orders list
               } catch {
                 toast.error('Failed to accept order.');
               }
@@ -102,7 +102,11 @@ const AvailableOrders = () => {
     <div className="py-8">
       <h2 className="text-xl font-semibold mb-4">Available Orders</h2>
       {loading ? (
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">Loading vendor data...</div>
+      ) : !vendorData?._id ? (
+        <div className="text-red-600">Please log in to view orders.</div>
+      ) : fetchLoading ? (
+        <div className="text-gray-600">Loading orders...</div>
       ) : orders.length === 0 ? (
         <div className="text-gray-500">No available orders.</div>
       ) : (
@@ -124,6 +128,16 @@ const AvailableOrders = () => {
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold">Date:</span> <span className="ml-1">{order.date}</span>
+                </div>
+                <div className="mb-2">
+                  <span className="font-semibold">Payment Method:</span> 
+                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    order.paymentMethod === 'Card Payment'
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Pay on Arrival'}
+                  </span>
                 </div>
                 {order.notes && (
                   <div className="mb-2">

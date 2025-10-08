@@ -73,17 +73,23 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
 
         if (data.success) {
           setClientSecret(data.clientSecret);
+          setPaymentError(''); 
         } else {
           toast.error(data.message || 'Failed to initialize payment');
         }
       } catch (error) {
-        toast.error('Failed to initialize payment');
         console.error('Payment intent creation error:', error);
+        const errorMessage = error.response?.data?.message || 'Failed to initialize payment';
+        setPaymentError(errorMessage);
+        toast.error(errorMessage);
       }
     };
 
-    createPaymentIntent();
-  }, [backendUrl, totalPrice, orderData, isServiceBooking]);
+    // Only create payment intent if we have the required data
+    if (backendUrl && totalPrice && orderData) {
+      createPaymentIntent();
+    }
+  }, [backendUrl, totalPrice, orderData, isServiceBooking, vendor, product]);
 
   const handleCardChange = (event) => {
     if (event.elementType === 'cardNumber') {
@@ -127,7 +133,16 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
     });
 
     if (error) {
-      setPaymentError(error.message);
+      console.error('Payment confirmation error:', error);
+      
+      // Check if it's a payment intent error and suggest refresh
+      if (error.code === 'resource_missing' && error.message.includes('payment_intent')) {
+        setPaymentError('Payment session expired. Please refresh the page and try again.');
+        toast.error('Payment session expired. Please refresh the page and try again.');
+      } else {
+        setPaymentError(error.message);
+        toast.error(error.message);
+      }
       setProcessing(false);
     } else if (paymentIntent.status === 'succeeded') {
       // Payment successful - now place the order
@@ -157,7 +172,8 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
           toast.success('Payment successful! Your order has been placed.');
           navigate(`/product/${product._id}`);
         }
-      } catch {
+      } catch (orderError) {
+        console.error('Order creation error:', orderError);
         toast.error('Payment succeeded but failed to create order. Please contact support.');
       }
     }
@@ -263,7 +279,18 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
 
         {paymentError && (
           <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-            {paymentError}
+            <div className="flex items-center justify-between">
+              <span>{paymentError}</span>
+              {paymentError.includes('payment_intent') && (
+                <button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  className="ml-2 px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                >
+                  Refresh
+                </button>
+              )}
+            </div>
           </div>
         )}
 

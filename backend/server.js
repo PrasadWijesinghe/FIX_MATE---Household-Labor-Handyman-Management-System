@@ -7,6 +7,7 @@ import connectDB from "./config/mongoDB.js";
 import authRouter from './routes/authRoutes.js';
 import userRouter from "./routes/userRoutes.js";
 import supplierRouter from './routes/supplierRouter.js';
+import deliveryRouter from './routes/deliveryRoute.js';
 
 import vendorRouter from './routes/vendorRoutes.js';
 import connectCloudinary from './config/cloudinary.js';
@@ -42,6 +43,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supplier', supplierRouter);
+app.use('/api/delivery', deliveryRouter);
 app.use('/api/vendor', vendorRouter);
 
 app.use('/api/upload', imageUploadRouter); 

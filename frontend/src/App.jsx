@@ -29,8 +29,11 @@ import VendorProfile from './vendor/Profile';
 import VendorAvailableOrders from './vendor/AvailableOrders';
 import SupplierAvailableOrders from './supplier/AvailableOrders';
 import SupplierPreviousOrders from './supplier/PreviousOrders';
+import SupplierWaitingOrders from './supplier/WaitingOrders';
 import OngoingOrders from './vendor/OngoingOrders';
 import PreviousOrders from './vendor/PreviousOrders';
+import Revenue from './vendor/Revenue';
+import SupplierRevenue from './supplier/Revenue';
 import { VendorContextProvider } from './Context/VendorContext';
 import SupplierDashboard from './supplier/SupplierDashboard';
 import { SupplierContextProvider } from './Context/SupplierContext';
@@ -43,6 +46,16 @@ import SupplierRegister from './supplier/SupplierRegister';
 import SupplierProfile from './supplier/SupplierProfile';
 import AddProducts from './supplier/AddProducts';
 import AvailableProducts from './supplier/AvailableProducts';
+
+import DeliveryLogin from './delivery/DeliveryLogin';
+import DeliveryRegister from './delivery/DeliveryRegister';
+import DeliveryDashboard from './delivery/DeliveryDashboard';
+import DeliveryContextProvider from './Context/DeliveryContext';
+import DeliveryAvailableOrders from './delivery/AvailableOrders';
+import DeliveryOngoingOrders from './delivery/OngoingOrders';
+import DeliveryPreviousOrders from './delivery/PreviousOrders';
+import DeliveryRevenue from './delivery/Revenue';
+import DeliveryProfile from './delivery/Profile';
 
 import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
@@ -90,25 +103,42 @@ const App = () => {
           <Route path="orders" element={<VendorAvailableOrders />} />
           <Route path="ongoing" element={<OngoingOrders />} />
           <Route path="previous" element={<PreviousOrders />} />
-          <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue Page</div>} />
+          <Route path="revenue" element={<Revenue />} />
           <Route path="profile" element={<VendorProfile />} />
         </Route>
 
         <Route path="/supplierlogin" element={<SupplierLogin />} />
         <Route path="/supplierregister" element={<SupplierRegister />} />
 
+        <Route path="/deliverylogin" element={<DeliveryLogin />} />
+        <Route path="/deliveryregister" element={<DeliveryRegister />} />
+
         <Route path="/supplier" element={
           <SupplierContextProvider>
             <SupplierDashboard />
           </SupplierContextProvider>
         }>
-          <Route index element={<div className='p-8 text-white text-xl'>Orders</div>} />
+          <Route index element={<SupplierAvailableOrders />} />
           <Route path="orders" element={<SupplierAvailableOrders />} />
+          <Route path="waiting" element={<SupplierWaitingOrders />} />
           <Route path="previous" element={<SupplierPreviousOrders />} />
           <Route path="availableProducts" element={<AvailableProducts />} />
           <Route path="addProducts" element={<AddProducts />} />
-          <Route path="revenue" element={<div className='p-8 text-white text-xl'>Revenue</div>} />
+          <Route path="revenue" element={<SupplierRevenue />} />
           <Route path="profile" element={<SupplierProfile />} />
+        </Route>
+
+        <Route path="/delivery" element={
+          <DeliveryContextProvider>
+            <DeliveryDashboard />
+          </DeliveryContextProvider>
+        }>
+          <Route index element={<DeliveryAvailableOrders />} />
+          <Route path="orders" element={<DeliveryAvailableOrders />} />
+          <Route path="ongoing" element={<DeliveryOngoingOrders />} />
+          <Route path="previous" element={<DeliveryPreviousOrders />} />
+          <Route path="revenue" element={<DeliveryRevenue />} />
+          <Route path="profile" element={<DeliveryProfile />} />
         </Route>
 
         <Route path="/admin" element={<AdminDashboard />}>

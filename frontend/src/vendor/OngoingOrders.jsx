@@ -4,13 +4,15 @@ import { VendorContext } from "../Context/VendorContext";
 import { toast } from "react-toastify";
 
 const OngoingOrders = () => {
-  const { vendorData, backendUrl } = useContext(VendorContext) || {};
+  const { vendorData, backendUrl, loading } = useContext(VendorContext) || {};
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [hoursWorked, setHoursWorked] = useState(1);
 
   const fetchOrders = async () => {
     if (!vendorData?._id) return;
-    setLoading(true);
+    setFetchLoading(true);
     try {
       const { data } = await axios.get(`${backendUrl}/api/orders/vendor/${vendorData._id}`);
       if (data.success) {
@@ -18,10 +20,10 @@ const OngoingOrders = () => {
       } else {
         setOrders([]);
       }
-    } catch (err) {
+    } catch {
       setOrders([]);
     } finally {
-      setLoading(false);
+      setFetchLoading(false);
     }
   };
 
@@ -30,29 +32,85 @@ const OngoingOrders = () => {
     // eslint-disable-next-line
   }, [vendorData, backendUrl]);
 
-  const handleMarkDone = (orderId) => {
+  const handleMarkDone = (order) => {
+    setSelectedOrder(order);
+    setHoursWorked(1);
+    
+    // Calculate totals based on hours
+    const calculateTotals = (hours) => {
+      const totalAmount = (vendorData.hourlyRate || 0) * hours;
+      const vendorRevenue = totalAmount * 0.8;
+      const serviceFee = totalAmount * 0.2;
+      return { totalAmount, vendorRevenue, serviceFee };
+    };
+
     toast.info(
       <div>
-        <div className="mb-2">Are you sure you want to mark this order as done?</div>
+        <div className="mb-3">Complete Order for {order.name}</div>
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Hours Worked:</label>
+          <input
+            type="number"
+            min="0.5"
+            step="0.5"
+            defaultValue={1}
+            className="w-full p-2 border rounded text-black"
+            onChange={(e) => {
+              const hours = parseFloat(e.target.value) || 1;
+              setHoursWorked(hours);
+              
+              // Update the totals display
+              const { totalAmount, vendorRevenue, serviceFee } = calculateTotals(hours);
+              
+              // Update the display elements
+              const totalEl = document.getElementById('total-amount-display');
+              const revenueEl = document.getElementById('revenue-display');
+              const feeEl = document.getElementById('fee-display');
+              
+              if (totalEl) totalEl.textContent = `$${totalAmount.toFixed(2)}`;
+              if (revenueEl) revenueEl.textContent = `$${vendorRevenue.toFixed(2)}`;
+              if (feeEl) feeEl.textContent = `$${serviceFee.toFixed(2)}`;
+            }}
+          />
+        </div>
+        <div className="mb-3 text-sm bg-blue-50 p-3 rounded text-black">
+          <div><strong>Hourly Rate:</strong> ${vendorData.hourlyRate || 0}</div>
+          <div><strong>Total Amount:</strong> <span id="total-amount-display">${(vendorData.hourlyRate || 0).toFixed(2)}</span></div>
+          <div><strong>Your Revenue (80%):</strong> <span id="revenue-display">${((vendorData.hourlyRate || 0) * 0.8).toFixed(2)}</span></div>
+          <div><strong>Service Fee (20%):</strong> <span id="fee-display">${((vendorData.hourlyRate || 0) * 0.2).toFixed(2)}</span></div>
+        </div>
         <div className="flex gap-2 justify-end">
           <button
             className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
             onClick={async () => {
               toast.dismiss();
               try {
-                await axios.patch(`${backendUrl}/api/orders/${orderId}/status`, { status: 'done' });
-                toast.success('Order marked as done.');
-                fetchOrders();
+                const { totalAmount, vendorRevenue, serviceFee } = calculateTotals(hoursWorked);
+                
+                // Update order status and save revenue
+                await axios.patch(`${backendUrl}/api/orders/${order._id}/status`, { 
+                  status: 'done',
+                  vendorRevenue: vendorRevenue,
+                  serviceFee: serviceFee,
+                  totalAmount: totalAmount,
+                  hoursWorked: hoursWorked
+                });
+                toast.success(`Order completed! Revenue of $${vendorRevenue.toFixed(2)} added to your account.`);
+                fetchOrders(); // Refresh the ongoing orders list
+                setSelectedOrder(null);
               } catch {
                 toast.error('Failed to mark as done.');
               }
             }}
           >
-            Yes
+            Complete Order
           </button>
           <button
             className="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-xs"
-            onClick={() => toast.dismiss()}
+            onClick={() => {
+              toast.dismiss();
+              setSelectedOrder(null);
+            }}
           >
             Cancel
           </button>
@@ -66,7 +124,11 @@ const OngoingOrders = () => {
     <div className="py-8">
       <h2 className="text-xl font-semibold mb-4">Ongoing Orders</h2>
       {loading ? (
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">Loading vendor data...</div>
+      ) : !vendorData?._id ? (
+        <div className="text-red-600">Please log in to view orders.</div>
+      ) : fetchLoading ? (
+        <div className="text-gray-600">Loading orders...</div>
       ) : orders.length === 0 ? (
         <div className="text-gray-500">No ongoing orders.</div>
       ) : (
@@ -89,6 +151,16 @@ const OngoingOrders = () => {
                 <div className="mb-2">
                   <span className="font-semibold">Date:</span> <span className="ml-1">{order.date}</span>
                 </div>
+                <div className="mb-2">
+                  <span className="font-semibold">Payment Method:</span> 
+                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    order.paymentMethod === 'Card Payment' 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Pay on Arrival'}
+                  </span>
+                </div>
                 {order.notes && (
                   <div className="mb-2">
                     <span className="font-semibold">Notes:</span> <span className="ml-1">{order.notes}</span>
@@ -98,7 +170,7 @@ const OngoingOrders = () => {
               <div className="flex gap-3 items-center">
                 <button
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-                  onClick={() => handleMarkDone(order._id)}
+                  onClick={() => handleMarkDone(order)}
                 >
                   Mark as Done
                 </button>

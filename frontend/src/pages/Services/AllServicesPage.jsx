@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 const ServiceCard = ({ service }) => {
   const navigate = useNavigate();
   const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
-
  
   const threshold = 12;
 
@@ -73,7 +72,7 @@ const ServiceCard = ({ service }) => {
 };
 
 const AllServicesPage = () => {
-  // Scroll to top when component mounts
+  
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

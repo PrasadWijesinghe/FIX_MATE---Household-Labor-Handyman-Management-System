@@ -18,11 +18,26 @@ export const updateOrderDetails = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { status } = req.body;
+    const { status, vendorRevenue, serviceFee, totalAmount, hoursWorked } = req.body;
+    
     if (!['pending', 'ongoing', 'done', 'rejected'].includes(status)) {
       return res.status(400).json({ success: false, message: 'Invalid status' });
     }
-    const order = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true });
+    
+    const updateData = { 
+      status, 
+      updatedAt: new Date() 
+    };
+    
+    // If marking as done, save revenue data
+    if (status === 'done') {
+      if (vendorRevenue !== undefined) updateData.vendorRevenue = vendorRevenue;
+      if (serviceFee !== undefined) updateData.serviceFee = serviceFee;
+      if (totalAmount !== undefined) updateData.totalAmount = totalAmount;
+      if (hoursWorked !== undefined) updateData.hoursWorked = hoursWorked;
+    }
+    
+    const order = await orderModel.findByIdAndUpdate(orderId, updateData, { new: true });
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
     return res.json({ success: true, order });
   } catch (error) {
@@ -56,11 +71,22 @@ export const getOrdersByUser = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   try {
-    const { vendorId, vendorName, userId, name, phone, email, address, date, notes } = req.body;
+    const { vendorId, vendorName, userId, name, phone, email, address, date, notes, paymentMethod } = req.body;
     if (!vendorId || !userId || !name || !phone || !email || !address || !date) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
-    const order = new orderModel({ vendorId, vendorName, userId, name, phone, email, address, date, notes });
+    const order = new orderModel({ 
+      vendorId, 
+      vendorName, 
+      userId, 
+      name, 
+      phone, 
+      email, 
+      address, 
+      date, 
+      notes,
+      paymentMethod: paymentMethod || 'Pay on Arrival'
+    });
     await order.save();
     return res.json({ success: true, order });
   } catch (error) {

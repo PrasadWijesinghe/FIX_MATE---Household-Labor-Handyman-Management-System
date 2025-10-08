@@ -4,7 +4,33 @@ import { Outlet } from "react-router-dom";
 import { VendorContext } from "../Context/VendorContext";
 
 const VendorDashboard = () => {
-  const { vendorData } = useContext(VendorContext) || {};
+  const { vendorData, loading, isVendorLoggedin } = useContext(VendorContext) || {};
+
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-gray-900 text-white items-center justify-center">
+        <div className="text-center">
+          <div className="text-xl mb-4">Loading...</div>
+          <div className="text-gray-400">Checking authentication status</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isVendorLoggedin || !vendorData) {
+    return (
+      <div className="flex h-screen bg-gray-900 text-white items-center justify-center">
+        <div className="text-center">
+          <div className="text-xl mb-4 text-red-400">Authentication Required</div>
+          <div className="text-gray-400 mb-4">Please log in to access the vendor dashboard</div>
+          <a href="/vendorlogin" className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
+            Go to Login
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <Sidebar />
