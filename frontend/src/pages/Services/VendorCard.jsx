@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
+// test
 
 const VendorCard = () => {
   // Scroll to top when component mounts
