@@ -10,6 +10,8 @@ export const verifyVendor = async (req, res) => {
 	}
 };
 import vendorModel from '../models/vendorModel.js';
+import BannedEmail from '../models/bannedEmailModel.js';
+import VendorNotice from '../models/vendorNoticeModel.js';
 
 
 export const getAllVendors = async (req, res) => {
@@ -78,7 +80,13 @@ export const getVendorsByCategory = async (req, res) => {
 			return res.json({ success: true, vendors: [] });
 		}
 
-		const vendorList = vendors.map(vendor => ({
+		// Exclude banned vendors
+		const bannedList = await BannedEmail.find({ type: 'vendor' }, 'email');
+		const bannedSet = new Set(bannedList.map(b => (b.email || '').toLowerCase()));
+
+		const vendorList = vendors
+			.filter(v => !bannedSet.has((v.email || '').toLowerCase()))
+			.map(vendor => ({
 			_id: vendor._id,
 			name: vendor.name,
 			category: vendor.category,
@@ -182,6 +190,7 @@ export const getVendorData = async (req, res) => {
 		if (!vendor) {
 			return res.json({ success: false, message: 'Vendor not found' });
 		}
+		const banned = await BannedEmail.findOne({ email: (vendor.email || '').toLowerCase(), type: 'vendor' });
 		res.json({
 			success: true,
 			vendor: {
@@ -191,6 +200,7 @@ export const getVendorData = async (req, res) => {
 				hourlyRate: vendor.hourlyRate,
 				email: vendor.email,
 				isAccountVerified: vendor.isAccountVerified,
+				isBanned: !!banned,
 				phone: vendor.phone || '',
 				address: vendor.address || '',
 				profileImageUrl: vendor.profileImageUrl || '',
@@ -210,6 +220,10 @@ export const registerVendor = async (req, res) => {
 		return res.json({ success: false, message: 'Missing Details' });
 	}
 	try {
+		const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'vendor' });
+		if (banned) {
+			return res.json({ success: false, message: 'This email is banned from registering as vendor' });
+		}
 		const existingVendor = await vendorModel.findOne({ email });
 		if (existingVendor) {
 			return res.json({ success: false, message: 'Vendor already exists' });
@@ -237,6 +251,10 @@ export const loginVendor = async (req, res) => {
 		return res.json({ success: false, message: 'Email and password are required' });
 	}
 	try {
+		const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'vendor' });
+		if (banned) {
+			return res.json({ success: false, message: 'This account has been banned. Contact admin.' });
+		}
 		const vendor = await vendorModel.findOne({ email });
 		if (!vendor) {
 			return res.json({ success: false, message: 'Vendor not found' });
@@ -255,6 +273,70 @@ export const loginVendor = async (req, res) => {
 		return res.json({ success: true });
 	} catch (error) {
 		return res.json({ success: false, message: error.message });
+	}
+};
+
+// Admin: Ban/Unban vendor and send notices
+export const adminBanVendorByEmail = async (req, res) => {
+	try {
+		const { email, reason } = req.body;
+		if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+		const record = await BannedEmail.findOneAndUpdate(
+			{ email: email.toLowerCase(), type: 'vendor' },
+			{ $set: { reason: reason || '', createdBy: req.user?.email || 'admin' } },
+			{ upsert: true, new: true }
+		);
+		return res.json({ success: true, message: 'Vendor banned', ban: record });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to ban vendor' });
+	}
+};
+
+export const adminUnbanVendorByEmail = async (req, res) => {
+	try {
+		const { email } = req.body;
+		if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+		await BannedEmail.deleteOne({ email: email.toLowerCase(), type: 'vendor' });
+		return res.json({ success: true, message: 'Vendor unbanned' });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to unban vendor' });
+	}
+};
+
+export const adminSendVendorNotice = async (req, res) => {
+	try {
+		const { vendorId, message } = req.body;
+		if (!vendorId || !message) return res.status(400).json({ success: false, message: 'vendorId and message are required' });
+		const vendor = await vendorModel.findById(vendorId);
+		if (!vendor) return res.status(404).json({ success: false, message: 'Vendor not found' });
+		const notice = await VendorNotice.create({ vendorId, message, createdBy: req.user?.email || 'admin' });
+		return res.json({ success: true, message: 'Notice sent', notice });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to send notice' });
+	}
+};
+
+export const getMyVendorNotices = async (req, res) => {
+	try {
+		const notices = await VendorNotice.find({ vendorId: req.user.id }).sort({ createdAt: -1 });
+		return res.json({ success: true, notices });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to get notices' });
+	}
+};
+
+export const markVendorNoticeRead = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const notice = await VendorNotice.findOneAndUpdate(
+			{ _id: id, vendorId: req.user.id },
+			{ $set: { read: true } },
+			{ new: true }
+		);
+		if (!notice) return res.status(404).json({ success: false, message: 'Notice not found' });
+		return res.json({ success: true, message: 'Notice marked as read', notice });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to update notice' });
 	}
 };
 

@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import deliveryModel from '../models/deliveryModel.js';
+import BannedEmail from '../models/bannedEmailModel.js';
+import DeliveryNotice from '../models/deliveryNoticeModel.js';
 
 // Register a new delivery driver
 const registerDelivery = async (req, res) => {
@@ -16,6 +18,12 @@ const registerDelivery = async (req, res) => {
     const existingDelivery = await deliveryModel.findOne({ email });
     if (existingDelivery) {
       return res.json({ success: false, message: "Email already exists" });
+    }
+
+    // Check banned list
+    const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'delivery' });
+    if (banned) {
+      return res.json({ success: false, message: "This email is banned from registering as delivery driver" });
     }
 
     // Validate rate
@@ -85,6 +93,12 @@ const loginDelivery = async (req, res) => {
       return res.json({ success: false, message: "Invalid credentials" });
     }
 
+    // Check banned list (blocks login too per requirements)
+    const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'delivery' });
+    if (banned) {
+      return res.json({ success: false, message: "This account has been banned. Contact admin." });
+    }
+
     // Check password
     const isPasswordValid = await bcrypt.compare(password, delivery.password);
     if (!isPasswordValid) {
@@ -148,6 +162,7 @@ const getDeliveryProfile = async (req, res) => {
     if (!delivery) {
       return res.json({ success: false, message: "Delivery driver not found" });
     }
+    const banned = await BannedEmail.findOne({ email: (delivery.email || '').toLowerCase(), type: 'delivery' });
 
     res.json({
       success: true,
@@ -163,6 +178,7 @@ const getDeliveryProfile = async (req, res) => {
         bio: delivery.bio,
         isAvailable: delivery.isAvailable,
         totalDeliveries: delivery.totalDeliveries,
+        isBanned: !!banned,
         createdAt: delivery.createdAt
       }
     });
@@ -244,4 +260,86 @@ export {
   getDeliveryProfile,
   updateDeliveryProfile,
   getAllDeliveryDrivers
+};
+
+// Admin actions
+export const adminDeleteDriver = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await deliveryModel.findByIdAndDelete(id);
+    if (!deleted) return res.status(404).json({ success: false, message: 'Driver not found' });
+    return res.json({ success: true, message: 'Driver removed' });
+  } catch (err) {
+    console.error('Admin delete driver error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to remove driver' });
+  }
+};
+
+export const adminBanDriverByEmail = async (req, res) => {
+  try {
+    const { email, reason } = req.body;
+    if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+    const record = await BannedEmail.findOneAndUpdate(
+      { email: email.toLowerCase(), type: 'delivery' },
+      { $set: { reason: reason || '', createdBy: req.user?.email || 'admin' } },
+      { upsert: true, new: true }
+    );
+    return res.json({ success: true, message: 'Driver banned', ban: record });
+  } catch (err) {
+    console.error('Admin ban driver error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to ban driver' });
+  }
+};
+
+export const adminUnbanDriverByEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+    await BannedEmail.deleteOne({ email: email.toLowerCase(), type: 'delivery' });
+    return res.json({ success: true, message: 'Driver unbanned' });
+  } catch (err) {
+    console.error('Admin unban driver error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to unban driver' });
+  }
+};
+
+export const adminSendDriverNotice = async (req, res) => {
+  try {
+    const { driverId, message } = req.body;
+    if (!driverId || !message) return res.status(400).json({ success: false, message: 'driverId and message are required' });
+    const driver = await deliveryModel.findById(driverId);
+    if (!driver) return res.status(404).json({ success: false, message: 'Driver not found' });
+    const notice = await DeliveryNotice.create({ driverId, message, createdBy: req.user?.email || 'admin' });
+    return res.json({ success: true, message: 'Notice sent', notice });
+  } catch (err) {
+    console.error('Admin send notice error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to send notice' });
+  }
+};
+
+// Driver endpoints for notices
+export const getMyNotices = async (req, res) => {
+  try {
+    const notices = await DeliveryNotice.find({ driverId: req.deliveryId }).sort({ createdAt: -1 });
+    return res.json({ success: true, notices });
+  } catch (err) {
+    console.error('Get notices error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to get notices' });
+  }
+};
+
+export const markNoticeRead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const notice = await DeliveryNotice.findOneAndUpdate(
+      { _id: id, driverId: req.deliveryId },
+      { $set: { read: true } },
+      { new: true }
+    );
+    if (!notice) return res.status(404).json({ success: false, message: 'Notice not found' });
+    return res.json({ success: true, message: 'Notice marked as read', notice });
+  } catch (err) {
+    console.error('Mark notice read error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to update notice' });
+  }
 };

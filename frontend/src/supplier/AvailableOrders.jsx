@@ -231,7 +231,7 @@ const AvailableOrders = () => {
   return (
     <div className="py-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Available Orders</h2>
+        <h2 className="text-xl font-semibold text-white">Available Orders</h2>
         <button
           onClick={fetchOrders}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -240,22 +240,22 @@ const AvailableOrders = () => {
         </button>
       </div>
       {loading ? (
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-300">Loading...</div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-8">
-          <div className="text-gray-500 mb-4">
-            <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center py-10">
+          <div className="text-gray-400 mb-4">
+            <svg className="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">No Available Orders</h3>
-            <p className="text-gray-500">No orders are currently available for processing.</p>
+            <h3 className="text-lg font-semibold text-gray-200 mb-2">No Available Orders</h3>
+            <p className="text-gray-400">No orders are currently available for processing.</p>
           </div>
         </div>
       ) : (
         <div className="max-w-3xl mx-auto space-y-6">
           {orders.map(order => (
-            <div key={order._id} className="border border-gray-200 rounded-xl p-6 bg-white shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex-1 text-gray-800">
+            <div key={order._id} className="border border-gray-700 rounded-xl p-6 bg-gray-800 shadow-lg flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex-1 text-gray-200">
                 <div className="mb-2">
                   <span className="font-semibold">Customer:</span> <span className="ml-1">{order.name}</span>
                 </div>
@@ -282,27 +282,27 @@ const AvailableOrders = () => {
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold">Payment Method:</span> 
-                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium border ${
                     order.paymentMethod === 'Card Payment'
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-emerald-900/30 text-emerald-300 border-emerald-700' 
+                      : 'bg-blue-900/30 text-blue-300 border-blue-700'
                   }`}>
                     {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Cash on Delivery'}
                   </span>
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold">Status:</span> 
-                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium border ${
                     order.status === 'Confirmed' 
-                      ? 'bg-blue-100 text-blue-800' 
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-indigo-900/30 text-indigo-300 border-indigo-700' 
+                      : 'bg-yellow-900/30 text-yellow-300 border-yellow-700'
                   }`}>
                     {order.status}
                   </span>
                 </div>
                 {order.notes && (
                   <div className="mb-2">
-                    <span className="font-semibold">Notes:</span> <span className="ml-1">{order.notes}</span>
+                    <span className="font-semibold">Notes:</span> <span className="ml-1 text-gray-300">{order.notes}</span>
                   </div>
                 )}
               </div>
@@ -346,17 +346,17 @@ const AvailableOrders = () => {
 
       {/* Delivery Driver Selection Modal */}
       {showDeliveryModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto border border-gray-700">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Select Delivery Driver</h3>
+              <h3 className="text-lg font-semibold text-gray-100">Select Delivery Driver</h3>
               <button
                 onClick={() => {
                   setShowDeliveryModal(false);
                   setSelectedOrder(null);
                   setSelectedDriver(null);
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-400 hover:text-gray-200"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -365,19 +365,19 @@ const AvailableOrders = () => {
             </div>
 
             {selectedOrder && (
-              <div className="mb-4 p-3 bg-gray-100 rounded-lg">
-                <h4 className="font-semibold text-gray-800 mb-2">Order Details:</h4>
-                <p className="text-sm text-gray-600">Customer: {selectedOrder.name}</p>
-                <p className="text-sm text-gray-600">Product: {selectedOrder.productId?.name || selectedOrder.productName}</p>
-                <p className="text-sm text-gray-600">Address: {selectedOrder.address}</p>
-                <p className="text-sm text-gray-600">Amount: {selectedOrder.amount || 1}</p>
+              <div className="mb-4 p-3 bg-gray-800 rounded-lg border border-gray-700">
+                <h4 className="font-semibold text-gray-100 mb-2">Order Details:</h4>
+                <p className="text-sm text-gray-300">Customer: {selectedOrder.name}</p>
+                <p className="text-sm text-gray-300">Product: {selectedOrder.productId?.name || selectedOrder.productName}</p>
+                <p className="text-sm text-gray-300">Address: {selectedOrder.address}</p>
+                <p className="text-sm text-gray-300">Amount: {selectedOrder.amount || 1}</p>
               </div>
             )}
 
             {loadingDrivers ? (
-              <div className="text-center py-8 text-gray-600">Loading drivers...</div>
+              <div className="text-center py-8 text-gray-300">Loading drivers...</div>
             ) : deliveryDrivers.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">No delivery drivers available at the moment.</div>
+              <div className="text-center py-8 text-gray-400">No delivery drivers available at the moment.</div>
             ) : (
               <>
                 <div className="space-y-3 mb-6">
@@ -386,8 +386,8 @@ const AvailableOrders = () => {
                       key={driver.id || driver._id}
                       className={`border rounded-lg p-4 cursor-pointer transition ${
                         selectedDriver?._id === driver._id || selectedDriver?.id === driver.id
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-purple-500 bg-purple-900/20'
+                          : 'border-gray-700 hover:border-gray-500 bg-gray-800'
                       }`}
                       onClick={() => setSelectedDriver(driver)}
                     >
@@ -405,21 +405,21 @@ const AvailableOrders = () => {
                             </div>
                           )}
                           <div>
-                            <h5 className="font-semibold text-gray-800">{driver.name}</h5>
-                            <p className="text-sm text-gray-600">Rate: ${driver.rate}/delivery</p>
-                            <p className="text-sm text-gray-600">Area: {driver.operatingArea}</p>
-                            <p className="text-sm text-gray-600">Phone: {driver.phone}</p>
+                            <h5 className="font-semibold text-gray-100">{driver.name}</h5>
+                            <p className="text-sm text-gray-300">Rate: ${driver.rate}/delivery</p>
+                            <p className="text-sm text-gray-300">Area: {driver.operatingArea}</p>
+                            <p className="text-sm text-gray-300">Phone: {driver.phone}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${
                             driver.isAvailable
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-emerald-900/30 text-emerald-300 border-emerald-700'
+                              : 'bg-red-900/30 text-red-300 border-red-700'
                           }`}>
                             {driver.isAvailable ? 'Available' : 'Busy'}
                           </span>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-400 mt-1">
                             {driver.totalDeliveries || 0} deliveries
                           </p>
                         </div>
@@ -435,7 +435,7 @@ const AvailableOrders = () => {
                       setSelectedOrder(null);
                       setSelectedDriver(null);
                     }}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-gray-700 text-gray-200 rounded-lg hover:bg-gray-800 transition"
                   >
                     Cancel
                   </button>
@@ -455,16 +455,16 @@ const AvailableOrders = () => {
 
       {/* Info Card for Contact Delivery Feature */}
       {orders.some(order => order.status === 'Confirmed') && (
-        <div className="mt-8 bg-purple-50 border border-purple-200 rounded-lg p-4">
+        <div className="mt-8 bg-purple-900/20 border border-purple-700 rounded-lg p-4">
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0">
-              <svg className="w-5 h-5 text-purple-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-purple-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-purple-700">Delivery Contact Available</h4>
-              <p className="text-sm text-purple-600 mt-1">
+              <h4 className="text-sm font-semibold text-purple-300">Delivery Contact Available</h4>
+              <p className="text-sm text-purple-200 mt-1">
                 You have confirmed orders ready for delivery! Use the "Contact Delivery" button to assign 
                 delivery drivers to your orders. Orders will then move to "Waiting Orders" until the driver accepts.
               </p>

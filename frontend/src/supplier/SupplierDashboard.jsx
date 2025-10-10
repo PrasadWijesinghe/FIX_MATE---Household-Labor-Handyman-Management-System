@@ -18,7 +18,12 @@ const SupplierDashboard = () => {
             {supplierData && supplierData.name && supplierData.name[0] ? supplierData.name[0].toUpperCase() : "S"}
           </div>
         </div>
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 p-6 overflow-y-auto space-y-6">
+          {supplierData?.isBanned && (
+            <div className="bg-red-900/40 border border-red-700 text-red-200 px-4 py-3 rounded">
+              Your account is banned. You cannot provide services or list products until an admin unbans you.
+            </div>
+          )}
           <Outlet />
         </div>
       </div>

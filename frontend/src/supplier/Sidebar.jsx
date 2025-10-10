@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Available Orders", path: "/supplier/orders" },
   { name: "Waiting Orders", path: "/supplier/waiting" },
   { name: "Previous Orders", path: "/supplier/previous" },
+  { name: "Admin Notices", path: "/supplier/notices" },
   { name: "Revenue", path: "/supplier/revenue" },
   { name: "Available Products", path: "/supplier/availableProducts" },
   { name: "Add Products", path: "/supplier/addProducts" },
@@ -25,7 +26,7 @@ const Sidebar = () => {
       setIsSupplierLoggedin(false);
       setSupplierData(null);
       navigate('/supplierlogin');
-    } catch (error) {
+    } catch {
      
       navigate('/supplierlogin');
     }

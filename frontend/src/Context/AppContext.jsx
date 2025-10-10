@@ -1,6 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 
 export const AppContext = createContext();
 
@@ -9,40 +9,51 @@ export const AppContextProvider = (props) => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [userData, setUserData] = useState(null);
  
-    const getAuthState = async () => {
+    const getUserData = useCallback(async () => {
+        try {
+            const { data } = await axios.get(backendUrl + '/api/user/data', { withCredentials: true });
+            if (data.success) {
+                if (data.userData && data.userData._id) {
+                    setUserData(data.userData);
+                } else {
+                    setUserData(null);
+                }
+            } else {
+                setUserData(null);
+            }
+        } catch (error) {
+            if (error?.response?.status === 401) {
+                setUserData(null);
+                setIsLoggedin(false);
+            } else {
+                // console.debug('getUserData error:', error?.message || error);
+            }
+        }
+    }, [backendUrl]);
+
+    const getAuthState = useCallback(async () => {
         try {
             const { data } = await axios.get(backendUrl + '/api/auth/is-auth', { withCredentials: true });
             if (data.success) {
                 setIsLoggedin(true);
                 getUserData();
+            } else {
+                // Not authenticated: silently clear state
+                setIsLoggedin(false);
+                setUserData(null);
             }
-        } catch (error) {
-            toast.error(error.message || 'Auth check failed');
+        } catch {
+            // Suppress toast on 401 to avoid noisy popups on reload
+            setIsLoggedin(false);
+            setUserData(null);
         }
-    };
+    }, [backendUrl, getUserData]);
 
     useEffect(() => {
         getAuthState();
-    }, []);
+    }, [getAuthState]);
 
-    const getUserData = async () => {
-        try {
-            const { data } = await axios.get(backendUrl + '/api/user/data', { withCredentials: true });
-            if (data.success) {
-                // Defensive: ensure _id is present
-                if (data.userData && data.userData._id) {
-                    setUserData(data.userData);
-                } else {
-                    toast.error('User ID missing in user data.');
-                    setUserData(null);
-                }
-            } else {
-                toast.error(data.message);
-            }
-        } catch (error) {
-            toast.error(error.message || 'Failed to fetch user data');
-        }
-    };
+    // getUserData wrapped above
 
 
 

@@ -37,70 +37,72 @@ const PreviousOrders = () => {
     <div className="py-8">
       <h2 className="text-xl font-semibold mb-4">Previous Orders</h2>
       {loading ? (
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-400">Loading...</div>
       ) : orders.length === 0 ? (
-        <div className="text-gray-500">No previous orders.</div>
+        <div className="bg-gray-800 rounded-lg p-8 text-center border border-gray-700 text-gray-400">No previous orders.</div>
       ) : (
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto space-y-6">
           {orders.map(order => (
-            <div key={order._id} className="border border-gray-200 rounded-xl p-6 bg-white shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex-1 text-gray-800">
+            <div key={order._id} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                <div className="flex-1 text-gray-200">
                 <div className="mb-2">
-                  <span className="font-semibold">Customer:</span> <span className="ml-1">{order.name}</span>
+                  <span className="text-gray-400">Customer:</span> <span className="ml-1 text-white font-semibold">{order.name}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Phone:</span> <span className="ml-1">{order.phone}</span>
+                  <span className="text-gray-400">Phone:</span> <span className="ml-1 text-white">{order.phone}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Email:</span> <span className="ml-1">{order.email}</span>
+                  <span className="text-gray-400">Email:</span> <span className="ml-1 text-white">{order.email}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Address:</span> <span className="ml-1">{order.address}</span>
+                  <span className="text-gray-400">Address:</span> <span className="ml-1 text-white">{order.address}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Date:</span> <span className="ml-1">{order.date}</span>
+                  <span className="text-gray-400">Date:</span> <span className="ml-1 text-white">{order.date}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Product:</span> <span className="ml-1">{order.productId?.name || order.productName}</span>
+                  <span className="text-gray-400">Product:</span> <span className="ml-1 text-white">{order.productId?.name || order.productName}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Amount:</span> <span className="ml-1">{order.amount || 1}</span>
+                  <span className="text-gray-400">Amount:</span> <span className="ml-1 text-white">{order.amount || 1}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Total Price:</span> <span className="ml-1">${(order.amount || 1) * (order.productId?.price || 0)}</span>
+                  <span className="text-gray-400">Total Price:</span> <span className="ml-1 text-green-400 font-semibold">${(order.amount || 1) * (order.productId?.price || 0)}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Payment Method:</span> 
-                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className="text-gray-400">Payment Method:</span> 
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
                     order.paymentMethod === 'Card Payment'
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-green-600/20 text-green-300 border border-green-600/40' 
+                      : 'bg-blue-600/20 text-blue-200 border border-blue-600/40'
                   }`}>
-                    {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Cash on Delivery'}
+                    {order.paymentMethod}
                   </span>
                 </div>
                 {order.notes && (
                   <div className="mb-2">
-                    <span className="font-semibold">Notes:</span> <span className="ml-1">{order.notes}</span>
+                    <span className="text-gray-400">Notes:</span> <span className="ml-1 text-gray-300">{order.notes}</span>
                   </div>
                 )}
                 <div className="mb-2">
-                  <span className="font-semibold">Status:</span> 
-                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className="text-gray-400">Status:</span> 
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
                     order.status === 'Delivered' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-green-600/20 text-green-300 border border-green-600/40' 
+                      : 'bg-red-600/20 text-red-200 border border-red-600/40'
                   }`}>
                     {order.status}
                   </span>
                 </div>
                 {order.status === 'Delivered' && order.supplierRevenue && (
-                  <div className="mb-2">
-                    <span className="font-semibold">Revenue Earned:</span> 
-                    <span className="ml-1 text-green-600 font-bold">${order.supplierRevenue.toFixed(2)}</span>
+                  <div className="mt-3 p-3 bg-green-900/20 rounded-lg border border-green-600/30">
+                    <span className="text-gray-300">Revenue Earned:</span> 
+                    <span className="ml-1 text-green-400 font-bold">${order.supplierRevenue.toFixed(2)}</span>
                     <span className="text-xs text-gray-500 ml-1">(80% of total)</span>
                   </div>
                 )}
+                </div>
               </div>
             </div>
           ))}

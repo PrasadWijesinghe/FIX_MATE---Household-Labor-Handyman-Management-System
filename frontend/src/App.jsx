@@ -23,6 +23,7 @@ import Vendors from './admin/Vendors';
 import Suppliers from './admin/Suppliers';
 import Products from './admin/Products';
 import Services from './admin/Services';
+import DeliveryDrivers from './admin/DeliveryDrivers';
 import Adminlogin from './admin/Adminlogin';
 import VendorDashboard from './vendor/VendorDashboard';
 import VendorProfile from './vendor/Profile';
@@ -56,6 +57,9 @@ import DeliveryOngoingOrders from './delivery/OngoingOrders';
 import DeliveryPreviousOrders from './delivery/PreviousOrders';
 import DeliveryRevenue from './delivery/Revenue';
 import DeliveryProfile from './delivery/Profile';
+import DeliveryNotices from './delivery/Notices';
+import VendorNotices from './vendor/Notices';
+import SupplierNotices from './supplier/Notices';
 
 import AllServicesPage from './pages/Services/AllServicesPage';
 import ServicesCard from './pages/Services/ServicesCard';
@@ -103,6 +107,7 @@ const App = () => {
           <Route path="orders" element={<VendorAvailableOrders />} />
           <Route path="ongoing" element={<OngoingOrders />} />
           <Route path="previous" element={<PreviousOrders />} />
+          <Route path="notices" element={<VendorNotices />} />
           <Route path="revenue" element={<Revenue />} />
           <Route path="profile" element={<VendorProfile />} />
         </Route>
@@ -122,6 +127,7 @@ const App = () => {
           <Route path="orders" element={<SupplierAvailableOrders />} />
           <Route path="waiting" element={<SupplierWaitingOrders />} />
           <Route path="previous" element={<SupplierPreviousOrders />} />
+          <Route path="notices" element={<SupplierNotices />} />
           <Route path="availableProducts" element={<AvailableProducts />} />
           <Route path="addProducts" element={<AddProducts />} />
           <Route path="revenue" element={<SupplierRevenue />} />
@@ -137,6 +143,7 @@ const App = () => {
           <Route path="orders" element={<DeliveryAvailableOrders />} />
           <Route path="ongoing" element={<DeliveryOngoingOrders />} />
           <Route path="previous" element={<DeliveryPreviousOrders />} />
+          <Route path="notices" element={<DeliveryNotices />} />
           <Route path="revenue" element={<DeliveryRevenue />} />
           <Route path="profile" element={<DeliveryProfile />} />
         </Route>
@@ -147,6 +154,7 @@ const App = () => {
           <Route path="vendors" element={<Vendors />} />
           <Route path="suppliers" element={<Suppliers />} />
           <Route path="products" element={<Products />} />
+          <Route path="delivery-drivers" element={<DeliveryDrivers />} />
           <Route path="services" element={<Services />} />
         </Route>
       </Routes>

@@ -6,6 +6,7 @@ const navLinks = [
   { name: "Available Orders", path: "/delivery/orders" },
   { name: "Ongoing Orders", path: "/delivery/ongoing" },
   { name: "Previous Orders", path: "/delivery/previous" },
+  { name: "Admin Notices", path: "/delivery/notices" },
   { name: "Revenue", path: "/delivery/revenue" },
   { name: "Profile", path: "/delivery/profile" },
 ];

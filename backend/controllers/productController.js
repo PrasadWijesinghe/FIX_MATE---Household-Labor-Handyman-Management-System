@@ -4,11 +4,13 @@ export const getAllProducts = async (req, res) => {
     // Populate supplier including verification status
     const products = await productModel
       .find({})
-      .populate('supplier', 'name businessName location profileImageUrl isAccountVerified');
+      .populate('supplier', 'name businessName location profileImageUrl isAccountVerified email');
 
-    // Only include products from verified suppliers
+    // Only include products from verified and not-banned suppliers
+    const bannedList = await (await import('../models/bannedEmailModel.js')).default.find({ type: 'supplier' }, 'email');
+    const bannedSet = new Set(bannedList.map(b => (b.email || '').toLowerCase()));
     const verifiedProducts = products.filter(
-      (p) => p.supplier && p.supplier.isAccountVerified === true
+      (p) => p.supplier && p.supplier.isAccountVerified === true && !bannedSet.has((p.supplier.email || '').toLowerCase())
     );
 
     res.json({ success: true, products: verifiedProducts });

@@ -45,7 +45,12 @@ const VendorDashboard = () => {
               : "V"}
           </div>
         </div>
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 p-6 overflow-y-auto space-y-6">
+          {vendorData?.isBanned && (
+            <div className="bg-red-900/40 border border-red-700 text-red-200 px-4 py-3 rounded">
+              Your account is banned. You cannot provide services until an admin unbans you.
+            </div>
+          )}
           <Outlet />
         </div>
       </div>

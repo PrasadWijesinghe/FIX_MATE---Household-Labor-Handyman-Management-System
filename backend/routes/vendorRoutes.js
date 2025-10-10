@@ -1,6 +1,7 @@
 import express from 'express';
 import vendorAuth from '../middleware/vendorAuth.js';
 import upload from '../middleware/vendorUpload.js';
+import { protect, admin } from '../middleware/authMiddleware.js';
 
 import {
 	registerVendor,
@@ -12,7 +13,12 @@ import {
 	getVendorById,
 	getAllVendors,
 	deleteVendor,
-	verifyVendor
+	verifyVendor,
+	adminBanVendorByEmail,
+	adminUnbanVendorByEmail,
+	adminSendVendorNotice,
+	getMyVendorNotices,
+	markVendorNoticeRead
 } from '../controllers/vendorContoller.js';
 
 const vendorRouter = express.Router();
@@ -36,5 +42,14 @@ vendorRouter.put('/profile', vendorAuth, upload, updateVendorProfile);
 vendorRouter.get('/category/:category', getVendorsByCategory);
 
 vendorRouter.get('/category/vendor/:id', getVendorById);
+
+// Admin ban/unban and notice
+vendorRouter.post('/admin/ban', protect, admin, adminBanVendorByEmail);
+vendorRouter.post('/admin/unban', protect, admin, adminUnbanVendorByEmail);
+vendorRouter.post('/admin/notice', protect, admin, adminSendVendorNotice);
+
+// Vendor notices
+vendorRouter.get('/notices', vendorAuth, getMyVendorNotices);
+vendorRouter.post('/notices/:id/read', vendorAuth, markVendorNoticeRead);
 
 export default vendorRouter;

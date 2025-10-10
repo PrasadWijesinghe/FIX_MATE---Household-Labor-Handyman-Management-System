@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Available Orders", path: "/vendor/orders" },
   { name: "Ongoing Orders", path: "/vendor/ongoing" },
   { name: "Previous Orders", path: "/vendor/previous" },
+  { name: "Admin Notices", path: "/vendor/notices" },
   { name: "Revenue", path: "/vendor/revenue" },
   { name: "Profile", path: "/vendor/profile" },
 ];
@@ -23,7 +24,7 @@ const Sidebar = () => {
       if (setIsVendorLoggedin) setIsVendorLoggedin(false);
       if (setVendorData) setVendorData(null);
       navigate('/vendorlogin');
-    } catch (error) {
+    } catch {
       navigate('/vendorlogin');
     }
   };

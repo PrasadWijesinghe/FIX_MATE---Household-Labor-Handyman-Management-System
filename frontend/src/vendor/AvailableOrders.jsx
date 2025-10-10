@@ -100,20 +100,20 @@ const AvailableOrders = () => {
 
   return (
     <div className="py-8">
-      <h2 className="text-xl font-semibold mb-4">Available Orders</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Available Orders</h2>
       {loading ? (
-        <div className="text-gray-600">Loading vendor data...</div>
+        <div className="text-gray-300">Loading vendor data...</div>
       ) : !vendorData?._id ? (
-        <div className="text-red-600">Please log in to view orders.</div>
+        <div className="text-red-400">Please log in to view orders.</div>
       ) : fetchLoading ? (
-        <div className="text-gray-600">Loading orders...</div>
+        <div className="text-gray-300">Loading orders...</div>
       ) : orders.length === 0 ? (
-        <div className="text-gray-500">No available orders.</div>
+        <div className="text-gray-400">No available orders.</div>
       ) : (
         <div className="max-w-3xl mx-auto space-y-6">
           {orders.map(order => (
-            <div key={order._id} className="border border-gray-200 rounded-xl p-6 bg-white shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex-1 text-gray-800">
+            <div key={order._id} className="border border-gray-700 rounded-xl p-6 bg-gray-800 shadow-lg flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex-1 text-gray-200">
                 <div className="mb-2">
                   <span className="font-semibold">Customer:</span> <span className="ml-1">{order.name}</span>
                 </div>
@@ -131,17 +131,17 @@ const AvailableOrders = () => {
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold">Payment Method:</span> 
-                  <span className={`ml-1 px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium border ${
                     order.paymentMethod === 'Card Payment'
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-emerald-900/30 text-emerald-300 border-emerald-700' 
+                      : 'bg-blue-900/30 text-blue-300 border-blue-700'
                   }`}>
                     {order.paymentMethod === 'Card Payment' ? '💳 Card Payment' : '💰 Pay on Arrival'}
                   </span>
                 </div>
                 {order.notes && (
                   <div className="mb-2">
-                    <span className="font-semibold">Notes:</span> <span className="ml-1">{order.notes}</span>
+                    <span className="font-semibold">Notes:</span> <span className="ml-1 text-gray-300">{order.notes}</span>
                   </div>
                 )}
               </div>

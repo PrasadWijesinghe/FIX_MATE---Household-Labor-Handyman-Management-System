@@ -31,6 +31,7 @@ const DeliveryDashboard = () => {
     );
   }
 
+
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <Sidebar />
@@ -45,7 +46,12 @@ const DeliveryDashboard = () => {
               : "D"}
           </div>
         </div>
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 p-6 overflow-y-auto space-y-6">
+          {deliveryData?.isBanned && (
+            <div className="bg-red-900/40 border border-red-700 text-red-200 px-4 py-3 rounded">
+              Your account is banned. You cannot accept or deliver orders until an admin unbans you.
+            </div>
+          )}
           <Outlet />
         </div>
       </div>

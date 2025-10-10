@@ -32,9 +32,11 @@ router.get("/:id", async (req, res) => {
 	try {
 		const product = await (await import("../models/productModel.js")).default
 			.findById(req.params.id)
-			.populate('supplier', 'name businessName location profileImageUrl email isAccountVerified');
+				.populate('supplier', 'name businessName location profileImageUrl email isAccountVerified');
 		if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
-		if (!product.supplier || product.supplier.isAccountVerified !== true) {
+			// Hide if supplier not verified or is banned
+			const banned = await (await import('../models/bannedEmailModel.js')).default.findOne({ type: 'supplier', email: (product.supplier?.email || '').toLowerCase() });
+			if (!product.supplier || product.supplier.isAccountVerified !== true || banned) {
 			return res.status(403).json({ success: false, message: 'Supplier not verified' });
 		}
 		res.json({ success: true, product });
