@@ -82,7 +82,7 @@ const SupplyStore = () => {
         } else {
           setError(data.message || 'Failed to fetch products');
         }
-      } catch (err) {
+      } catch {
         setError('Failed to fetch products');
       } finally {
         setLoading(false);
@@ -90,6 +90,11 @@ const SupplyStore = () => {
     };
     fetchProducts();
   }, [backendUrl]);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div>
@@ -123,7 +128,7 @@ const SupplyStore = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 py-12 min-h-[60vh]">
+      <div className="bg-gray-50 py-12 min-h-screen">
         <div className="max-w-7xl mx-auto px-6">
           {loading ? (
             <div className="text-center text-gray-500">Loading...</div>

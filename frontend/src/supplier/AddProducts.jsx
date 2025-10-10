@@ -79,13 +79,13 @@ const AddProducts = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8 mt-6">
+    <div className="max-w-lg mx-auto bg-gray-900 rounded-2xl shadow-2xl p-8 mt-6 border border-gray-800">
       <h2 className="text-2xl font-bold text-white mb-6">Add New Product</h2>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div>
           <label className="block text-gray-400 mb-1">Product Name</label>
           <input
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -96,7 +96,7 @@ const AddProducts = () => {
         <div>
           <label className="block text-gray-400 mb-1">Price</label>
           <input
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"
             name="price"
             type="number"
             min="0"
@@ -109,7 +109,7 @@ const AddProducts = () => {
         <div>
           <label className="block text-gray-400 mb-1">Description</label>
           <textarea
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -117,13 +117,18 @@ const AddProducts = () => {
             required
           />
 
-          <div>Upload Image
-            <label htmlFor="image" className="cursor-pointer block w-20">
+          <div className="mt-4">
+            <span className="block text-gray-400 mb-1">Upload Image</span>
+            <label htmlFor="image" className="cursor-pointer inline-flex items-center gap-3 px-4 py-3 rounded-lg border-2 border-dashed border-gray-700 bg-gray-800 hover:border-gray-500 transition">
               {imagePreview ? (
-                <img className="w-20 h-20 object-cover border-2 border-white rounded" src={imagePreview} alt="Preview" />
+                <img className="w-16 h-16 object-cover rounded border border-gray-600" src={imagePreview} alt="Preview" />
               ) : (
-                <img className="w-20 border-white" src={assets.Upload_img} alt="Upload" />
+                <img className="w-10 opacity-80" src={assets.Upload_img} alt="Upload" />
               )}
+              <div className="text-gray-300 text-sm">
+                <div className="font-semibold">Click to choose an image</div>
+                <div className="text-gray-400 text-xs">PNG, JPG up to ~5MB</div>
+              </div>
               <input
                 type="file"
                 id="image"
@@ -132,7 +137,7 @@ const AddProducts = () => {
                 onChange={handleImageChange}
               />
             </label>
-            {form.image && <div className="text-gray-400 text-xs mt-1">{form.image.name}</div>}
+            {form.image && <div className="text-gray-400 text-xs mt-2">{form.image.name}</div>}
           </div>
 
         </div>

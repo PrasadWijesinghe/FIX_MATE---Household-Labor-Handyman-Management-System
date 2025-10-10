@@ -64,7 +64,7 @@ const AvailableProducts = () => {
   };
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8 mt-6">
+    <div className="w-full max-w-screen-2xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-8 mt-6 border border-gray-800">
       <h2 className="text-2xl font-bold text-white mb-6">Your Products</h2>
       {loading ? (
         <div className="text-gray-300">Loading...</div>
@@ -73,13 +73,15 @@ const AvailableProducts = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map(product => (
-            <div key={product._id} className="bg-gray-700 rounded-xl p-4 flex flex-col items-center relative">
+            <div key={product._id} className="bg-gray-800 rounded-xl p-4 flex flex-col items-center relative border border-gray-700 shadow-lg">
               {product.imageUrl && (
-                <img src={product.imageUrl} alt={product.name} className="w-32 h-32 object-cover rounded mb-2 border-2 border-white" />
+                <img src={product.imageUrl} alt={product.name} className="w-32 h-32 object-cover rounded mb-2 border-2 border-gray-600" />
               )}
-              <div className="text-xl font-semibold text-white mb-1">{product.name}</div>
-              <div className="text-blue-400 font-bold mb-1">${product.price}</div>
-              <div className="text-gray-300 text-sm mb-2">{product.description}</div>
+              <div className="text-xl font-semibold text-white mb-1 text-center">{product.name}</div>
+              <div className="mb-2">
+                <span className="px-2 py-1 rounded-full text-xs font-medium border bg-blue-900/30 text-blue-300 border-blue-700">${product.price}</span>
+              </div>
+              <div className="text-gray-300 text-sm mb-2 text-center">{product.description}</div>
               <div className="text-gray-500 text-xs mb-2">Added: {new Date(product.createdAt).toLocaleString()}</div>
               <button
                 onClick={() => handleDelete(product._id)}
