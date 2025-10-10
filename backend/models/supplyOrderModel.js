@@ -43,17 +43,64 @@ const supplyOrderSchema = new mongoose.Schema({
   notes: {
     type: String
   },
+  amount: {
+    type: Number,
+    required: true,
+    min: 1
+  },
   paymentMethod: {
     type: String,
-    enum: ['Cash on Delivery', 'Online Payment'],
+    enum: ['Cash on Delivery', 'Card Payment'],
     required: true
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending'
+  },
+  paymentIntentId: {
+    type: String
   },
   status: {
     type: String,
-    enum: ['Pending', 'Confirmed', 'Delivered', 'Cancelled'],
+    enum: ['Pending', 'Confirmed', 'Waiting for Delivery', 'Out for Delivery', 'Delivered', 'Cancelled'],
     default: 'Pending'
   },
+  // Delivery-related fields
+  assignedDeliveryDriver: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Delivery'
+    },
+    name: String,
+    phone: String
+  },
+  deliveryAssignedAt: {
+    type: Date
+  },
+  deliveryAcceptedAt: {
+    type: Date
+  },
+  deliveryStartedAt: {
+    type: Date
+  },
+  deliveryCompletedAt: {
+    type: Date
+  },
+  totalAmount: {
+    type: Number
+  },
+  supplierRevenue: {
+    type: Number
+  },
+  serviceFee: {
+    type: Number
+  },
   createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
     type: Date,
     default: Date.now
   }

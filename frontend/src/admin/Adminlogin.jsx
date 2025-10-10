@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
-const ADMIN_USERNAME = 'Admin@fixmate';
-const ADMIN_PASSWORD = 'admin123';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
 
 const Adminlogin = () => {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -13,16 +13,28 @@ const Adminlogin = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      form.username === ADMIN_USERNAME &&
-      form.password === ADMIN_PASSWORD
-    ) {
-      toast.success('Admin login successful');
-      navigate('/admin');
-    } else {
-      toast.error('Invalid admin credentials');
+    try {
+      const res = await axios.post(
+        `${backendUrl}/api/auth/admin-login`,
+        { username: form.username, password: form.password },
+        { withCredentials: true }
+      );
+
+      if (res.data?.success) {
+        // Store token so dashboard requests can send Authorization header
+        if (res.data.token) {
+          localStorage.setItem('admin_token', res.data.token);
+        }
+        toast.success('Admin login successful');
+        navigate('/admin');
+      } else {
+        toast.error(res.data?.message || 'Invalid admin credentials');
+      }
+    } catch (err) {
+      console.error('Admin login failed', err);
+      toast.error(err.response?.data?.message || 'Admin login failed');
     }
   };
 

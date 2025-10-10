@@ -13,15 +13,29 @@ const ProductCardDynamic = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { isLoggedin } = useContext(AppContext);
+  const { isLoggedin, backendUrl, userdata } = useContext(AppContext);
   const navigate = useNavigate();
+  
+  // Review states
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewForm, setReviewForm] = useState({
+    rating: 0,
+    comment: ''
+  });
+  const [submittingReview, setSubmittingReview] = useState(false);
+  
+  // Edit/delete states
+  const [editingReview, setEditingReview] = useState(null);
+  const [editForm, setEditForm] = useState({ rating: 0, comment: '' });
+  const [deletingReview, setDeletingReview] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       setError('');
       try {
-  const { data } = await axios.get(`/api/supplier/${id}`);
+        const { data } = await axios.get(`/api/supplier/${id}`);
         if (data.success && data.product) {
           setProduct(data.product);
         } else {
@@ -33,8 +47,29 @@ const ProductCardDynamic = () => {
         setLoading(false);
       }
     };
+    
+    const fetchProductReviews = async () => {
+      setReviewsLoading(true);
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/reviews/product/${id}`);
+        console.log('Reviews response:', data); // Debug log
+        if (data.success) {
+          setReviews(data.reviews || []);
+        } else {
+          console.log('Failed to fetch reviews:', data.message);
+          setReviews([]);
+        }
+      } catch (error) {
+        console.log('Failed to fetch reviews:', error);
+        setReviews([]);
+      } finally {
+        setReviewsLoading(false);
+      }
+    };
+    
     fetchProduct();
-  }, [id]);
+    fetchProductReviews();
+  }, [id, backendUrl]);
 
   const handleGoToBooking = () => {
     if (!isLoggedin) {
@@ -43,6 +78,145 @@ const ProductCardDynamic = () => {
     }
     // Pass product info to booking page
     navigate('/booking', { state: { product } });
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!isLoggedin) {
+      toast.error('Please log in to submit a review');
+      return;
+    }
+
+    if (reviewForm.rating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+
+    if (!reviewForm.comment.trim()) {
+      toast.error('Please write a comment');
+      return;
+    }
+
+    setSubmittingReview(true);
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/reviews/add`,
+        {
+          productId: id,
+          rating: reviewForm.rating,
+          comment: reviewForm.comment
+        },
+        { withCredentials: true }
+      );
+
+      if (data.success) {
+        toast.success('Review submitted');
+        setReviewForm({ rating: 0, comment: '' });
+        // Refresh reviews
+        const reviewData = await axios.get(`${backendUrl}/api/reviews/product/${id}`);
+        if (reviewData.data.success) {
+          setReviews(reviewData.data.reviews);
+        }
+      } else {
+        toast.error(data.message || 'Failed to submit review');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to submit review');
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+  const handleEditReview = (review) => {
+    setEditingReview(review._id);
+    setEditForm({ rating: review.rating, comment: review.comment });
+  };
+
+  const handleEditSubmit = async (reviewId) => {
+    if (editForm.rating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+
+    if (!editForm.comment.trim()) {
+      toast.error('Please write a comment');
+      return;
+    }
+
+    try {
+      const { data } = await axios.put(
+        `${backendUrl}/api/reviews/${reviewId}`,
+        {
+          rating: editForm.rating,
+          comment: editForm.comment
+        },
+        { withCredentials: true }
+      );
+
+      if (data.success) {
+        toast.success('Review updated successfully');
+        setEditingReview(null);
+        // Refresh reviews
+        const reviewData = await axios.get(`${backendUrl}/api/reviews/product/${id}`);
+        if (reviewData.data.success) {
+          setReviews(reviewData.data.reviews);
+        }
+      } else {
+        toast.error(data.message || 'Failed to update review');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update review');
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Are you sure you want to delete this review?')) {
+      return;
+    }
+
+    setDeletingReview(reviewId);
+    try {
+      const { data } = await axios.delete(
+        `${backendUrl}/api/reviews/${reviewId}`,
+        { withCredentials: true }
+      );
+
+      if (data.success) {
+        toast.success('Review deleted successfully');
+        // Refresh reviews
+        const reviewData = await axios.get(`${backendUrl}/api/reviews/product/${id}`);
+        if (reviewData.data.success) {
+          setReviews(reviewData.data.reviews);
+        }
+      } else {
+        toast.error(data.message || 'Failed to delete review');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete review');
+    } finally {
+      setDeletingReview(null);
+    }
+  };
+
+  const StarRating = ({ rating, onRatingChange, interactive = false }) => {
+    return (
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <svg
+            key={star}
+            className={`w-5 h-5 cursor-pointer transition-colors ${
+              star <= rating ? 'text-yellow-400' : 'text-gray-300'
+            } ${interactive ? 'hover:text-yellow-400' : ''}`}
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            onClick={() => interactive && onRatingChange && onRatingChange(star)}
+          >
+            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+          </svg>
+        ))}
+      </div>
+    );
   };
 
 
@@ -109,52 +283,125 @@ const ProductCardDynamic = () => {
             </div>
             <div className="bg-white border-t border-gray-200 px-8 py-6">
               <h3 className="text-xl font-bold mb-4">Reviews</h3>
+              
+              {/* Display Reviews */}
               <div className="space-y-4 mb-8">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold">Rusith Fernando</span>
-                    <span className="text-yellow-400">★★★★☆</span>
-                  </div>
-                  <div className="text-gray-700 text-sm">Great product, fast delivery!</div>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold">Janith Disssanayake</span>
-                    <span className="text-yellow-400">★★★★★</span>
-                  </div>
-                  <div className="text-gray-700 text-sm">Quality materials, will order again.</div>
-                </div>
+                {reviewsLoading ? (
+                  <div className="text-gray-500">Loading reviews...</div>
+                ) : reviews.length === 0 ? (
+                  <div className="text-gray-500">No reviews yet. Be the first to review this product!</div>
+                ) : (
+                  reviews.map((review) => (
+                    <div key={review._id} className="bg-gray-50 p-4 rounded-lg">
+                      {editingReview === review._id ? (
+                        // Edit form
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium">Your Rating:</span>
+                            <StarRating 
+                              rating={editForm.rating} 
+                              onRatingChange={(rating) => setEditForm(prev => ({ ...prev, rating }))}
+                              interactive={true}
+                            />
+                          </div>
+                          <textarea
+                            value={editForm.comment}
+                            onChange={(e) => setEditForm(prev => ({ ...prev, comment: e.target.value }))}
+                            className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[80px] resize-none"
+                            maxLength={500}
+                          />
+                          <div className="text-xs text-gray-500 text-right">
+                            {editForm.comment.length}/500 characters
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditSubmit(review._id)}
+                              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingReview(null)}
+                              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        // Display mode
+                        <>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="font-semibold">{review.userName}</span>
+                            <StarRating rating={review.rating} />
+                            <span className="text-sm text-gray-500">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </span>
+                            {/* Show edit/delete buttons only for user's own reviews */}
+                            {isLoggedin && userdata && review.userId === userdata._id && (
+                              <div className="ml-auto flex gap-2">
+                                <button
+                                  onClick={() => handleEditReview(review)}
+                                  className="text-blue-600 hover:text-blue-800 text-sm underline"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteReview(review._id)}
+                                  disabled={deletingReview === review._id}
+                                  className="text-red-600 hover:text-red-800 text-sm underline disabled:opacity-50"
+                                >
+                                  {deletingReview === review._id ? 'Deleting...' : 'Delete'}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-gray-700 text-sm">{review.comment}</div>
+                        </>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
-              <div className="bg-gray-50 p-6 rounded-lg max-w-xl mx-auto mt-8">
-                <h4 className="text-lg font-semibold mb-2">Add a Review</h4>
-                <form className="flex flex-col gap-3">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                    name="reviewerName"
-                  />
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">Your Rating:</span>
-                    {[1,2,3,4,5].map(star => (
-                      <svg key={star} className="w-6 h-6 cursor-pointer text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                      </svg>
-                    ))}
-                  </div>
-                  <textarea
-                    placeholder="Your review..."
-                    className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[80px]"
-                    name="reviewText"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2"
-                  >
-                    Submit Review
-                  </button>
-                </form>
-              </div>
+              
+              {/* Add Review Form */}
+              {isLoggedin ? (
+                <div className="bg-gray-50 p-6 rounded-lg max-w-xl mx-auto mt-8">
+                  <h4 className="text-lg font-semibold mb-4">Add a Review</h4>
+                  <form className="flex flex-col gap-4" onSubmit={handleReviewSubmit}>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">Your Rating:</span>
+                      <StarRating 
+                        rating={reviewForm.rating} 
+                        onRatingChange={(rating) => setReviewForm(prev => ({ ...prev, rating }))}
+                        interactive={true}
+                      />
+                    </div>
+                    <textarea
+                      placeholder="Write your review..."
+                      className="p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[100px] resize-none"
+                      value={reviewForm.comment}
+                      onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
+                      maxLength={500}
+                      required
+                    />
+                    <div className="text-xs text-gray-500 text-right">
+                      {reviewForm.comment.length}/500 characters
+                    </div>
+                    <button
+                      type="submit"
+                      className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={submittingReview}
+                    >
+                      {submittingReview ? 'Submitting...' : 'Submit Review'}
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div className="bg-gray-50 p-6 rounded-lg max-w-xl mx-auto mt-8 text-center">
+                  <p className="text-gray-600">Please log in to submit a review.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -59,23 +59,23 @@ const Navbar = () => {
 
      
       <ul className="hidden md:flex list-none gap-5 text-black text-xs">
-        <li onClick={() => setMenu("home")}
+        <li onClick={() => { setMenu("home"); navigate('/'); }}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "home" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           HOME
         </li>
-        <li onClick={() => navigate('/about')}
+        <li onClick={() => { setMenu("about"); navigate('/about'); }}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "about" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           ABOUT
         </li>
-        <li onClick={() => navigate('/AllServicesPage')}
+        <li onClick={() => { setMenu("services"); navigate('/AllServicesPage'); }}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "services" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}` }>
           SERVICES
         </li>
-        <li onClick={() => setMenu("store")}
+        <li onClick={() => { setMenu("store"); navigate('/supplystore'); }}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "store" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           STORE
         </li>
-        <li onClick={() => navigate('/contact')}
+        <li onClick={() => { setMenu("contact"); navigate('/contact'); }}
             className={`cursor-pointer pb-0.5 transition-all ${menu === "contact" ? "border-b-2 border-blue-600" : "hover:border-b-2 hover:border-blue-600"}`}>
           CONTACT
         </li>
@@ -152,23 +152,23 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-200 z-50">
           <ul className="flex flex-col list-none text-black">
-            <li onClick={() => handleMenuClick("home")}
+            <li onClick={() => { handleMenuClick("home"); navigate('/'); }}
                 className={`cursor-pointer py-4 px-6 border-b border-gray-100 transition-all ${menu === "home" ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"}`}>
               HOME
             </li>
-            <li onClick={() => handleMenuClick("about")}
+            <li onClick={() => { handleMenuClick("about"); navigate('/about'); }}
                 className={`cursor-pointer py-4 px-6 border-b border-gray-100 transition-all ${menu === "about" ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"}`}>
               ABOUT
             </li>
-            <li onClick={() => handleMenuClick("services")}
+            <li onClick={() => { handleMenuClick("services"); navigate('/AllServicesPage'); }}
                 className={`cursor-pointer py-4 px-6 border-b border-gray-100 transition-all ${menu === "services" ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"}`}>
               SERVICES
             </li>
-            <li onClick={() => handleMenuClick("store")}
+            <li onClick={() => { handleMenuClick("store"); navigate('/supplystore'); }}
                 className={`cursor-pointer py-4 px-6 border-b border-gray-100 transition-all ${menu === "store" ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"}`}>
               STORE
             </li>
-            <li onClick={() => handleMenuClick("contact")}
+            <li onClick={() => { handleMenuClick("contact"); navigate('/contact'); }}
                 className={`cursor-pointer py-4 px-6 transition-all ${menu === "contact" ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"}`}>
               CONTACT
             </li>

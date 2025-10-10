@@ -16,7 +16,8 @@ const Profile = () => {
     hourlyRate: "",
     profileImageUrl: "",
     category: "",
-    description: ""
+    description: "",
+    isAccountVerified: false
   });
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
@@ -38,7 +39,8 @@ const Profile = () => {
             hourlyRate: data.vendor.hourlyRate || "",
             profileImageUrl: data.vendor.profileImageUrl || "",
             category: data.vendor.category || "",
-            description: data.vendor.description || ""
+            description: data.vendor.description || "",
+            isAccountVerified: !!data.vendor.isAccountVerified
           });
           setProfileImagePreview(data.vendor.profileImageUrl || null);
           setGalleryImagesFromDb(data.vendor.galleryImages || []);
@@ -114,7 +116,21 @@ const Profile = () => {
 
   return (
   <div className="w-full max-w-screen-2xl mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8 mt-6">
-      <h2 className="text-2xl font-bold text-white mb-6">Vendor Profile</h2>
+      <h2 className="text-2xl font-bold text-white mb-2">Vendor Profile</h2>
+      {/* Verification badge / hint */}
+      <div className="mb-6">
+        {form.isAccountVerified ? (
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-600/20 text-green-300 border border-green-600/40 text-xs">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-2.89a.75.75 0 10-1.22-.88l-3.72 5.15-1.69-1.69a.75.75 0 10-1.06 1.06l2.25 2.25c.33.33.87.29 1.15-.09l4.29-5.79z" clipRule="evenodd"/></svg>
+            Account verified by admin
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-yellow-600/20 text-yellow-200 border border-yellow-600/40 text-xs">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Account not verified yet. Admin must verify the account.
+          </div>
+        )}
+      </div>
       <div className="flex flex-col md:flex-row gap-8 items-center mb-6">
         <div className="flex flex-col items-center">
           <div className="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden mb-2 border-4 border-blue-500">

@@ -9,8 +9,7 @@ const ServiceCard = ({ service }) => {
   const navigate = useNavigate();
   const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
 
- 
-  const threshold = 12;
+   const threshold = 12;
 
   const handleMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -73,7 +72,13 @@ const ServiceCard = ({ service }) => {
 };
 
 const AllServicesPage = () => {
-  // Services data
+
+  
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+
   const services = [
     {
       id: 1,

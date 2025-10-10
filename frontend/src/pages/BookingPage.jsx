@@ -22,6 +22,8 @@ const BookingPage = () => {
     amount: 1
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
 
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center text-red-500">No product selected for booking.</div>;
@@ -81,6 +83,53 @@ const BookingPage = () => {
     }
   };
 
+  const handlePaymentMethodSelect = (method) => {
+    // Validate form first
+    const requiredFields = [
+      form.name,
+      form.phone,
+      form.email,
+      form.address,
+      form.date,
+      product?._id,
+      product?.name,
+      product?.supplier?._id,
+      userData._id || userData.id
+    ];
+    if (requiredFields.some(f => !f || f.toString().trim() === '')) {
+      toast.error('Please fill all required fields.');
+      return;
+    }
+
+    // Set payment method and show confirmation
+    setSelectedPaymentMethod(method);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmOrder = () => {
+    if (selectedPaymentMethod === 'cash') {
+      handlePlaceOrder(new Event('submit'));
+    } else if (selectedPaymentMethod === 'online') {
+      // Navigate to payment page with order data
+      const orderData = {
+        productId: product._id,
+        productName: product.name,
+        supplierId: product.supplier?._id,
+        userId: userData._id || userData.id,
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        address: form.address,
+        date: form.date,
+        notes: form.notes,
+        amount: form.amount,
+        totalPrice: totalPrice
+      };
+      navigate('/payment', { state: { orderData, product } });
+    }
+    setShowConfirmation(false);
+  };
+
   // Calculate total price
   const totalPrice = (Number(form.amount) > 0 ? Number(form.amount) : 1) * (Number(product.price) || 0);
 
@@ -103,7 +152,7 @@ const BookingPage = () => {
           {bookingSuccess ? (
             <div className="text-green-600 text-center text-lg font-semibold py-8">Booking submitted!<br/>We will contact you soon.</div>
           ) : (
-            <form className="flex flex-col gap-5" onSubmit={handlePlaceOrder}>
+            <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
               <div className="flex flex-col gap-1">
                 <label htmlFor="name" className="font-medium text-gray-700">Name</label>
                 <input
@@ -197,13 +246,62 @@ const BookingPage = () => {
               <div className="flex flex-col gap-1 mt-2">
                 <div className="text-xl font-bold text-indigo-700">Total Price: <span className="text-green-600">${totalPrice}</span></div>
               </div>
-              <button
-                type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold text-lg mt-2"
-              >
-                Place Order
-              </button>
+              <div className="flex flex-col gap-3 mt-4">
+                <div className="text-lg font-semibold text-gray-700 text-center">Choose Payment Method</div>
+                <button
+                  type="button"
+                  onClick={() => handlePaymentMethodSelect('cash')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg"
+                >
+                  Pay on Arrival (Cash)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePaymentMethodSelect('online')}
+                  className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold text-lg"
+                >
+                  Pay Now (Card)
+                </button>
+              </div>
             </form>
+          )}
+          
+          {/* Confirmation Modal */}
+          {showConfirmation && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in">
+                <h3 className="text-xl font-bold mb-4 text-center text-gray-800">Confirm Your Order</h3>
+                <div className="space-y-3 mb-6">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-700 mb-2">Order Details</h4>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <div><strong>Product:</strong> {product.name}</div>
+                      <div><strong>Quantity:</strong> {form.amount}</div>
+                      <div><strong>Total:</strong> <span className="text-green-600 font-bold">${totalPrice}</span></div>
+                      <div><strong>Delivery Date:</strong> {form.date}</div>
+                      <div><strong>Payment Method:</strong> {selectedPaymentMethod === 'cash' ? 'Pay on Arrival (Cash)' : 'Pay Now (Card)'}</div>
+                    </div>
+                  </div>
+                  <div className="text-center text-gray-600">
+                    Are you sure you want to {selectedPaymentMethod === 'cash' ? 'place this order' : 'proceed to payment'}?
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowConfirmation(false)}
+                    className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmOrder}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                  >
+                    {selectedPaymentMethod === 'cash' ? 'Place Order' : 'Continue to Payment'}
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

@@ -54,6 +54,8 @@ import jwt from 'jsonwebtoken';
 import supplierModel from '../models/supplierModel.js';
 import transporter from '../config/nodemailer.js';
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from '../config/EmailTemplate.js';
+import BannedEmail from '../models/bannedEmailModel.js';
+import SupplierNotice from '../models/supplierNoticeModel.js';
 
 
 export const getSupplierData = async (req, res) => {
@@ -63,6 +65,7 @@ export const getSupplierData = async (req, res) => {
 		if (!supplier) {
 			return res.json({ success: false, message: 'Supplier Not Found' });
 		}
+		const banned = await BannedEmail.findOne({ email: (supplier.email || '').toLowerCase(), type: 'supplier' });
 		res.json({
 			success: true,
 			supplierData: {
@@ -70,9 +73,11 @@ export const getSupplierData = async (req, res) => {
 				name: supplier.name,
 				email: supplier.email,
 				isAccountVerified: supplier.isAccountVerified,
+				isBanned: !!banned,
 				businessName: supplier.businessName,
 				phone: supplier.phone,
-				location: supplier.location
+				location: supplier.location,
+				profileImageUrl: supplier.profileImageUrl || ''
 			}
 		});
 	} catch (error) {
@@ -87,6 +92,10 @@ export const registerSupplier = async (req, res) => {
 		return res.json({ success: false, message: 'Missing Details' });
 	}
 	try {
+		const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'supplier' });
+		if (banned) {
+			return res.json({ success: false, message: 'This email is banned from registering as supplier' });
+		}
 		const existingSupplier = await supplierModel.findOne({ email });
 		if (existingSupplier) {
 			return res.json({ success: false, message: 'Supplier Already Exists' });
@@ -122,6 +131,10 @@ export const loginSupplier = async (req, res) => {
 		return res.json({ success: false, message: 'Email and password are required' });
 	}
 	try {
+		const banned = await BannedEmail.findOne({ email: email.toLowerCase(), type: 'supplier' });
+		if (banned) {
+			return res.json({ success: false, message: 'This account has been banned. Contact admin.' });
+		}
 		const supplier = await supplierModel.findOne({ email });
 		if (!supplier) {
 			return res.json({ success: false, message: 'Invalid Supplier Email' });
@@ -140,6 +153,70 @@ export const loginSupplier = async (req, res) => {
 		return res.json({ success: true });
 	} catch (error) {
 		return res.json({ success: false, message: error.message });
+	}
+};
+
+// Admin: Ban/Unban and send notices to suppliers
+export const adminBanSupplierByEmail = async (req, res) => {
+	try {
+		const { email, reason } = req.body;
+		if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+		const record = await BannedEmail.findOneAndUpdate(
+			{ email: email.toLowerCase(), type: 'supplier' },
+			{ $set: { reason: reason || '', createdBy: req.user?.email || 'admin' } },
+			{ upsert: true, new: true }
+		);
+		return res.json({ success: true, message: 'Supplier banned', ban: record });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to ban supplier' });
+	}
+};
+
+export const adminUnbanSupplierByEmail = async (req, res) => {
+	try {
+		const { email } = req.body;
+		if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+		await BannedEmail.deleteOne({ email: email.toLowerCase(), type: 'supplier' });
+		return res.json({ success: true, message: 'Supplier unbanned' });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to unban supplier' });
+	}
+};
+
+export const adminSendSupplierNotice = async (req, res) => {
+	try {
+		const { supplierId, message } = req.body;
+		if (!supplierId || !message) return res.status(400).json({ success: false, message: 'supplierId and message are required' });
+		const supplier = await supplierModel.findById(supplierId);
+		if (!supplier) return res.status(404).json({ success: false, message: 'Supplier not found' });
+		const notice = await SupplierNotice.create({ supplierId, message, createdBy: req.user?.email || 'admin' });
+		return res.json({ success: true, message: 'Notice sent', notice });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to send notice' });
+	}
+};
+
+export const getMySupplierNotices = async (req, res) => {
+	try {
+		const notices = await SupplierNotice.find({ supplierId: req.user.id }).sort({ createdAt: -1 });
+		return res.json({ success: true, notices });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to get notices' });
+	}
+};
+
+export const markSupplierNoticeRead = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const notice = await SupplierNotice.findOneAndUpdate(
+			{ _id: id, supplierId: req.user.id },
+			{ $set: { read: true } },
+			{ new: true }
+		);
+		if (!notice) return res.status(404).json({ success: false, message: 'Notice not found' });
+		return res.json({ success: true, message: 'Notice marked as read', notice });
+	} catch (e) {
+		return res.status(500).json({ success: false, message: 'Failed to update notice' });
 	}
 };
 

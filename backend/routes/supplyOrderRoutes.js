@@ -6,7 +6,11 @@ import {
   getSupplyOrdersBySupplier,
   updateSupplyOrderStatus,
   deleteSupplyOrder,
-  updateSupplyOrderDetails
+  updateSupplyOrderDetails,
+  assignDeliveryToOrder,
+  cancelDeliveryAssignment,
+  acceptDeliveryOrder,
+  completeDeliveryOrder
 } from '../controllers/supplyOrderController.js';
 
 const router = express.Router();
@@ -31,5 +35,11 @@ router.put('/:orderId', updateSupplyOrderDetails);
 
 // Delete supply order
 router.delete('/:orderId', deleteSupplyOrder);
+
+// Delivery-related routes
+router.patch('/:orderId/assign-delivery', assignDeliveryToOrder);
+router.patch('/:orderId/cancel-delivery', cancelDeliveryAssignment);
+router.patch('/:orderId/accept-delivery', acceptDeliveryOrder);
+router.patch('/:orderId/complete-delivery', completeDeliveryOrder);
 
 export default router;
