@@ -30,8 +30,13 @@ router.get("/products", (req, res, next) => {
 // Public: Get single product by ID with supplier info
 router.get("/:id", async (req, res) => {
 	try {
-		const product = await (await import("../models/productModel.js")).default.findById(req.params.id).populate('supplier', 'name businessName location profileImageUrl email');
+		const product = await (await import("../models/productModel.js")).default
+			.findById(req.params.id)
+			.populate('supplier', 'name businessName location profileImageUrl email isAccountVerified');
 		if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
+		if (!product.supplier || product.supplier.isAccountVerified !== true) {
+			return res.status(403).json({ success: false, message: 'Supplier not verified' });
+		}
 		res.json({ success: true, product });
 	} catch (error) {
 		res.status(500).json({ success: false, message: error.message });

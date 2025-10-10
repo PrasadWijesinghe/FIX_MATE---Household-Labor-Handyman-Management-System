@@ -17,6 +17,7 @@ import productRouter from './routes/productRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
 import vendorReviewRouter from './routes/vendorReviewRouter.js';
 import paymentRouter from './routes/paymentRouter.js';
+import adminRouter from './routes/adminRoute.js';
 
 import orderRouter from './routes/orderRoutes.js';
 
@@ -55,6 +56,6 @@ app.use('/api/payment', paymentRouter);
 app.use('/api/supplier', productRouter); 
 
 app.use('/api/orders', orderRouter);
-// Removed duplicate productRouter mount
+app.use('/api/admin', adminRouter);
 
 app.listen(port, ()=> console.log(`Server started on PORT:${port}`));

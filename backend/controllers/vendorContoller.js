@@ -68,12 +68,16 @@ export const getVendorsByCategory = async (req, res) => {
 		if (!category) {
 			return res.status(400).json({ success: false, message: 'Category is required' });
 		}
-	
-		const vendors = await vendorModel.find({ category: { $regex: `^${category}$`, $options: 'i' } });
+
+		// Only return vendors whose accounts are verified by admin
+		const vendors = await vendorModel.find({
+			category: { $regex: `^${category}$`, $options: 'i' },
+			isAccountVerified: true
+		});
 		if (!vendors.length) {
 			return res.json({ success: true, vendors: [] });
 		}
-	
+
 		const vendorList = vendors.map(vendor => ({
 			_id: vendor._id,
 			name: vendor.name,

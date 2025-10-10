@@ -17,7 +17,7 @@ const SupplierProfile = () => {
   });
   const email = supplierData?.email || "Edit your email here";
   const rating = supplierData?.rating || 4.8;
-  const verified = supplierData?.isAccountVerified ?? true;
+  const verified = supplierData?.isAccountVerified ?? false;
   const displayName = supplierData?.name || "Name not set";
 
   const handleChange = (e) => {
@@ -62,8 +62,14 @@ const SupplierProfile = () => {
           <div>
             <div className="text-2xl font-bold text-white flex items-center gap-2">
               {displayName}
-              {verified && (
-                <span className="text-green-400 text-sm font-semibold ml-2">&#10003; Verified</span>
+              {verified ? (
+                <span className="inline-flex items-center gap-1 text-green-300 text-xs font-semibold ml-2 bg-green-600/20 px-2 py-0.5 rounded-full border border-green-600/40">
+                  &#10003; Verified by admin
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-yellow-200 text-xs font-semibold ml-2 bg-yellow-600/20 px-2 py-0.5 rounded-md border border-yellow-600/40">
+                  Account not verified yet. Admin must verify the account.
+                </span>
               )}
             </div>
             <div className="flex items-center gap-2 mt-1">
