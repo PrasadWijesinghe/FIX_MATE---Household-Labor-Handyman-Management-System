@@ -59,7 +59,7 @@ const VendorsByCategory = () => {
                   className="w-20 h-20 rounded-full object-cover mb-2 border-2 border-blue-500"
                 />
                 <h3 className="text-lg font-semibold mb-2">{vendor.name}</h3>
-                <div className="text-sm text-gray-700 mb-4">Hourly Rate: ${vendor.hourlyRate}</div>
+                <div className="text-sm text-gray-700 mb-4">Hourly Rate: Rs.{vendor.hourlyRate}</div>
                 <button
                   className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-black transition-colors duration-200 cursor-pointer"
                   onClick={() => navigate(`/services/category/vendor/${vendor._id}`)}

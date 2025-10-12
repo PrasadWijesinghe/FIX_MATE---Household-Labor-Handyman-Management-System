@@ -319,7 +319,7 @@ const AvailableOrders = () => {
                   <span className="font-semibold">Amount:</span> <span className="ml-1">{order.amount || 1}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="font-semibold">Total Price:</span> <span className="ml-1">${(order.amount || 1) * (order.productId?.price || 0)}</span>
+                  <span className="font-semibold">Total Price:</span> <span className="ml-1">Rs.{(order.amount || 1) * (order.productId?.price || 0)}</span>
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold">Payment Method:</span> 
@@ -447,7 +447,7 @@ const AvailableOrders = () => {
                           )}
                           <div>
                             <h5 className="font-semibold text-gray-100">{driver.name}</h5>
-                            <p className="text-sm text-gray-300">Rate: ${driver.rate}/delivery</p>
+                            <p className="text-sm text-gray-300">Rate: Rs.{driver.rate}/delivery</p>
                             <p className="text-sm text-gray-300">Area: {driver.operatingArea}</p>
                             <p className="text-sm text-gray-300">Phone: {driver.phone}</p>
                           </div>

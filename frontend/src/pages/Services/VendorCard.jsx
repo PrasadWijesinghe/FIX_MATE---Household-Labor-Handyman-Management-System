@@ -105,10 +105,10 @@ const VendorCard = () => {
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">Service Pricing</h3>
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="text-gray-500 line-through">${vendor.hourlyRate}/hr</span>
-                      <span className="text-2xl sm:text-3xl font-bold text-indigo-600">${vendor.offerRate}/hr</span>
+                      <span className="text-gray-500 line-through">Rs.{vendor.hourlyRate}/hr</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-indigo-600">Rs.{vendor.offerRate}/hr</span>
                       <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs sm:text-sm">
-                        Save ${vendor.hourlyRate - vendor.offerRate}
+                        Save Rs.{vendor.hourlyRate - vendor.offerRate}
                       </span>
                     </div>
                   </div>

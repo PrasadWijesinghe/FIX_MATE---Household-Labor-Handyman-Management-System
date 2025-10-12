@@ -462,7 +462,7 @@ const ServiceBookingPage = () => {
                   <div><strong>Category:</strong> {vendor.category}</div>
                   <div><strong>Date:</strong> {bookingForm.date}</div>
                   <div><strong>Address:</strong> {bookingForm.address}</div>
-                  <div><strong>Hourly Rate:</strong> ${vendor.hourlyRate}</div>
+                  <div><strong>Hourly Rate:</strong> Rs.{vendor.hourlyRate}</div>
                   <div><strong>Payment Method:</strong> Pay on Arrival</div>
                 </div>
               </div>

@@ -66,21 +66,21 @@ const Revenue = () => {
 
   const generateReportContent = () => {
     const currentDate = new Date().toLocaleDateString();
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
     
-    // Calculate real revenue from delivered orders
+    // Calculate metrics
     const totalOrderValue = orders.reduce((sum, order) => {
       const orderTotal = (Number(order.amount) || 1) * (Number(order.productId?.price) || 0);
       return sum + orderTotal;
     }, 0);
 
-    const totalDeliveryFees = totalOrderValue * 0.1; // 10% delivery fee
-    const driverEarnings = totalDeliveryFees * 0.8; // Driver gets 80% of delivery fees
-    const adminCommission = totalDeliveryFees * 0.2; // Admin gets 20% of delivery fees
+    const totalDeliveryFees = totalOrderValue * 0.1;
+    const driverEarnings = totalDeliveryFees * 0.8;
+    const adminCommission = totalDeliveryFees * 0.2;
     const avgEarningsPerDelivery = orders.length > 0 ? driverEarnings / orders.length : 0;
 
     // Calculate this month's earnings
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
     const thisMonthOrders = orders.filter(order => {
       const orderDate = new Date(order.deliveryCompletedAt || order.updatedAt);
       return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
@@ -89,74 +89,63 @@ const Revenue = () => {
       const orderTotal = (Number(order.amount) || 1) * (Number(order.productId?.price) || 0);
       return sum + orderTotal;
     }, 0);
-    const thisMonthEarnings = (thisMonthValue * 0.1) * 0.8; // 80% of 10% delivery fee
-    
-    return `
-DELIVERY DRIVER REVENUE REPORT
-==============================
+    const thisMonthEarnings = (thisMonthValue * 0.1) * 0.8;
 
-Driver: ${deliveryData?.name || 'Unknown'}
-Email: ${deliveryData?.email || 'Unknown'}
-Operating Area: ${deliveryData?.operatingArea || 'Not specified'}
-Report Generated: ${currentDate}
+    // Create CSV header and summary rows
+    let csvContent = [
+      ['DELIVERY DRIVER REVENUE REPORT'],
+      ['Generated Date', currentDate],
+      [''],
+      ['DRIVER INFORMATION'],
+      ['Name', deliveryData?.name || 'Unknown'],
+      ['Email', deliveryData?.email || 'Unknown'],
+      ['Operating Area', deliveryData?.operatingArea || 'Not specified'],
+      ['Status', deliveryData?.isAvailable ? 'Active' : 'Inactive'],
+      ['Join Date', deliveryData?.createdAt ? new Date(deliveryData.createdAt).toLocaleDateString() : 'Unknown'],
+      [''],
+      ['SUMMARY METRICS'],
+      ['Total Delivered Orders', orders.length],
+      ['Total Order Value', `Rs. ${totalOrderValue.toFixed(2)}`],
+      ['Total Delivery Fees (10%)', `Rs. ${totalDeliveryFees.toFixed(2)}`],
+      ['Driver Total Earnings', `Rs. ${driverEarnings.toFixed(2)}`],
+      ['Average per Delivery', `Rs. ${avgEarningsPerDelivery.toFixed(2)}`],
+      ['This Month Earnings', `Rs. ${thisMonthEarnings.toFixed(2)}`],
+      ['Admin Commission', `Rs. ${adminCommission.toFixed(2)}`],
+      [''],
+      ['DELIVERY DETAILS'],
+      ['Order ID', 'Customer', 'Address', 'Date', 'Order Value', 'Delivery Fee', 'Driver Earnings', 'Status']
+    ];
 
-EARNINGS SUMMARY
-================
-Total Delivered Orders: ${orders.length}
-Total Order Value Handled: $${totalOrderValue.toFixed(2)}
-Total Delivery Fees (10%): $${totalDeliveryFees.toFixed(2)}
+    // Add order details
+    orders.forEach(order => {
+      const orderTotal = (Number(order.amount) || 1) * (Number(order.productId?.price) || 0);
+      const deliveryFee = orderTotal * 0.1;
+      const driverShare = deliveryFee * 0.8;
+      
+      csvContent.push([
+        order._id,
+        order.name || 'N/A',
+        order.address || 'N/A',
+        new Date(order.deliveryCompletedAt || order.updatedAt).toLocaleDateString(),
+        orderTotal.toFixed(2),
+        deliveryFee.toFixed(2),
+        driverShare.toFixed(2),
+        'Delivered'
+      ]);
+    });
 
-DRIVER EARNINGS (80% of Delivery Fees)
-=====================================
-Total Driver Earnings: $${driverEarnings.toFixed(2)}
-Average per Delivery: $${avgEarningsPerDelivery.toFixed(2)}
-This Month Earnings: $${thisMonthEarnings.toFixed(2)}
-
-ADMIN COMMISSION (20% of Delivery Fees)
-======================================
-Total Admin Commission: $${adminCommission.toFixed(2)}
-
-PERFORMANCE METRICS
-==================
-Completion Rate: 100%
-Status: ${deliveryData?.isAvailable ? 'Active' : 'Inactive'}
-Join Date: ${deliveryData?.createdAt ? new Date(deliveryData.createdAt).toLocaleDateString() : 'Unknown'}
-
-RECENT DELIVERIES (Last 10)
-==========================
-${orders.length === 0 ? 'No deliveries found.' : orders.slice(-10).map((order, index) => {
-  const orderTotal = (Number(order.amount) || 1) * (Number(order.productId?.price) || 0);
-  const deliveryFee = orderTotal * 0.1;
-  const driverShare = deliveryFee * 0.8;
-  return `
-${index + 1}. Order #${order._id.slice(-6)}
-   Customer: ${order.name}
-   Address: ${order.address}
-   Date: ${new Date(order.deliveryCompletedAt || order.updatedAt).toLocaleDateString()}
-   Order Value: $${orderTotal.toFixed(2)}
-   Delivery Fee: $${deliveryFee.toFixed(2)}
-   Driver Earnings: $${driverShare.toFixed(2)}
-   Status: Delivered
-`;
-}).join('')}
-
-FEE STRUCTURE
-=============
-- Delivery Fee: 10% of order value
-- Driver Share: 80% of delivery fee
-- Admin Commission: 20% of delivery fee
-
-REPORT END
-Generated by FIX MATE Delivery Dashboard
-`;
+    // Convert array to CSV string
+    return csvContent.map(row => row.map(cell => 
+      typeof cell === 'string' && cell.includes(',') ? `"${cell}"` : cell
+    ).join(',')).join('\n');
   };
 
   const downloadReport = (content) => {
-    const blob = new Blob([content], { type: 'text/plain' });
+    const blob = new Blob([content], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `delivery-revenue-report-${deliveryData?.name || 'driver'}-${new Date().toISOString().split('T')[0]}.txt`;
+    link.download = `delivery-revenue-report-${deliveryData?.name || 'driver'}-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -252,7 +241,7 @@ Generated by FIX MATE Delivery Dashboard
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-400 text-sm font-medium">Total Earnings</p>
-              <p className="text-3xl font-bold text-green-300">${revenueMetrics.totalEarnings.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-green-300">Rs. {revenueMetrics.totalEarnings.toFixed(2)}</p>
               <p className="text-green-400 text-xs mt-1">80% of delivery fees</p>
             </div>
             <div className="bg-green-600/20 p-3 rounded-full">
@@ -282,7 +271,7 @@ Generated by FIX MATE Delivery Dashboard
           <div className="flex items-center justify-between">
             <div>
               <p className="text-yellow-400 text-sm font-medium">This Month</p>
-              <p className="text-3xl font-bold text-yellow-300">${revenueMetrics.thisMonth.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-yellow-300">Rs. {revenueMetrics.thisMonth.toFixed(2)}</p>
               <p className="text-yellow-400 text-xs mt-1">Current month earnings</p>
             </div>
             <div className="bg-yellow-600/20 p-3 rounded-full">
@@ -297,7 +286,7 @@ Generated by FIX MATE Delivery Dashboard
           <div className="flex items-center justify-between">
             <div>
               <p className="text-purple-400 text-sm font-medium">Average per Delivery</p>
-              <p className="text-3xl font-bold text-purple-300">${revenueMetrics.avgDeliveryFee.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-purple-300">Rs. {revenueMetrics.avgDeliveryFee.toFixed(2)}</p>
               <p className="text-purple-400 text-xs mt-1">Your average rate</p>
             </div>
             <div className="bg-purple-600/20 p-3 rounded-full">
@@ -320,21 +309,21 @@ Generated by FIX MATE Delivery Dashboard
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-green-900/20 border border-green-600/30 rounded-lg p-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-400">${revenueMetrics.totalOrderValue.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-green-400">Rs. {revenueMetrics.totalOrderValue.toFixed(2)}</div>
               <div className="text-sm text-gray-400">Total Order Value</div>
               <div className="text-xs text-gray-500 mt-1">Orders you delivered</div>
             </div>
           </div>
           <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-400">${revenueMetrics.totalDeliveryFees.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-blue-400">Rs. {revenueMetrics.totalDeliveryFees.toFixed(2)}</div>
               <div className="text-sm text-gray-400">Total Delivery Fees (10%)</div>
               <div className="text-xs text-gray-500 mt-1">Fees collected from orders</div>
             </div>
           </div>
           <div className="bg-red-900/20 border border-red-600/30 rounded-lg p-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-400">${(revenueMetrics.totalDeliveryFees * 0.2).toFixed(2)}</div>
+              <div className="text-2xl font-bold text-red-400">Rs. {(revenueMetrics.totalDeliveryFees * 0.2).toFixed(2)}</div>
               <div className="text-sm text-gray-400">Admin Commission (20%)</div>
               <div className="text-xs text-gray-500 mt-1">Platform service fee</div>
             </div>

@@ -161,7 +161,7 @@ const Profile = () => {
                 required
               />
             ) : (
-              <span className="text-white font-bold">${form.hourlyRate}</span>
+              <span className="text-white font-bold">Rs.{form.hourlyRate}</span>
             )}
           </div>
           <div className="grid grid-cols-2 gap-2 mt-4">

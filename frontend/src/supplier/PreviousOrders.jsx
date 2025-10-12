@@ -68,7 +68,7 @@ const PreviousOrders = () => {
                   <span className="text-gray-400">Amount:</span> <span className="ml-1 text-white">{order.amount || 1}</span>
                 </div>
                 <div className="mb-2">
-                  <span className="text-gray-400">Total Price:</span> <span className="ml-1 text-green-400 font-semibold">${(order.amount || 1) * (order.productId?.price || 0)}</span>
+                  <span className="text-gray-400">Total Price:</span> <span className="ml-1 text-green-400 font-semibold">Rs.{(order.amount || 1) * (order.productId?.price || 0)}</span>
                 </div>
                 <div className="mb-2">
                   <span className="text-gray-400">Payment Method:</span> 

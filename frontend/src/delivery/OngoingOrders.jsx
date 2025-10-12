@@ -67,10 +67,10 @@ const OngoingOrders = () => {
         <div className="mb-3 text-sm bg-blue-50 p-3 rounded text-black">
           <div><strong>Customer:</strong> {order.name}</div>
           <div><strong>Product:</strong> {order.productId?.name || order.productName}</div>
-          <div><strong>Total Order Value:</strong> ${totalAmount.toFixed(2)}</div>
-          <div><strong>Your Delivery Fee:</strong> ${deliveryFee.toFixed(2)} (10%)</div>
-          <div><strong>Supplier Revenue:</strong> ${supplierRevenue.toFixed(2)} (80%)</div>
-          <div><strong>Service Fee:</strong> ${serviceFee.toFixed(2)} (20%)</div>
+          <div><strong>Total Order Value:</strong> Rs.{totalAmount.toFixed(2)}</div>
+          <div><strong>Your Delivery Fee:</strong> Rs.{deliveryFee.toFixed(2)} (10%)</div>
+          <div><strong>Supplier Revenue:</strong> Rs.{supplierRevenue.toFixed(2)} (80%)</div>
+          <div><strong>Service Fee:</strong> Rs.{serviceFee.toFixed(2)} (20%)</div>
         </div>
         <div className="flex gap-2 justify-end">
           <button
@@ -210,7 +210,7 @@ const OngoingOrders = () => {
                   </div>
                   <div>
                     <span className="text-gray-400">Total Value:</span>
-                    <div className="text-white">${(order.amount || 1) * (order.productId?.price || 0)}</div>
+                    <div className="text-white">Rs.{(order.amount || 1) * (order.productId?.price || 0)}</div>
                   </div>
                 </div>
                 {order.notes && (

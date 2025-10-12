@@ -72,10 +72,10 @@ const OngoingOrders = () => {
           />
         </div>
         <div className="mb-3 text-sm bg-blue-50 p-3 rounded text-black">
-          <div><strong>Hourly Rate:</strong> ${vendorData.hourlyRate || 0}</div>
-          <div><strong>Total Amount:</strong> <span id="total-amount-display">${(vendorData.hourlyRate || 0).toFixed(2)}</span></div>
-          <div><strong>Your Revenue (80%):</strong> <span id="revenue-display">${((vendorData.hourlyRate || 0) * 0.8).toFixed(2)}</span></div>
-          <div><strong>Service Fee (20%):</strong> <span id="fee-display">${((vendorData.hourlyRate || 0) * 0.2).toFixed(2)}</span></div>
+          <div><strong>Hourly Rate:</strong> Rs.{vendorData.hourlyRate || 0}</div>
+          <div><strong>Total Amount:</strong> <span id="total-amount-display">Rs.{(vendorData.hourlyRate || 0).toFixed(2)}</span></div>
+          <div><strong>Your Revenue (80%):</strong> <span id="revenue-display">Rs.{((vendorData.hourlyRate || 0) * 0.8).toFixed(2)}</span></div>
+          <div><strong>Service Fee (20%):</strong> <span id="fee-display">Rs.{((vendorData.hourlyRate || 0) * 0.2).toFixed(2)}</span></div>
         </div>
         <div className="flex gap-2 justify-end">
           <button

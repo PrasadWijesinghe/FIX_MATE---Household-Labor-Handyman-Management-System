@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Create payment intent
 const createPaymentIntent = async (req, res) => {
   try {
-    const { amount, currency = 'usd', orderData } = req.body;
+  const { amount, currency = 'lkr', orderData } = req.body;
 
     // Validate amount
     if (!amount || amount <= 0) {

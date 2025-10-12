@@ -42,7 +42,7 @@ const ServiceCard = ({ service }) => {
         
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-lg font-bold text-indigo-600">${service.price}</span>
+            <span className="text-lg font-bold text-indigo-600">Rs.{service.price}</span>
             <span className="text-sm text-gray-500">starting</span>
           </div>
           

@@ -211,13 +211,13 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
             <>
               <div><strong>Service Provider:</strong> {vendor.name}</div>
               <div><strong>Service Category:</strong> {vendor.category}</div>
-              <div><strong>Hourly Rate:</strong> ${vendor.hourlyRate}</div>
-              <div><strong>Total Amount:</strong> <span className="text-green-600 font-bold">${totalPrice}</span></div>
+              <div><strong>Hourly Rate:</strong> Rs.{vendor.hourlyRate}</div>
+              <div><strong>Total Amount:</strong> <span className="text-green-600 font-bold">Rs.{totalPrice}</span></div>
             </>
           ) : (
             <>
               <div><strong>Product:</strong> {product.name}</div>
-              <div><strong>Amount:</strong> {orderData.amount} × ${product.price} = <span className="text-green-600 font-bold">${totalPrice}</span></div>
+                            <div><strong>Amount:</strong> {orderData.amount} × Rs.{product.price} = <span className="text-green-600 font-bold">Rs.{totalPrice}</span></div>
             </>
           )}
         </div>
@@ -312,13 +312,13 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
                 <>
                   <div><strong>Service Provider:</strong> {vendor.name}</div>
                   <div><strong>Category:</strong> {vendor.category}</div>
-                  <div><strong>Hourly Rate:</strong> ${vendor.hourlyRate}</div>
+                  <div><strong>Hourly Rate:</strong> Rs. {vendor.hourlyRate}</div>
                 </>
               ) : (
                 <>
                   <div><strong>Product:</strong> {product.name}</div>
                   <div><strong>Quantity:</strong> {orderData.amount}</div>
-                  <div><strong>Unit Price:</strong> ${product.price}</div>
+                  <div><strong>Unit Price:</strong> Rs. {product.price}</div>
                 </>
               )}
             </div>
@@ -330,7 +330,7 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
           disabled={!stripe || processing || !clientSecret}
           className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {processing ? 'Processing...' : `Review and Pay $${totalPrice}`}
+          {processing ? 'Processing...' : `Review and Pay Rs. ${totalPrice}`}
         </button>
       </form>
 
@@ -355,9 +355,9 @@ const PaymentForm = ({ orderData, product, vendor, totalPrice, isServiceBooking 
                       <div><strong>Quantity:</strong> {orderData.amount}</div>
                     </>
                   )}
-                  <div><strong>Amount to Pay:</strong> <span className="text-green-600 font-bold text-lg">${totalPrice}</span></div>
-                  <div><strong>Payment Method:</strong> Card ({cardBrand ? getCardBrandIcon(cardBrand) : '💳 Card'})</div>
-                  <div><strong>Cardholder:</strong> {cardholderName}</div>
+                      <div><strong>Amount to Pay:</strong> <span className="text-green-600 font-bold text-lg">Rs. {totalPrice}</span></div>
+                      <div><strong>Payment Method:</strong> Card ({cardBrand ? getCardBrandIcon(cardBrand) : '💳 Card'})</div>
+                      <div><strong>Cardholder:</strong> {cardholderName}</div>
                 </div>
               </div>
               <div className="text-center text-gray-600">

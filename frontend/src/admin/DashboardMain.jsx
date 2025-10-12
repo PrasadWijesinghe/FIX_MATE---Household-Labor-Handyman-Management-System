@@ -26,11 +26,19 @@ const DashboardMain = () => {
       setLoading(true);
       setError('');
 
-      // Include cookie and bearer token (stored after admin-login)
       const bearer = localStorage.getItem('admin_token');
+      if (!bearer) {
+        setError('Authentication required. Please log in again.');
+        navigate('/adminlogin');
+        return;
+      }
+
       const config = {
         withCredentials: true,
-        headers: bearer ? { Authorization: `Bearer ${bearer}` } : {}
+        headers: {
+          'Authorization': `Bearer ${bearer}`,
+          'Content-Type': 'application/json'
+        }
       };
 
       // Fetch all statistics from different endpoints
@@ -64,11 +72,21 @@ const DashboardMain = () => {
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
-      setError('Failed to load dashboard statistics');
+      if (error.response?.status === 403) {
+        setError('Access denied. Please log in again with admin credentials.');
+        navigate('/adminlogin');
+      } else {
+        setError(error.response?.data?.message || 'Failed to load dashboard statistics');
+      }
+      
+      // Clear admin token if it's an authentication error
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        localStorage.removeItem('admin_token');
+      }
     } finally {
       setLoading(false);
     }
-  }, [backendUrl]);
+  }, [backendUrl, navigate]);
 
   useEffect(() => {
     fetchDashboardStats();
@@ -214,7 +232,7 @@ const DashboardMain = () => {
         
         <StatCard
           title="Admin Revenue (20%)"
-          value={`$${stats.totalRevenue.toFixed(2)}`}
+          value={`Rs. ${stats.totalRevenue.toFixed(2)}`}
           icon="💰"
           color="from-yellow-500 to-yellow-600"
           subtitle="Platform commission"
@@ -230,26 +248,26 @@ const DashboardMain = () => {
             <div className="flex justify-between items-center p-3 bg-gray-700 rounded-lg">
               <span className="text-gray-300">Vendor Service Fees (20%)</span>
               <span className="text-green-400 font-semibold">
-                ${stats.vendorRevenue?.toFixed(2) || '0.00'}
+                Rs. {stats.vendorRevenue?.toFixed(2) || '0.00'}
               </span>
             </div>
             <div className="flex justify-between items-center p-3 bg-gray-700 rounded-lg">
               <span className="text-gray-300">Supplier Product Fees (20%)</span>
               <span className="text-blue-400 font-semibold">
-                ${stats.supplierRevenue?.toFixed(2) || '0.00'}
+                Rs. {stats.supplierRevenue?.toFixed(2) || '0.00'}
               </span>
             </div>
             <div className="flex justify-between items-center p-3 bg-gray-700 rounded-lg">
               <span className="text-gray-300">Delivery Admin Commission (20% of 10%)</span>
               <span className="text-orange-400 font-semibold">
-                ${stats.deliveryRevenue?.toFixed(2) || '0.00'}
+                Rs. {stats.deliveryRevenue?.toFixed(2) || '0.00'}
               </span>
             </div>
             <div className="border-t border-gray-600 pt-3">
               <div className="flex justify-between items-center">
                 <span className="text-white font-semibold">Total Admin Revenue</span>
                 <span className="text-yellow-400 font-bold text-lg">
-                  ${stats.totalRevenue.toFixed(2)}
+                  Rs. {stats.totalRevenue.toFixed(2)}
                 </span>
               </div>
             </div>

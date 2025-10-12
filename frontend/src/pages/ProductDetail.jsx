@@ -81,7 +81,7 @@ const ProductDetail = () => {
                 alt={product.name}
                 className="w-80 h-80 object-cover rounded-xl border-2 border-gray-200 mb-4"
               />
-              <div className="text-lg font-bold text-indigo-600 mb-2">${product.price} per item</div>
+              <div className="text-lg font-bold text-indigo-600 mb-2">Rs.{product.price} per item</div>
               <div className="text-gray-700 text-sm mb-2">{product.description}</div>
             </div>
             <div className="flex-1 flex flex-col gap-6 justify-center">

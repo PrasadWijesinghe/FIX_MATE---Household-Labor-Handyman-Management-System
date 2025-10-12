@@ -135,7 +135,7 @@ const DeliveryDrivers = () => {
                   <td className="px-4 py-3 text-gray-200">{d.email}</td>
                   <td className="px-4 py-3 text-gray-200">{d.phone}</td>
                   <td className="px-4 py-3 text-gray-200">{d.operatingArea}</td>
-                  <td className="px-4 py-3 text-gray-200">${d.rate}/delivery</td>
+                  <td className="px-4 py-3 text-gray-200">Rs. {d.rate}/delivery</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded-full text-xs ${d.isAvailable ? 'bg-green-600/20 text-green-300 border border-green-700' : 'bg-gray-600/20 text-gray-300 border border-gray-700'}`}>
                       {d.isAvailable ? 'Available' : 'Unavailable'}

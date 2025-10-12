@@ -25,7 +25,7 @@ const Store = () => {
             alt="Sand"
           />
           <p className="text-sm mt-2">Sand</p>
-          <p className="text-xl font-semibold">$29.00</p>
+          <p className="text-xl font-semibold">Rs.29.00</p>
         </a>
 
         <a href="#" className="group w-full sm:w-56">
@@ -35,7 +35,7 @@ const Store = () => {
             alt="Cement"
           />
           <p className="text-sm mt-2">Cement</p>
-          <p className="text-xl font-semibold">$39.00</p>
+          <p className="text-xl font-semibold">Rs.39.00</p>
         </a>
 
         <a href="#" className="group w-full sm:w-56">

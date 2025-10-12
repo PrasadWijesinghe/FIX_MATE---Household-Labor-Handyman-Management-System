@@ -239,10 +239,10 @@ const BookingPage = () => {
                   min={1}
                   required
                 />
-                <span className="text-xs text-gray-500">(Enter quantity. Price per item: ${product.price})</span>
+                <span className="text-xs text-gray-500">(Enter quantity. Price per item: Rs.{product.price})</span>
               </div>
               <div className="flex flex-col gap-1 mt-2">
-                <div className="text-xl font-bold text-indigo-700">Total Price: <span className="text-green-600">${totalPrice}</span></div>
+                <div className="text-xl font-bold text-indigo-700">Total Price: <span className="text-green-600">Rs.{totalPrice}</span></div>
               </div>
               <div className="flex flex-col gap-3 mt-4">
                 <div className="text-lg font-semibold text-gray-700 text-center">Choose Payment Method</div>

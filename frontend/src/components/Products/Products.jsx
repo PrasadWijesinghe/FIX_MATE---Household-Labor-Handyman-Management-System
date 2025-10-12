@@ -37,7 +37,7 @@ const Products = () => {
               Professional car washing and detailing services to keep your vehicle spotless.
             </p>
             <div className='flex items-center justify-between'>
-              <span className='text-base font-bold text-blue-600'>$25</span>
+              <span className="text-base font-bold text-blue-600">Rs.25</span>
               <div className='flex items-center'>
                 <span className='text-yellow-400'>★★★★★</span>
                 <span className='text-xs text-gray-500 ml-1'>(4.8)</span>
@@ -63,7 +63,7 @@ const Products = () => {
               Comprehensive home cleaning services for a spotless and healthy living space.
             </p>
             <div className='flex items-center justify-between'>
-              <span className='text-base font-bold text-blue-600'>$45</span>
+              <span className="text-base font-bold text-blue-600">Rs.45</span>
               <div className='flex items-center'>
                 <span className='text-yellow-400'>★★★★☆</span>
                 <span className='text-xs text-gray-500 ml-1'>(4.6)</span>

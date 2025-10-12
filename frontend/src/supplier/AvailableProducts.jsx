@@ -79,7 +79,7 @@ const AvailableProducts = () => {
               )}
               <div className="text-xl font-semibold text-white mb-1 text-center">{product.name}</div>
               <div className="mb-2">
-                <span className="px-2 py-1 rounded-full text-xs font-medium border bg-blue-900/30 text-blue-300 border-blue-700">${product.price}</span>
+                <span className="px-2 py-1 rounded-full text-xs font-medium border bg-blue-900/30 text-blue-300 border-blue-700">Rs.{product.price}</span>
               </div>
               <div className="text-gray-300 text-sm mb-2 text-center">{product.description}</div>
               <div className="text-gray-500 text-xs mb-2">Added: {new Date(product.createdAt).toLocaleString()}</div>

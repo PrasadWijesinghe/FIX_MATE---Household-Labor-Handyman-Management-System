@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
         </h3>
         <p className="text-xs text-gray-600 mb-3 line-clamp-2">{product.description}</p>
         <div className="flex items-center justify-between mb-2">
-          <span className="text-lg font-bold text-indigo-600">${product.price}</span>
+          <span className="text-lg font-bold text-indigo-600">Rs.{product.price}</span>
           <span className="text-xs text-gray-500">per item</span>
         </div>
         <div className="flex items-center gap-2 mt-2">

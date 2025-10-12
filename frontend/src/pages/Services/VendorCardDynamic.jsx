@@ -191,7 +191,7 @@ const VendorCardDynamic = () => {
                 <h1 className="text-3xl font-bold mb-1">{vendor.name}</h1>
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">{vendor.category}</span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">Hourly Rate: ${vendor.hourlyRate}</span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">Hourly Rate: Rs.{vendor.hourlyRate}</span>
                 </div>
                 <div className="flex items-center gap-1 mt-2">
                   {[...Array(5)].map((_, i) => (
