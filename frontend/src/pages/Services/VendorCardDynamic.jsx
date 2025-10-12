@@ -390,6 +390,17 @@ const VendorCardDynamic = () => {
                             )}
                           </div>
                           <div className="text-gray-700 text-sm">{review.comment}</div>
+
+                          {/* Display vendor reply if present (read-only on public vendor card) */}
+                          {review.vendorReply && review.vendorReply.replyText && (
+                            <div className="mt-3 bg-gray-100 p-3 rounded">
+                              <div className="text-sm font-semibold text-indigo-700">Reply from vendor</div>
+                              <div className="text-sm text-gray-800 mt-1">{review.vendorReply.replyText}</div>
+                              {review.vendorReply.repliedAt && (
+                                <div className="text-xs text-gray-500 mt-2">{new Date(review.vendorReply.repliedAt).toLocaleString()}</div>
+                              )}
+                            </div>
+                          )}
                         </>
                       )}
                     </div>

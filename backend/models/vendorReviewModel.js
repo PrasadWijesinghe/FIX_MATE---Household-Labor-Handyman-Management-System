@@ -27,6 +27,13 @@ const vendorReviewSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+  ,
+  vendorReply: {
+    repliedByVendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    repliedByVendorName: { type: String },
+    replyText: { type: String, trim: true, maxlength: 1000 },
+    repliedAt: { type: Date }
+  }
 }, {
   timestamps: true
 });

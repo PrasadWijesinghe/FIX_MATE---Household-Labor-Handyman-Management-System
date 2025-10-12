@@ -84,6 +84,24 @@ const getUserReviews = async (req, res) => {
   }
 };
 
+// Get reviews for all products owned by a supplier
+const getSupplierReviews = async (req, res) => {
+  try {
+    const { supplierId } = req.params;
+
+    // Find all products for this supplier
+    const products = await productModel.find({ supplier: supplierId }, '_id');
+    const productIds = products.map(p => p._id);
+
+    const reviews = await reviewModel.find({ productId: { $in: productIds } }).sort({ createdAt: -1 });
+
+    res.json({ success: true, reviews });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 // Edit a review
 const editReview = async (req, res) => {
   try {
@@ -146,4 +164,64 @@ const deleteReview = async (req, res) => {
   }
 };
 
-export { addReview, getProductReviews, getUserReviews, editReview, deleteReview };
+// Add or update a supplier's reply to a product review (supplier must be authenticated)
+const addOrUpdateSupplierReply = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const { replyText } = req.body;
+    const supplierId = req.user.id; // supplierAuth should set req.user.id
+
+    if (!replyText || !replyText.trim()) {
+      return res.json({ success: false, message: 'Reply text is required' });
+    }
+
+    const review = await reviewModel.findById(reviewId);
+    if (!review) return res.json({ success: false, message: 'Review not found' });
+
+    // Verify supplier owns the product referenced by the review
+    const product = await productModel.findById(review.productId);
+    if (!product) return res.json({ success: false, message: 'Product not found' });
+    if (product.supplier.toString() !== supplierId) {
+      return res.json({ success: false, message: 'Not authorized to reply to this review' });
+    }
+
+    review.supplierReply = {
+      repliedBySupplierId: supplierId,
+      repliedBySupplierName: req.user.name || undefined,
+      replyText: replyText.trim(),
+      repliedAt: new Date()
+    };
+
+    await review.save();
+    res.json({ success: true, message: 'Reply saved', review });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Delete supplier reply
+const deleteSupplierReply = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const supplierId = req.user.id;
+
+    const review = await reviewModel.findById(reviewId);
+    if (!review) return res.json({ success: false, message: 'Review not found' });
+
+    const product = await productModel.findById(review.productId);
+    if (!product) return res.json({ success: false, message: 'Product not found' });
+    if (product.supplier.toString() !== supplierId) {
+      return res.json({ success: false, message: 'Not authorized to delete this reply' });
+    }
+
+    review.supplierReply = undefined;
+    await review.save();
+    res.json({ success: true, message: 'Reply deleted', review });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export { addReview, getProductReviews, getUserReviews, getSupplierReviews, editReview, deleteReview, addOrUpdateSupplierReply, deleteSupplierReply };

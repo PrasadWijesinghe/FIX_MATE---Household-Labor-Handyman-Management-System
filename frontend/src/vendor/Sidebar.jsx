@@ -9,6 +9,7 @@ const navLinks = [
   { name: "Ongoing Orders", path: "/vendor/ongoing" },
   { name: "Previous Orders", path: "/vendor/previous" },
   { name: "Admin Notices", path: "/vendor/notices" },
+  { name: "Reviews", path: "/vendor/reviews" },
   { name: "Revenue", path: "/vendor/revenue" },
   { name: "Profile", path: "/vendor/profile" },
 ];

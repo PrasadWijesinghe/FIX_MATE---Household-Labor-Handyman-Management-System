@@ -146,4 +146,61 @@ const deleteVendorReview = async (req, res) => {
   }
 };
 
-export { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview };
+// Add or update a vendor reply to a review (vendor must be authenticated)
+const addOrUpdateReply = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const { replyText } = req.body;
+    const vendorId = req.user.id; // vendorAuth should set req.user.id
+
+    if (!replyText || !replyText.trim()) {
+      return res.json({ success: false, message: 'Reply text is required' });
+    }
+
+    const review = await vendorReviewModel.findById(reviewId);
+    if (!review) return res.json({ success: false, message: 'Review not found' });
+
+    // verify the vendor owns the review's vendorId
+    if (review.vendorId.toString() !== vendorId) {
+      return res.json({ success: false, message: 'Not authorized to reply to this review' });
+    }
+
+    // update the vendorReply subdocument
+    review.vendorReply = {
+      repliedByVendorId: vendorId,
+      repliedByVendorName: req.user.name || undefined,
+      replyText: replyText.trim(),
+      repliedAt: new Date()
+    };
+
+    await review.save();
+    res.json({ success: true, message: 'Reply saved', review });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Delete a vendor reply (vendor must be authenticated)
+const deleteReply = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const vendorId = req.user.id;
+
+    const review = await vendorReviewModel.findById(reviewId);
+    if (!review) return res.json({ success: false, message: 'Review not found' });
+
+    if (review.vendorId.toString() !== vendorId) {
+      return res.json({ success: false, message: 'Not authorized to delete this reply' });
+    }
+
+    review.vendorReply = undefined;
+    await review.save();
+    res.json({ success: true, message: 'Reply deleted', review });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview, addOrUpdateReply, deleteReply };

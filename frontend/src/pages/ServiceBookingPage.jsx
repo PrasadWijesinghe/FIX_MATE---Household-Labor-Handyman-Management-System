@@ -10,7 +10,7 @@ const ServiceBookingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { vendor } = location.state || {};
-  const { userData, isLoggedin } = useContext(AppContext);
+  const { userData, isLoggedin, backendUrl } = useContext(AppContext);
 
   const [bookingForm, setBookingForm] = useState({
     name: '',
@@ -23,6 +23,8 @@ const ServiceBookingPage = () => {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [blockedDates, setBlockedDates] = useState([]);
+  const [dateError, setDateError] = useState('');
 
   // Set form data from user data when component mounts
   useEffect(() => {
@@ -38,6 +40,35 @@ const ServiceBookingPage = () => {
     }
   }, [isLoggedin, userData]);
 
+  // Fetch vendor orders to determine blocked dates (pending or ongoing)
+  useEffect(() => {
+    const fetchBlockedDates = async () => {
+      if (!vendor || !backendUrl) return;
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/orders/vendor/${vendor._id}`);
+        if (data && data.success && Array.isArray(data.orders)) {
+          const blocked = data.orders
+            .filter(o => o.status === 'pending' || o.status === 'ongoing')
+            .map(o => {
+              // normalize to yyyy-mm-dd
+              try {
+                return new Date(o.date).toISOString().split('T')[0];
+              } catch {
+                return String(o.date).split('T')[0];
+              }
+            })
+            .filter(Boolean);
+          setBlockedDates(Array.from(new Set(blocked)));
+        }
+      } catch {
+        // silently ignore
+        setBlockedDates([]);
+      }
+    };
+
+    fetchBlockedDates();
+  }, [vendor, backendUrl]);
+
   if (!vendor) {
     return (
       <div>
@@ -51,7 +82,18 @@ const ServiceBookingPage = () => {
   }
 
   const handleFormChange = (e) => {
-    setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBookingForm({ ...bookingForm, [name]: value });
+
+    // Validate selected date against blocked dates
+    if (name === 'date') {
+      const norm = value;
+      if (blockedDates.includes(norm)) {
+        setDateError('Selected date is unavailable. Please choose another day.');
+      } else {
+        setDateError('');
+      }
+    }
   };
 
   const handlePaymentMethodSelect = (method) => {
@@ -119,6 +161,12 @@ const ServiceBookingPage = () => {
     
     if (!isLoggedin) {
       toast.error('Please log in to book a service');
+      return false;
+    }
+
+    // Prevent booking on blocked dates
+    if (blockedDates.includes(bookingForm.date)) {
+      toast.error('The selected date is unavailable. Please pick a different date.');
       return false;
     }
     
@@ -265,6 +313,50 @@ const ServiceBookingPage = () => {
                     min={new Date().toISOString().split('T')[0]}
                     required
                   />
+                  {dateError && (
+                    <div className="text-sm text-red-500 mt-2">{dateError}</div>
+                  )}
+                  {blockedDates.length > 0 && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      Unavailable dates: {blockedDates.join(', ')}
+                    </div>
+                  )}
+
+                  {/* Simple 30-day calendar grid for quick selection */}
+                  <div className="mt-4">
+                    <div className="mb-2 text-sm font-medium text-gray-700">Quick calendar (next 30 days)</div>
+                    <div className="grid grid-cols-7 gap-2">
+                      {(() => {
+                        const days = [];
+                        const today = new Date();
+                        for (let i = 0; i < 30; i++) {
+                          const d = new Date(today);
+                          d.setDate(today.getDate() + i);
+                          const iso = d.toISOString().split('T')[0];
+                          const isBlocked = blockedDates.includes(iso);
+                          const isSelected = bookingForm.date === iso;
+                          days.push(
+                            <button
+                              key={iso}
+                              type="button"
+                              onClick={() => {
+                                if (isBlocked) return;
+                                setBookingForm(prev => ({ ...prev, date: iso }));
+                                setDateError('');
+                              }}
+                              disabled={isBlocked}
+                              className={`text-xs p-2 rounded-lg w-full transition-colors border ${isBlocked ? 'bg-red-100 text-red-700 border-red-200 cursor-not-allowed' : isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-800 hover:bg-indigo-50'} `}
+                            >
+                              <div className="font-semibold">{d.getDate()}</div>
+                              <div className="text-[10px]">{d.toLocaleString(undefined, { weekday: 'short' })}</div>
+                            </button>
+                          );
+                        }
+                        return days;
+                      })()}
+                    </div>
+                    <div className="mt-2 text-xs text-gray-500">Red = unavailable • Click a date to select it</div>
+                  </div>
                 </div>
               </div>
 

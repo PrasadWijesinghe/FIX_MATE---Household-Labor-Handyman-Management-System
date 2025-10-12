@@ -1,6 +1,7 @@
 import express from 'express';
-import { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview } from '../controllers/vendorReviewController.js';
+import { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview, addOrUpdateReply, deleteReply } from '../controllers/vendorReviewController.js';
 import userAuth from '../middleware/userAuth.js';
+import vendorAuth from '../middleware/vendorAuth.js';
 
 const vendorReviewRouter = express.Router();
 
@@ -18,5 +19,11 @@ vendorReviewRouter.put('/:reviewId', userAuth, editVendorReview);
 
 // Delete a vendor review (requires authentication)
 vendorReviewRouter.delete('/:reviewId', userAuth, deleteVendorReview);
+
+// Vendor can add/update a reply to a review (vendor must be authenticated)
+vendorReviewRouter.post('/:reviewId/reply', vendorAuth, addOrUpdateReply);
+
+// Vendor can delete their reply
+vendorReviewRouter.delete('/:reviewId/reply', vendorAuth, deleteReply);
 
 export default vendorReviewRouter;

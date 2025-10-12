@@ -34,6 +34,8 @@ import SupplierWaitingOrders from './supplier/WaitingOrders';
 import OngoingOrders from './vendor/OngoingOrders';
 import PreviousOrders from './vendor/PreviousOrders';
 import Revenue from './vendor/Revenue';
+import VendorReviews from './vendor/Reviews';
+import SupplierReviews from './supplier/Reviews';
 import SupplierRevenue from './supplier/Revenue';
 import { VendorContextProvider } from './Context/VendorContext';
 import SupplierDashboard from './supplier/SupplierDashboard';
@@ -109,6 +111,7 @@ const App = () => {
           <Route path="previous" element={<PreviousOrders />} />
           <Route path="notices" element={<VendorNotices />} />
           <Route path="revenue" element={<Revenue />} />
+          <Route path="reviews" element={<VendorReviews />} />
           <Route path="profile" element={<VendorProfile />} />
         </Route>
 
@@ -131,6 +134,7 @@ const App = () => {
           <Route path="availableProducts" element={<AvailableProducts />} />
           <Route path="addProducts" element={<AddProducts />} />
           <Route path="revenue" element={<SupplierRevenue />} />
+          <Route path="reviews" element={<SupplierReviews />} />
           <Route path="profile" element={<SupplierProfile />} />
         </Route>
 
