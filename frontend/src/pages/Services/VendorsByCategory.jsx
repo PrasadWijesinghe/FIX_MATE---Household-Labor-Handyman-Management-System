@@ -11,7 +11,14 @@ const VendorsByCategory = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   useEffect(() => {
     const fetchVendors = async () => {
       setLoading(true);
@@ -32,6 +39,7 @@ const VendorsByCategory = () => {
     fetchVendors();
   }, [category]);
 
+<<<<<<< HEAD
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,6 +49,24 @@ const VendorsByCategory = () => {
     <div>
       <Navbar />
       <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
+=======
+<<<<<<< HEAD
+  return (
+    <div>
+      <Navbar />
+      <div className="max-w-5xl mx-auto px-4 py-8 min-h-[60vh]">
+=======
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
+
+  return (
+    <div>
+      <Navbar />
+      <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
+>>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
         <h2 className="text-2xl font-bold mb-6 text-center capitalize">Available {category} Vendors</h2>
         {loading ? (
           <div className="text-center text-gray-500">Loading...</div>

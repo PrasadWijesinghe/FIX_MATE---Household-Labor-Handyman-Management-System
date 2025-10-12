@@ -112,7 +112,14 @@ const Contact = () => {
                     >
                       Email Address *
                     </label>
+<<<<<<< HEAD
                     
+=======
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
                     <input
                       type="email"
                       id="email"

@@ -146,6 +146,7 @@ const deleteVendorReview = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 // Add or update a vendor reply to a review (vendor must be authenticated)
 const addOrUpdateReply = async (req, res) => {
   try {
@@ -204,3 +205,6 @@ const deleteReply = async (req, res) => {
 };
 
 export { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview, addOrUpdateReply, deleteReply };
+=======
+export { addVendorReview, getVendorReviews, getUserVendorReviews, editVendorReview, deleteVendorReview };
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f

@@ -8,8 +8,13 @@ import { useNavigate } from 'react-router-dom';
 const ServiceCard = ({ service }) => {
   const navigate = useNavigate();
   const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
+<<<<<<< HEAD
  
   const threshold = 12;
+=======
+
+   const threshold = 12;
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
 
   const handleMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -72,12 +77,20 @@ const ServiceCard = ({ service }) => {
 };
 
 const AllServicesPage = () => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
+<<<<<<< HEAD
   // Services data
+=======
+
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   const services = [
     {
       id: 1,

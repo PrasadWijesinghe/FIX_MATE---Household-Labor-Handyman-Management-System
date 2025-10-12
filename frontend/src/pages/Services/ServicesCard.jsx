@@ -87,6 +87,12 @@ const ServicesCard = ({ title = "Car Washing Services", bgImage = assets.carwash
     window.scrollTo(0, 0);
   }, []);
 
+  // Scroll to top when component mounts
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   const vendors = [
     {
       id: 1,

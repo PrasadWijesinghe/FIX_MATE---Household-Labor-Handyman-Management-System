@@ -10,8 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@stripe/react-stripe-js": "^5.0.0",
     "@stripe/stripe-js": "^8.0.0",
+=======
+
+    "@stripe/react-stripe-js": "^5.0.0",
+    "@stripe/stripe-js": "^8.0.0",
+
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.1",
     "cloudinary": "^2.7.0",

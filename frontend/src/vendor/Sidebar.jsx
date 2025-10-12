@@ -9,7 +9,10 @@ const navLinks = [
   { name: "Ongoing Orders", path: "/vendor/ongoing" },
   { name: "Previous Orders", path: "/vendor/previous" },
   { name: "Admin Notices", path: "/vendor/notices" },
+<<<<<<< HEAD
   { name: "Reviews", path: "/vendor/reviews" },
+=======
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   { name: "Revenue", path: "/vendor/revenue" },
   { name: "Profile", path: "/vendor/profile" },
 ];

@@ -27,6 +27,7 @@ const vendorReviewSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+<<<<<<< HEAD
   ,
   vendorReply: {
     repliedByVendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
@@ -34,6 +35,8 @@ const vendorReviewSchema = new mongoose.Schema({
     replyText: { type: String, trim: true, maxlength: 1000 },
     repliedAt: { type: Date }
   }
+=======
+>>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
 }, {
   timestamps: true
 });
