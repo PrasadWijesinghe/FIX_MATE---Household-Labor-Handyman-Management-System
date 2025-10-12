@@ -23,13 +23,19 @@ const SignUp = () => {
         { withCredentials: true }
       );
       if (data.success) {
+        // Store the token first
+        localStorage.setItem('token', data.token);
+        // Then update the login state
         setIsLoggedin(true);
+        // Get user data with the new token
         await getUserData();
+        toast.success('Login successful');
         navigate('/');
       } else {
         toast.error(data.message || 'Login failed');
       }
     } catch (error) {
+      console.error('Login error:', error);
       toast.error(error.response?.data?.message || 'Login failed');
     }
   };

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Banner from "../../components/Banner/Banner";
 import { assets } from "../../assets/assets";
@@ -58,7 +57,6 @@ const Contact = () => {
 
   return (
     <div>
-      <Navbar />
       <Banner title="Contact Us" bgImage={assets.contactus} />
 
       <div className="bg-gray-50 py-8 sm:py-12 lg:py-16">
@@ -108,19 +106,11 @@ const Contact = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Email Address *
-                    </label>
-<<<<<<< HEAD
-                    
-=======
-<<<<<<< HEAD
-=======
-                    
->>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
-                    <input
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Email Address *
+                      </label>
+                      <input
                       type="email"
                       id="email"
                       name="email"

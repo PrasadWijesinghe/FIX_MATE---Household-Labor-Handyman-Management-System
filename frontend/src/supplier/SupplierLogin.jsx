@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import SupplierContext from '../Context/SupplierContextDefs';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
 
 const SupplierLogin = () => {
   const [form, setForm] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { getSupplierAuthState } = useContext(SupplierContext);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,6 +18,7 @@ const SupplierLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await axios.post(
         backendUrl + '/api/supplier/login',
@@ -22,6 +26,8 @@ const SupplierLogin = () => {
         { withCredentials: true }
       );
       if (data.success) {
+        localStorage.setItem('supplier_token', data.token);
+        await getSupplierAuthState(); // Update supplier context state
         toast.success('Login successful');
         navigate('/supplier');
       } else {
@@ -29,6 +35,9 @@ const SupplierLogin = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,9 +101,12 @@ const SupplierLogin = () => {
  
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2"
+            disabled={loading}
+            className={`w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition mt-2 ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 

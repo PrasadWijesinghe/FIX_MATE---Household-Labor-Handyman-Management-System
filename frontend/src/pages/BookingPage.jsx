@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import { toast } from 'react-toastify';
 import { AppContext } from '../Context/AppContext';
@@ -135,7 +134,6 @@ const BookingPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-screen py-8 flex flex-col items-center bg-gradient-to-r from-indigo-500 to-purple-600">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-12 mt-12">
           <button

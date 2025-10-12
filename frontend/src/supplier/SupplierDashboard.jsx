@@ -1,10 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { Outlet } from "react-router-dom";
-import { SupplierContext, SupplierContextProvider } from "../Context/SupplierContext";
+import { Outlet, useNavigate } from "react-router-dom";
+import SupplierContext from "../Context/SupplierContextDefs";
+import { toast } from 'react-toastify';
 
 const SupplierDashboard = () => {
-  const { supplierData } = useContext(SupplierContext);
+  const navigate = useNavigate();
+  const { supplierData, loading, isSupplierLoggedin } = useContext(SupplierContext);
+
+  useEffect(() => {
+    if (!loading && !isSupplierLoggedin) {
+      toast.error('Please login to access supplier dashboard');
+      navigate('/supplierlogin');
+    }
+  }, [loading, isSupplierLoggedin, navigate]);
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <Sidebar />

@@ -22,19 +22,42 @@ const Register = () => {
       return;
     }
     try {
+      // First try to register
       const { data } = await axios.post(
         backendUrl + '/api/auth/register',
         { name, email, password },
         { withCredentials: true }
       );
+      
       if (data.success) {
-        setIsLoggedin(true);
-        await getUserData();
-        navigate('/');
+        // If registration is successful, attempt to log in automatically
+        try {
+          const loginData = await axios.post(
+            backendUrl + '/api/auth/login',
+            { email, password },
+            { withCredentials: true }
+          );
+          
+          if (loginData.data.success) {
+            // Store the token
+            localStorage.setItem('token', loginData.data.token);
+            // Update login state
+            setIsLoggedin(true);
+            // Get user data
+            await getUserData();
+            toast.success('Registration successful!');
+            navigate('/');
+          }
+        } catch (loginError) {
+          console.error('Auto-login failed:', loginError);
+          toast.success('Registration successful! Please log in.');
+          navigate('/signup');
+        }
       } else {
-        toast.error(data.message);
+        toast.error(data.message || 'Registration failed');
       }
     } catch (error) {
+      console.error('Registration error:', error);
       toast.error(error.response?.data?.message || 'Registration failed');
     }
   };

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import Banner from '../../components/Banner/Banner';
-import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import { assets } from '../../assets/assets';
 import { useNavigate } from 'react-router-dom';
@@ -176,7 +175,6 @@ const ServicesCard = ({ title = "Car Washing Services", bgImage = assets.carwash
 
   return (
     <div>
-      <Navbar />
       <Banner title={title} bgImage={bgImage} />
       
       <div className="min-h-screen bg-gray-50">

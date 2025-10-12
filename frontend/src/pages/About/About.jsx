@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import Banner from "../../components/Banner/Banner";
 import { assets } from "../../assets/assets";
@@ -7,7 +6,6 @@ import { assets } from "../../assets/assets";
 const About = () => {
   return (
     <div>
-      <Navbar />
       <Banner title="About Us" bgImage={assets.banner4} />
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 px-6 py-16">

@@ -11,20 +11,36 @@ export const AppContextProvider = (props) => {
  
     const getUserData = useCallback(async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/user/data', { withCredentials: true });
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setUserData(null);
+                setIsLoggedin(false);
+                return;
+            }
+
+            const { data } = await axios.get(backendUrl + '/api/user/data', { 
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (data.success) {
                 if (data.userData && data.userData._id) {
                     setUserData(data.userData);
+                    setIsLoggedin(true);
                 } else {
                     setUserData(null);
+                    setIsLoggedin(false);
                 }
             } else {
                 setUserData(null);
+                setIsLoggedin(false);
             }
         } catch (error) {
             if (error?.response?.status === 401) {
                 setUserData(null);
                 setIsLoggedin(false);
+                localStorage.removeItem('token');
             } else {
                 // console.debug('getUserData error:', error?.message || error);
             }
@@ -33,7 +49,19 @@ export const AppContextProvider = (props) => {
 
     const getAuthState = useCallback(async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/auth/is-auth', { withCredentials: true });
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setIsLoggedin(false);
+                setUserData(null);
+                return;
+            }
+
+            const { data } = await axios.get(backendUrl + '/api/auth/is-auth', { 
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (data.success) {
                 setIsLoggedin(true);
                 getUserData();
@@ -41,11 +69,15 @@ export const AppContextProvider = (props) => {
                 // Not authenticated: silently clear state
                 setIsLoggedin(false);
                 setUserData(null);
+                localStorage.removeItem('token');
             }
-        } catch {
+        } catch (error) {
             // Suppress toast on 401 to avoid noisy popups on reload
             setIsLoggedin(false);
             setUserData(null);
+            if (error?.response?.status === 401) {
+                localStorage.removeItem('token');
+            }
         }
     }, [backendUrl, getUserData]);
 

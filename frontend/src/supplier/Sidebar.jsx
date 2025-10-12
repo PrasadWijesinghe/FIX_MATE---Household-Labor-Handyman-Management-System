@@ -2,17 +2,14 @@
 import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SupplierContext } from "../Context/SupplierContext";
+import SupplierContext from "../Context/SupplierContextDefs";
 
 const navLinks = [
   { name: "Available Orders", path: "/supplier/orders" },
   { name: "Waiting Orders", path: "/supplier/waiting" },
   { name: "Previous Orders", path: "/supplier/previous" },
   { name: "Admin Notices", path: "/supplier/notices" },
-<<<<<<< HEAD
   { name: "Reviews", path: "/supplier/reviews" },
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   { name: "Revenue", path: "/supplier/revenue" },
   { name: "Available Products", path: "/supplier/availableProducts" },
   { name: "Add Products", path: "/supplier/addProducts" },

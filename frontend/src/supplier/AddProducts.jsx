@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
-import { SupplierContext } from "../Context/SupplierContext";
+import SupplierContext from "../Context/SupplierContextDefs";
 import { toast } from "react-toastify";
 
 const AddProducts = () => {

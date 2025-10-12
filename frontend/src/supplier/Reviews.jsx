@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { SupplierContext } from '../Context/SupplierContext';
+import SupplierContext from '../Context/SupplierContextDefs';
 
 const SupplierReviews = () => {
   const { supplierData, backendUrl } = useContext(SupplierContext) || {};

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { SupplierContext } from "../Context/SupplierContext";
+import SupplierContext from "../Context/SupplierContextDefs";
 import { toast } from "react-toastify";
 import ReactDOM from "react-dom";
 

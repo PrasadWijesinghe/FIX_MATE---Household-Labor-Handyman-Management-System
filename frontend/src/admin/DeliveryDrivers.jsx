@@ -11,19 +11,46 @@ const DeliveryDrivers = () => {
 
   const authConfig = () => {
     const bearer = localStorage.getItem('admin_token');
-    return { withCredentials: true, headers: bearer ? { Authorization: `Bearer ${bearer}` } : {} };
+    if (!bearer) {
+      toast.error('Authentication required. Please log in again.');
+      // Optional: Redirect to login page
+      window.location.href = '/adminlogin';
+      return null;
+    }
+    return { 
+      withCredentials: true, 
+      headers: { 
+        'Authorization': `Bearer ${bearer}`,
+        'Content-Type': 'application/json'
+      } 
+    };
   };
 
   const fetchDrivers = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const { data } = await axios.get(`${backendUrl}/api/delivery/admin/all`, authConfig());
-      if (data.success) setDrivers(data.deliveryDrivers || []);
-      else setError('Failed to load drivers');
+      const config = authConfig();
+      if (!config) return;
+      
+      const { data } = await axios.get(`${backendUrl}/api/delivery/admin/all`, config);
+      if (data.success) {
+        setDrivers(data.deliveryDrivers || []);
+      } else {
+        setError(data.message || 'Failed to load drivers');
+        toast.error(data.message || 'Failed to load drivers');
+      }
     } catch (e) {
-      console.error(e);
-      setError('Failed to load drivers');
+      console.error('Error fetching drivers:', e);
+      const errorMessage = e.response?.data?.message || 'Failed to load drivers';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      
+      if (e.response?.status === 403) {
+        toast.error('Authentication failed. Please log in again.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/adminlogin';
+      }
     } finally {
       setLoading(false);
     }

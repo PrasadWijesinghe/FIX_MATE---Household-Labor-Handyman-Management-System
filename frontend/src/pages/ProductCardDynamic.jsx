@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import Banner from '../components/Banner/Banner';
 import { assets } from '../assets/assets';
@@ -13,11 +12,10 @@ const ProductCardDynamic = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-<<<<<<< HEAD
+
   const { isLoggedin, backendUrl, userData } = useContext(AppContext);
-=======
-  const { isLoggedin, backendUrl, userdata } = useContext(AppContext);
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+
+
   const navigate = useNavigate();
   
   // Review states
@@ -230,8 +228,6 @@ const ProductCardDynamic = () => {
 
   return (
     <div>
-      <Navbar />
-    
       <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
@@ -342,11 +338,8 @@ const ProductCardDynamic = () => {
                               {new Date(review.createdAt).toLocaleDateString()}
                             </span>
                             {/* Show edit/delete buttons only for user's own reviews */}
-<<<<<<< HEAD
+
                             {isLoggedin && userData && String(review.userId) === String(userData._id) && (
-=======
-                            {isLoggedin && userdata && review.userId === userdata._id && (
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
                               <div className="ml-auto flex gap-2">
                                 <button
                                   onClick={() => handleEditReview(review)}
@@ -365,7 +358,7 @@ const ProductCardDynamic = () => {
                             )}
                           </div>
                           <div className="text-gray-700 text-sm">{review.comment}</div>
-<<<<<<< HEAD
+
                           {/* Supplier reply (if any) */}
                           {review.supplierReply && review.supplierReply.replyText && (
                             <div className="mt-3 bg-indigo-50 border border-indigo-100 p-3 rounded">
@@ -374,8 +367,7 @@ const ProductCardDynamic = () => {
                               <div className="text-xs text-gray-500 mt-2">{review.supplierReply.repliedAt ? new Date(review.supplierReply.repliedAt).toLocaleString() : ''}</div>
                             </div>
                           )}
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+
                         </>
                       )}
                     </div>

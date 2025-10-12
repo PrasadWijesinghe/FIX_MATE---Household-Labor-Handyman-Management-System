@@ -9,7 +9,6 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
-import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import { toast } from 'react-toastify';
 import { AppContext } from '../Context/AppContext';
@@ -400,23 +399,19 @@ const PaymentPage = () => {
   const location = useLocation();
   const { orderData, product, vendor, isServiceBooking } = location.state || {};
 
-  if (!orderData || (!product && !vendor)) {
+    if (!orderData || (!product && !vendor)) {
     return (
       <div>
-        <Navbar />
         <div className="min-h-screen flex items-center justify-center text-red-500">
           No order data found. Please go back and try again.
         </div>
         <Footer />
       </div>
     );
-  }
-
-  const totalPrice = isServiceBooking ? vendor.hourlyRate : orderData.totalPrice;
+  }  const totalPrice = isServiceBooking ? vendor.hourlyRate : orderData.totalPrice;
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-screen py-8 flex flex-col items-center bg-gradient-to-r from-indigo-500 to-purple-600">
         <div className="mt-12">
           <Elements stripe={stripePromise}>

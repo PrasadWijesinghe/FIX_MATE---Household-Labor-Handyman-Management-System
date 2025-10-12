@@ -31,7 +31,7 @@ const reviewSchema = new mongoose.Schema({
   timestamps: true
 });
 
-<<<<<<< HEAD
+
 // Optional supplier reply subdocument
 reviewSchema.add({
   supplierReply: {
@@ -42,8 +42,7 @@ reviewSchema.add({
   }
 });
 
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+
 // Ensure one review per user per product
 reviewSchema.index({ userId: 1, productId: 1 }, { unique: true });
 

@@ -1,72 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import axios from 'axios';
+import { AppContext } from '../../Context/AppContext';
 
 const VendorsByCategory = () => {
   const { category } = useParams();
+  const { backendUrl } = useContext(AppContext);
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
   useEffect(() => {
     const fetchVendors = async () => {
       setLoading(true);
       setError('');
       try {
-        const { data } = await axios.get(`/api/vendor/category/${category}`);
+        const { data } = await axios.get(`${backendUrl}/api/vendor/category/${category}`);
         if (data.success) {
           setVendors(data.vendors);
         } else {
           setError(data.message || 'Failed to fetch vendors');
         }
       } catch (err) {
+        console.error('Failed to fetch vendors:', err);
         setError('Failed to fetch vendors');
       } finally {
         setLoading(false);
       }
     };
     fetchVendors();
-  }, [category]);
-
-<<<<<<< HEAD
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [category]);
+  }, [category, backendUrl]);
 
   return (
     <div>
-      <Navbar />
       <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
-=======
-<<<<<<< HEAD
-  return (
-    <div>
-      <Navbar />
-      <div className="max-w-5xl mx-auto px-4 py-8 min-h-[60vh]">
-=======
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [category]);
-
-  return (
-    <div>
-      <Navbar />
-      <div className="max-w-5xl mx-auto px-4 py-8 min-h-screen">
->>>>>>> c190f60f77d963b8a598d0d1ed7e85533e8c63f1
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
         <h2 className="text-2xl font-bold mb-6 text-center capitalize">Available {category} Vendors</h2>
         {loading ? (
           <div className="text-center text-gray-500">Loading...</div>

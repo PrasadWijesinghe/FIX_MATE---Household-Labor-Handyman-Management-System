@@ -110,6 +110,8 @@ export const registerSupplier = async (req, res) => {
 			sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
 			maxAge: 7 * 24 * 60 * 60 * 1000
 		});
+
+		await new Promise(resolve => setTimeout(resolve, 100)); // Wait for cookie to be set
 	
 		const mailOptions = {
 			from: process.env.SENDER_EMAIL,
@@ -150,7 +152,7 @@ export const loginSupplier = async (req, res) => {
 			sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
 			maxAge: 7 * 24 * 60 * 60 * 1000
 		});
-		return res.json({ success: true });
+		return res.json({ success: true, token });
 	} catch (error) {
 		return res.json({ success: false, message: error.message });
 	}

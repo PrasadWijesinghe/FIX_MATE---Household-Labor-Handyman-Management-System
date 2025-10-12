@@ -84,7 +84,6 @@ const getUserReviews = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // Get reviews for all products owned by a supplier
 const getSupplierReviews = async (req, res) => {
   try {
@@ -103,8 +102,7 @@ const getSupplierReviews = async (req, res) => {
   }
 };
 
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+
 // Edit a review
 const editReview = async (req, res) => {
   try {
@@ -167,7 +165,7 @@ const deleteReview = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
+
 // Add or update a supplier's reply to a product review (supplier must be authenticated)
 const addOrUpdateSupplierReply = async (req, res) => {
   try {
@@ -228,7 +226,14 @@ const deleteSupplierReply = async (req, res) => {
   }
 };
 
-export { addReview, getProductReviews, getUserReviews, getSupplierReviews, editReview, deleteReview, addOrUpdateSupplierReply, deleteSupplierReply };
-=======
-export { addReview, getProductReviews, getUserReviews, editReview, deleteReview };
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
+export {
+  addReview,
+  getProductReviews,
+  getUserReviews,
+  getSupplierReviews,
+  editReview,
+  deleteReview,
+  addOrUpdateSupplierReply,
+  deleteSupplierReply
+};
+

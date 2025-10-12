@@ -10,11 +10,7 @@ const ServiceBookingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { vendor } = location.state || {};
-<<<<<<< HEAD
   const { userData, isLoggedin, backendUrl } = useContext(AppContext);
-=======
-  const { userData, isLoggedin } = useContext(AppContext);
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
 
   const [bookingForm, setBookingForm] = useState({
     name: '',
@@ -27,11 +23,8 @@ const ServiceBookingPage = () => {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
-<<<<<<< HEAD
   const [blockedDates, setBlockedDates] = useState([]);
   const [dateError, setDateError] = useState('');
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
 
   // Set form data from user data when component mounts
   useEffect(() => {
@@ -47,7 +40,6 @@ const ServiceBookingPage = () => {
     }
   }, [isLoggedin, userData]);
 
-<<<<<<< HEAD
   // Fetch vendor orders to determine blocked dates (pending or ongoing)
   useEffect(() => {
     const fetchBlockedDates = async () => {
@@ -77,8 +69,6 @@ const ServiceBookingPage = () => {
     fetchBlockedDates();
   }, [vendor, backendUrl]);
 
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   if (!vendor) {
     return (
       <div>
@@ -92,7 +82,6 @@ const ServiceBookingPage = () => {
   }
 
   const handleFormChange = (e) => {
-<<<<<<< HEAD
     const { name, value } = e.target;
     setBookingForm({ ...bookingForm, [name]: value });
 
@@ -105,9 +94,6 @@ const ServiceBookingPage = () => {
         setDateError('');
       }
     }
-=======
-    setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   };
 
   const handlePaymentMethodSelect = (method) => {
@@ -141,7 +127,7 @@ const ServiceBookingPage = () => {
 
   const handleConfirmOrder = async () => {
     setShowConfirmation(false);
-    
+
     try {
       await axios.post('/api/orders', {
         vendorId: vendor._id,
@@ -155,7 +141,7 @@ const ServiceBookingPage = () => {
         notes: bookingForm.notes,
         paymentMethod: 'Pay on Arrival'
       });
-      
+
       setBookingSuccess(true);
       setTimeout(() => {
         navigate(`/services/category/vendor/${vendor._id}`);
@@ -172,27 +158,24 @@ const ServiceBookingPage = () => {
       toast.error('Please fill in all required fields');
       return false;
     }
-    
+
     if (!isLoggedin) {
       toast.error('Please log in to book a service');
       return false;
     }
-<<<<<<< HEAD
 
     // Prevent booking on blocked dates
     if (blockedDates.includes(bookingForm.date)) {
       toast.error('The selected date is unavailable. Please pick a different date.');
       return false;
     }
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
-    
+
     return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -330,7 +313,6 @@ const ServiceBookingPage = () => {
                     min={new Date().toISOString().split('T')[0]}
                     required
                   />
-<<<<<<< HEAD
                   {dateError && (
                     <div className="text-sm text-red-500 mt-2">{dateError}</div>
                   )}
@@ -375,8 +357,6 @@ const ServiceBookingPage = () => {
                     </div>
                     <div className="mt-2 text-xs text-gray-500">Red = unavailable • Click a date to select it</div>
                   </div>
-=======
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
                 </div>
               </div>
 
@@ -513,9 +493,9 @@ const ServiceBookingPage = () => {
         </div>
       )}
 
-      <Footer />
-    </div>
-  );
-};
+          <Footer />
+        </div>
+      );
+    };
 
-export default ServiceBookingPage;
+    export default ServiceBookingPage;

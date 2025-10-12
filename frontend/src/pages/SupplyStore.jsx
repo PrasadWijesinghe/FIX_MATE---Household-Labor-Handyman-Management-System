@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Navbar from '../components/Navbar/Navbar';
 import Banner from '../components/Banner/Banner';
 import Footer from '../components/Footer/Footer';
 import { assets } from '../assets/assets';
@@ -98,7 +97,6 @@ const SupplyStore = () => {
 
   return (
     <div>
-      <Navbar />
       <Banner title="Supply Store" bgImage={assets.banner2} />
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-8">

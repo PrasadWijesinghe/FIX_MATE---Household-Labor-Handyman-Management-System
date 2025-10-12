@@ -1,22 +1,11 @@
 import React from 'react';
-import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-// test
 
 const VendorCard = () => {
-<<<<<<< HEAD
-=======
-
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   // Scroll to top when component mounts
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
-<<<<<<< HEAD
-=======
-
->>>>>>> 148ae8f2edf656df542a86c2cbdd8179c617aa0f
   const vendor = {
     name: "Mike's Auto Detailing",
     category: "Car Washing & Detailing",
@@ -51,8 +40,6 @@ const VendorCard = () => {
 
   return (
     <div>
-      <Navbar />
-
       <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">

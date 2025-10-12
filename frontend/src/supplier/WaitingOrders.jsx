@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { SupplierContext } from "../Context/SupplierContext";
+import SupplierContext from "../Context/SupplierContextDefs";
 import { toast } from "react-toastify";
 
 const WaitingOrders = () => {

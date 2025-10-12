@@ -1,11 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { SupplierContext } from "../Context/SupplierContext";
+import SupplierContext from "../Context/SupplierContextDefs";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
 const AvailableOrders = () => {
-  const { supplierData } = useContext(SupplierContext) || {};
+  const navigate = useNavigate();
+  const { supplierData, loading: contextLoading, isSupplierLoggedin, getAuthHeaders } = useContext(SupplierContext) || {};
+  
+  // State declarations
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
@@ -13,7 +18,14 @@ const AvailableOrders = () => {
   const [deliveryDrivers, setDeliveryDrivers] = useState([]);
   const [loadingDrivers, setLoadingDrivers] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState(null);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!contextLoading && !isSupplierLoggedin) {
+      toast.error('Please login to access supplier dashboard');
+      navigate('/supplierlogin');
+      return;
+    }
+  }, [contextLoading, isSupplierLoggedin, navigate]);
 
   const fetchOrders = async () => {
     if (!supplierData?._id) {
@@ -22,7 +34,12 @@ const AvailableOrders = () => {
     }
     setLoading(true);
     try {
-  const { data } = await axios.get(`/api/supply-orders/supplier/${supplierData._id}`);
+      const { data } = await axios.get(`${backendUrl}/api/supply-orders/supplier/${supplierData._id}`, {
+        withCredentials: true,
+        headers: {
+          ...getAuthHeaders()
+        }
+      });
       if (data.success) {
         // Debug: log all returned orders
         console.log('Fetched orders from backend:', data.orders);
@@ -42,7 +59,12 @@ const AvailableOrders = () => {
   const fetchDeliveryDrivers = async () => {
     setLoadingDrivers(true);
     try {
-      const { data } = await axios.get('/api/delivery/drivers');
+      const { data } = await axios.get(`${backendUrl}/api/delivery/drivers`, {
+        withCredentials: true,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('supplier_token')}`
+        }
+      });
       console.log('Fetched delivery drivers:', data); // Debug log
       if (data.success) {
         setDeliveryDrivers(data.deliveryDrivers || []);
@@ -124,7 +146,14 @@ const AvailableOrders = () => {
             onClick={async () => {
               toast.dismiss();
               try {
-                await axios.patch(`/api/supply-orders/${orderId}/status`, { status: 'Confirmed' });
+                await axios.patch(`${backendUrl}/api/supply-orders/${orderId}/status`, 
+                  { status: 'Confirmed' },
+                  {
+                    withCredentials: true,
+                    headers: {
+                      ...getAuthHeaders()
+                    }
+                  });
                 toast.success('Order accepted and moved to Previous Orders.');
                 navigate('/supplier/previous');
               } catch {
@@ -156,7 +185,12 @@ const AvailableOrders = () => {
             onClick={async () => {
               toast.dismiss();
               try {
-                await axios.delete(`/api/supply-orders/${orderId}`);
+                await axios.delete(`${backendUrl}/api/supply-orders/${orderId}`, {
+                  withCredentials: true,
+                  headers: {
+                    ...getAuthHeaders()
+                  }
+                });
                 toast.success('Order rejected and removed.');
                 fetchOrders();
               } catch {
@@ -201,12 +235,19 @@ const AvailableOrders = () => {
             onClick={async () => {
               toast.dismiss();
               try {
-                await axios.patch(`/api/supply-orders/${order._id}/status`, { 
-                  status: 'Delivered',
-                  supplierRevenue: supplierRevenue,
-                  serviceFee: serviceFee,
-                  totalAmount: totalAmount
-                });
+                await axios.patch(`${backendUrl}/api/supply-orders/${order._id}/status`, 
+                  { 
+                    status: 'Delivered',
+                    supplierRevenue: supplierRevenue,
+                    serviceFee: serviceFee,
+                    totalAmount: totalAmount
+                  },
+                  {
+                    withCredentials: true,
+                      headers: {
+                      ...getAuthHeaders()
+                    }
+                  });
                 toast.success(`Order delivered! Revenue of $${supplierRevenue.toFixed(2)} added to your account.`);
                 fetchOrders();
               } catch {
